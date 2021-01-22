@@ -11,6 +11,12 @@ jacocoTestReport {
 
 check.dependsOn jacocoTestReport
 
+jar {
+    manifest {
+        attributes 'Main-Class': 'tiralabra.Main'
+    }
+}
+
 mainClassName = 'tiralabra.Main'
 
 repositories {
