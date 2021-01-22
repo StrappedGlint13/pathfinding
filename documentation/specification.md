@@ -2,15 +2,15 @@
 
 The main target of the project is to make efficient pathing algorithms to find the shortest path with minimal cost. There will be comparsion of the algorithms. 
 
-The algorithms will use benchmark maps from _Nathan Sturtevant's Moving AI Lab_ benchmark maps that are focused on problems for 2D grids.This project is done by student of bachelor’s in computer science (CS). All the documenation is in english and programming language is Java in this project. 
+The algorithms will use _Nathan Sturtevant's Moving AI Lab_ benchmark maps that are focused on problems for 2D grids.This project is done by student of bachelor’s in computer science (CS). All the documenation is in english and programming language is Java in this project. 
 
 # Data structures and algorithms
 
 Algorithms that I chose for the project are: Dijkstra's, A* and Jump point search (JPS) Algorithms. These algorithms share some of the data structures like priorityqueue but are a bit different by their nature. Thus the results of the comparsion should be fruitful. In addition we want to use also algorithms that use "weights" that can be used for simulating different kinds of travelling costs such as swimming, hill climbing, door openings etc. 
 
-*Input*: maps from the Moving AI Lab. On the map, there are locations and connections. Naturally we handle these as a graph made with nodes and edges.
+**Input**: maps from the Moving AI Lab. On the map, there are locations and connections. Naturally we handle these as a graph made with nodes and edges.
 
-*Output*: the algorithm is a path found from nodes and edges of the chosen graph. The result should be shortest path draw in the chosen map. 
+**Output**: the algorithm is a path found from nodes and edges of the chosen graph. The result should be shortest path draw in the chosen map. 
 
 Dijkstra's algorithm is designed for finding the shortest path and is used f.ex in road networks. The Algorithm favors lower cost paths. For this, we will store the costs to min-priority queue. The assumption is that Dijkstra's Algorithm is good for finding path to many locations but for a one path it might be too slow, because it is exploring all the paths. 
 
