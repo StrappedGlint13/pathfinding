@@ -3,19 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package tiralabra;
+package io;
 
 /**
  *
  * @author matibrax
  */
-public class Main {
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        System.out.println("testing");
-    }
+public class IOimage {
     
 }

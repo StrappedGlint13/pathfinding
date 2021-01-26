@@ -26,3 +26,15 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build
       working-directory: tiralabra
+    - name: Test with Gradle
+      run: ./gradlew test
+      working-directory: tiralabra
+    - name: Code coverage report
+      run: ./gradlew jacocoTestReport
+      working-directory: tiralabra
+    - name: Data to codecov
+      run: bash <(curl -s https://codecov.io/bash)
+      working-directory: tiralabra
+    - name: Data to codecov
+      run: ./gradlew checkstyleMain
+      working-directory: tiralabra
