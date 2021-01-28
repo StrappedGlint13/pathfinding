@@ -2,6 +2,7 @@ plugins {
     id 'application'
     id 'jacoco'
     id 'checkstyle'
+    id 'org.openjfx.javafxplugin' version '0.0.9'
 }
 
 jacocoTestReport {
@@ -9,6 +10,10 @@ jacocoTestReport {
         xml.enabled = true
         html.enabled = true
     }
+}
+
+javafx {
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
 }
 
 
