@@ -15,8 +15,8 @@ import java.awt.image.BufferedImage;
 public class Map {
     
     private Color[][] pixelMap;
-    private Color[][] land;
-    private Color[][] obstacle;
+    private int[][] land; // moving
+    private Color[][] obstacle; // not sure if needed, walls etc, this is for user, if user pick no-land for start or end points
     private BufferedImage img;
     private int height;
     private int width;
@@ -26,20 +26,20 @@ public class Map {
         this.height = height;
         this.width = width;
         this.pixelMap = new Color[height][width];
-        this.land = new Color[height][width];
+        this.land = new int[height][width];
         this.obstacle = new Color[height][width];
-        
-        for (int j = 0; j < height; j++) {
-                for (int k = 0; k < width; k++) {
-                    pixelMap[j][k] = new Color(img.getRGB(j, k));
-                    if (pixelMap[j][k].getGreen()== 299 && pixelMap[j][k].getBlue()== 299 && pixelMap[j][k].getRed() == 299 ) {
-                        land[j][k] = new Color(img.getRGB(j, k));
-                    } else {
-                        obstacle[j][k] = new Color(img.getRGB(j, k));
-                    }
-                }
-        }
     }
-        
     
+    public void generateMaps() {
+        for (int j = 0; j < this.height; j++) {
+            for (int k = 0; k < width; k++) {
+                pixelMap[j][k] = new Color(img.getRGB(j, k));
+                if (pixelMap[j][k].getGreen()== 229 && pixelMap[j][k].getBlue()== 229 && pixelMap[j][k].getRed() == 229 ) {
+                    land[j][k] = 0;
+                } else {
+                    obstacle[j][k] = new Color(img.getRGB(j, k));
+                }
+            }
+        }
+    }         
 }

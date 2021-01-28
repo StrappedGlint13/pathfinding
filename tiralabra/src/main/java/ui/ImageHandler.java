@@ -5,6 +5,7 @@
  */
 package ui;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -13,6 +14,8 @@ import javax.imageio.ImageIO;
 
 /**
  *
+ * A Class for handling the images of the maps.
+ * 
  * @author matibrax
  */
 public class ImageHandler {
@@ -25,6 +28,15 @@ public class ImageHandler {
         writer.drawImage(img, 0, 0, width, heigth, null);
         writer.dispose();
         return resizedImage;
+    }
+    
+    public BufferedImage draw(BufferedImage img, int width, int heigth) throws Exception {
+        for (int j = 0; j < heigth; j++) {
+            for (int k = 0; k < width; k++) {
+                img.setRGB(j, k, Color.green.getRGB()); 
+            }
+        }
+        return img;
     }
    
 }

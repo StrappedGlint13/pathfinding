@@ -30,10 +30,10 @@ public class IOimage {
         try {
             url = new URL(imageUrl);
             return img = ImageIO.read(url);
-         } catch (IOException e) {
+        } catch (IOException e) {
             System.out.println("Failed to read the image " + e);
             showMessageDialog(null, "This is not a 2D benchmark map!");
-         }
-       return null;
+        }
+        return null;
     }
 }
