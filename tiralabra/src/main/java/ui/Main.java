@@ -73,8 +73,6 @@ public class Main extends Application {
             frame.add(label);
             frame.setVisible(true);
          
-
-           
         });
         
     

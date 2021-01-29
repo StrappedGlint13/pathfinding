@@ -18,7 +18,7 @@ public class Dijkstra implements SearchInterface {
     public Dijkstra() {
     }
    
-    public ArrayList<Vertice> findPath(int[][]map, int startC, int startR, int endC, int endR) {
+    public ArrayList<Vertice> findPath(int[][]map, int startR, int startC, int endR, int endC) {
         //current data structures
         int n = map.length; 
         int[][] distance = new int[n][n];
@@ -30,9 +30,17 @@ public class Dijkstra implements SearchInterface {
               distance[r][c] = Integer.MAX_VALUE;
             }
         }
+        
+        //testing purposes
+        if (map[startR][startC] == 0) {
+            System.out.println("Starting point is in the wall!");
+        }
+        if(map[endR][endC] == 0) {
+            System.out.println("Ending point is in the wall!");
+        }
+        
         //Start and end vertices
-        Vertice startPoint = new Vertice(startC, startR);
-        Vertice endPoint = new Vertice(endC, endR);
+        Vertice startPoint = new Vertice(startR, startC);
         distance[startR][startC] = 0;
         
         //Start searching
@@ -41,13 +49,16 @@ public class Dijkstra implements SearchInterface {
             Vertice currentV = heap.poll();
             System.out.println("Next vertice from the heap:"+ currentV);
             
-            // If start and end is the same
-            if (currentV.equals(endPoint)) {
-                return createShortestPath(currentV);
-            }
-            
             int currentRow = currentV.getRow();
             int currentColumn = currentV.getColumn();
+            
+            System.out.println("current node: " + map[currentRow][currentColumn]);
+            
+            // If start and end is the same
+            if (currentRow == endR && currentColumn == endC) {
+                return createShortestPath(currentV);
+            }
+           
             
             if (visited[currentRow][currentColumn]) {
                 continue;
@@ -70,7 +81,7 @@ public class Dijkstra implements SearchInterface {
                     }
                     
                     //if there is an obstacle
-                    if (map[moveOneRow][moveOneColumn] == 1) {
+                    if (map[moveOneRow][moveOneColumn] == 0) {
                         continue;
                      }
                     
@@ -101,9 +112,9 @@ public class Dijkstra implements SearchInterface {
     @Override
     public ArrayList<Vertice> createShortestPath(Vertice vertice) {
         ArrayList<Vertice> shortestPath = new ArrayList<>();
-        while (vertice != null) {
+        while (vertice.getPrevious() != null) {
             shortestPath.add(vertice);
-            vertice.getPervious();
+            vertice = vertice.getPrevious();
         }
         return shortestPath;
     }

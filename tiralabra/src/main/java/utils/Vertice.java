@@ -18,40 +18,34 @@ public class Vertice implements Comparable<Vertice>{
     private int row;
     private int column;
     private int distance;
-    private Vertice pervious;
+    private Vertice previous;
 
     public Vertice(int row, int column) {
         this.row = row;
         this.column = column;
         this.distance = 0;
-        this.pervious = null;
+        this.previous = null;
     }
     
-    public Vertice(int number, int column, int distance, Vertice previous) {
-        this.row = number;
+    public Vertice(int row, int column, int distance, Vertice previous) {
+        this.row = row;
         this.column = column;
         this.distance = 0;
-        this.pervious = null;
+        this.previous = previous;
     }
 
     public int getRow() {
         return row;
     }
 
-    public void setRow(int row) {
-        this.row = row;
-    }
 
     public int getColumn() {
         return column;
     }
 
-    public void setColumn(int column) {
-        this.column = column;
-    }
 
-    public Vertice getPervious() {
-        return pervious;
+    public Vertice getPrevious() {
+        return previous;
     }
 
     @Override   
@@ -64,15 +58,7 @@ public class Vertice implements Comparable<Vertice>{
             return 0;
         }
     }
-
-    public int getNumber() {
-        return row;
-    }
-
-    public void setNumber(int number) {
-        this.row = number;
-    }
-
+    
     public int getDistance() {
         return distance;
     }
