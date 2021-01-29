@@ -16,8 +16,11 @@ import static javax.swing.JOptionPane.showMessageDialog;
 
 /**
  *
+ * Class that imports the image with given URL. . 
+ * 
  * @author matibrax
  */
+
 public class IOimage {
     private URL url;
     
@@ -26,8 +29,8 @@ public class IOimage {
     }
     
     public BufferedImage readImage(String imageUrl) {
-        BufferedImage img;
         try {
+            BufferedImage img;
             url = new URL(imageUrl);
             return img = ImageIO.read(url);
         } catch (IOException e) {

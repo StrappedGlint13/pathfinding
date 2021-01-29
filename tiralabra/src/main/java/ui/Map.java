@@ -11,10 +11,13 @@ import utils.Vertice;
 
 /**
  *
+ * A Class that generates the map for the application and UI. 
+ * 
  * @author matibrax
  */
+
 public class Map {
-    private Color[][] pixelMap; // might be needed 
+    private Color[][] pixelMap;
     private int[][] land; // for moving
     private BufferedImage img;
     private int height;

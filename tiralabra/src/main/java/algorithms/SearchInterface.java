@@ -10,6 +10,8 @@ import utils.Vertice;
 
 /**
  *
+ * Interface for path finding algorithms.
+ * 
  * @author matibrax
  */
 public interface SearchInterface {

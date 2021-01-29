@@ -42,7 +42,7 @@ public class DijkstraTest {
 
     @Test
     public void testFindingMap() {
-        ArrayList<Vertice> path = dijkstra.findPath(testmap, 0, 0, 0, 3);
+        ArrayList<Vertice> path = dijkstra.findPath(testmap, 0, 0, 3, 0);
         assertEquals(3, path.size());
     }
 }

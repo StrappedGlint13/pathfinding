@@ -18,6 +18,7 @@ import javax.imageio.ImageIO;
  * 
  * @author matibrax
  */
+
 public class ImageHandler {
     public ImageHandler() {   
     }
@@ -34,7 +35,7 @@ public class ImageHandler {
     public BufferedImage draw(BufferedImage img, int width, int heigth) throws Exception {
         for (int j = 0; j < heigth; j++) {
             for (int k = 0; k < width; k++) {
-                 img.setRGB(j, k, Color.green.getRGB());
+                img.setRGB(j, k, Color.green.getRGB());
             }
         }
         

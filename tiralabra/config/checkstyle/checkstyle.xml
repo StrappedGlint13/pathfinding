@@ -47,7 +47,7 @@
         <module name="Indentation"/>
         <module name="LeftCurly"/>
         <module name="CyclomaticComplexity">
-             <property name="max" value="6"/>
+             <property name="max" value="20"/>
         </module>
         
     </module>

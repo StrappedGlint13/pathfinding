@@ -7,13 +7,11 @@ package utils;
 
 /**
  *
- * A class for the vertices
- * 
- * @param number row of the vertice, known also as "node"
- * @param distance weight of the vertice, known also as "weight"
+ * A Class for the vertices and edges.
  * 
  * @author matibrax
  */
+
 public class Vertice implements Comparable<Vertice>{
     private int row;
     private int column;
@@ -38,11 +36,9 @@ public class Vertice implements Comparable<Vertice>{
         return row;
     }
 
-
     public int getColumn() {
         return column;
     }
-
 
     public Vertice getPrevious() {
         return previous;

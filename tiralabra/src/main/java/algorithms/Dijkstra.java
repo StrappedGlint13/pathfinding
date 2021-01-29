@@ -12,12 +12,15 @@ import utils.Vertice;
 
 /**
  *
+ * Algorithm that searches the shortest path. 
+ * 
  * @author matibrax
  */
+
 public class Dijkstra implements SearchInterface {
     public Dijkstra() {
     }
-   
+    
     public ArrayList<Vertice> findPath(int[][]map, int startR, int startC, int endR, int endC) {
         //current data structures
         int n = map.length; 
@@ -27,7 +30,7 @@ public class Dijkstra implements SearchInterface {
         
         for (int r = 0; r < n; r++) {
             for (int c = 0; c < n; c++) {
-              distance[r][c] = Integer.MAX_VALUE;
+                distance[r][c] = Integer.MAX_VALUE;
             }
         }
         
@@ -47,7 +50,7 @@ public class Dijkstra implements SearchInterface {
         heap.add(startPoint);
         while(!heap.isEmpty()) {
             Vertice currentV = heap.poll();
-            System.out.println("Next vertice from the heap:"+ currentV);
+            System.out.println("Next vertice from the heap: "+ currentV);
             
             int currentRow = currentV.getRow();
             int currentColumn = currentV.getColumn();
@@ -83,23 +86,21 @@ public class Dijkstra implements SearchInterface {
                     //if there is an obstacle
                     if (map[moveOneRow][moveOneColumn] == 0) {
                         continue;
-                     }
+                    }
                     
                     int nextDistance = currentV.getDistance() + 1;
                     
                     //check, if the distance is better
                     if(nextDistance < distance[moveOneRow][moveOneColumn]) {
                         distance[moveOneRow][moveOneColumn] = nextDistance;
-                        System.out.println("");
                         Vertice next = new Vertice(moveOneRow, moveOneColumn, nextDistance, currentV);
-                        System.out.println(next);
                         heap.add(next);
                     }
-            }
-        }                  
-    }
+                }
+            }                  
+        }
         return null;
-}
+    }
 
     @Override
     public boolean checkLimits(int[][]map, int r, int c, int n) {

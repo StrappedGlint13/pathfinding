@@ -27,7 +27,9 @@ import utils.Vertice;
 
 
 /**
- *
+ * A Class for user interface.
+ * 
+ * 
  * @author matibrax
  */
 public class Main extends Application {
@@ -46,8 +48,8 @@ public class Main extends Application {
             ImageHandler imgHand = new ImageHandler();
             BufferedImage img = io.readImage(url);
 
-            int height = 10;
-            int width = 10;
+            int height = 1000;
+            int width = 1000;
 
             try {
                 img = imgHand.resizeImage(img, height, width);
