@@ -46,16 +46,5 @@ public class DijkstraTest {
         assertEquals(3, path.size());
     }
     
-    @Test
-    public void testWillnotFindThePath() {
-        testmap = new int[][]{
-            {0, 0, 0 },
-            {0, 0, 0 },
-            {1, 1, 0 }, 
-        };
-        ArrayList<Vertice> path = dijkstra.findPath(testmap, 0, 0, 0, 1);
-        assertEquals(3, path.size());
-    }
-    
     
 }
