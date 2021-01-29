@@ -7,16 +7,15 @@ package ui;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import utils.Vertice;
 
 /**
  *
  * @author matibrax
  */
 public class Map {
-    
-    private Color[][] pixelMap;
-    private int[][] land; // moving
-    private Color[][] obstacle; // not sure if needed, walls etc, this is for user, if user pick no-land for start or end points
+    private Color[][] pixelMap; // might be needed 
+    private int[][] land; // for moving
     private BufferedImage img;
     private int height;
     private int width;
@@ -27,19 +26,20 @@ public class Map {
         this.width = width;
         this.pixelMap = new Color[height][width];
         this.land = new int[height][width];
-        this.obstacle = new Color[height][width];
     }
     
-    public void generateMaps() {
-        for (int j = 0; j < this.height; j++) {
-            for (int k = 0; k < width; k++) {
-                pixelMap[j][k] = new Color(img.getRGB(j, k));
-                if (pixelMap[j][k].getGreen()== 229 && pixelMap[j][k].getBlue()== 229 && pixelMap[j][k].getRed() == 229 ) {
-                    land[j][k] = 0;
+    public int[][] generateMaps() {
+        for (int r = 0; r < this.height; r++) {
+            for (int c = 0; c < width; c++) {
+                pixelMap[r][c] = new Color(img.getRGB(r, c));
+                if (pixelMap[r][c].getGreen()== 229 && pixelMap[r][c].getBlue()== 229 && pixelMap[r][c].getRed() == 229 ) {
+                    land[r][c] = 1;
                 } else {
-                    obstacle[j][k] = new Color(img.getRGB(j, k));
+                    land[r][c] = 0;
                 }
             }
         }
+        return land;
     }         
+
 }

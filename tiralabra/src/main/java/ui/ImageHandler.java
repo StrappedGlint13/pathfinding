@@ -30,12 +30,15 @@ public class ImageHandler {
         return resizedImage;
     }
     
+    // Add drawing functionality when we have the best path
     public BufferedImage draw(BufferedImage img, int width, int heigth) throws Exception {
         for (int j = 0; j < heigth; j++) {
             for (int k = 0; k < width; k++) {
-                img.setRGB(j, k, Color.green.getRGB()); 
+                 img.setRGB(j, k, Color.green.getRGB());
             }
         }
+        
+        
         return img;
     }
    

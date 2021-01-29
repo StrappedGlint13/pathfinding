@@ -7,15 +7,51 @@ package utils;
 
 /**
  *
+ * A class for the vertices
+ * 
+ * @param number row of the vertice, known also as "node"
+ * @param distance weight of the vertice, known also as "weight"
+ * 
  * @author matibrax
  */
 public class Vertice implements Comparable<Vertice>{
-    int number;
-    int distance;
+    private int row;
+    private int column;
+    private int distance;
+    private Vertice pervious;
 
-    public Vertice(int number, int distance) {
-        this.number = number;
-        this.distance = distance;
+    public Vertice(int row, int column) {
+        this.row = row;
+        this.column = column;
+        this.distance = 0;
+        this.pervious = null;
+    }
+    
+    public Vertice(int number, int column, int distance, Vertice previous) {
+        this.row = number;
+        this.column = column;
+        this.distance = 0;
+        this.pervious = null;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    public int getColumn() {
+        return column;
+    }
+
+    public void setColumn(int column) {
+        this.column = column;
+    }
+
+    public Vertice getPervious() {
+        return pervious;
     }
 
     @Override   
@@ -28,4 +64,26 @@ public class Vertice implements Comparable<Vertice>{
             return 0;
         }
     }
+
+    public int getNumber() {
+        return row;
+    }
+
+    public void setNumber(int number) {
+        this.row = number;
+    }
+
+    public int getDistance() {
+        return distance;
+    }
+
+    public void setDistance(int distance) {
+        this.distance = distance;
+    }
+    @Override
+    public String toString() {
+        return "Vertice: row " + this.row + " column " + this.column;
+    }
+    
+    
 }
