@@ -23,20 +23,18 @@ public class Dijkstra implements SearchInterface {
     
     public ArrayList<Vertice> findPath(int[][]map, int startR, int startC, int endR, int endC) {
         //current data structures
-        /*
+
         map = new int[][]{
-            {1, 1, 1, 1, 1, 1, 1, 1},
-            {1, 1, 1, 1, 1, 1, 1, 1},
-            {1, 1, 1, 1, 1, 1, 1, 1},
-            {1, 1, 1, 1, 1, 1, 1, 1},
-            {1, 1, 1, 0, 0, 0, 1, 1},
-            {1, 1, 1, 0, 1, 0, 1, 1},
-            {1, 1, 1, 0, 0, 0, 1, 1},
-            {1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 0, 1, 1, 0, 0, 0, 1, 0},
+            {1, 0, 1, 1, 0, 0, 0, 1, 0},
+            {1, 0, 1, 1, 1, 1, 1, 0, 1},
+            {1, 1, 1, 1, 1, 1, 1, 0, 1},
+            {1, 0, 1, 0, 1, 0, 1, 1, 0},
+            {1, 1, 1, 0, 1, 0, 1, 1, 1},
+            {1, 0, 1, 0, 1, 0, 1, 1, 0},
+            {1, 0, 1, 0, 1, 1, 0, 0, 1},
+            {1, 1, 1, 0, 1, 1, 0, 0, 0},
         };
-
-        */
-
         int rowLength = map.length;  
         int columnLength = map[0].length;
 
@@ -73,7 +71,6 @@ public class Dijkstra implements SearchInterface {
             int currentRow = currentV.getRow();
             int currentColumn = currentV.getColumn();
             
-            // If start and end is the same
             if (currentRow == endR && currentColumn == endC) {
                 return createShortestPath(currentV);
             }
@@ -105,7 +102,6 @@ public class Dijkstra implements SearchInterface {
                     }
                     
                     int nextDistance = currentV.getDistance() + 1;
-                    
                     //check, if we have not went to this vertice
                     if(nextDistance < distance[moveOneRow][moveOneColumn]) {
                         distance[moveOneRow][moveOneColumn] = nextDistance;

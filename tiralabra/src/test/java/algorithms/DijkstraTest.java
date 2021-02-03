@@ -33,19 +33,20 @@ public class DijkstraTest {
             {1, 0, 0, 0, 0, 0, 0, 1},
             {1, 1, 1, 1, 1, 1, 1, 1},
         };
-        
+        vertices = new ArrayList<>();
+    }
     /*
     @Test
-    public void testConstructor() {
-        ArrayList<Vertice> path = dijkstra.findPath(testmap, 0, 0, 1, 1);
-        assertEquals(1, path.size());
-    }*/
+    public void testStartingPointAndDistance() {
+        vertices = dijkstra.findPath(testmap, 0, 0, 0, 0);
+        Vertice v = new Vertice(0,0,0,null);
+        assertEquals(v, vertices.get(0));
+      
     }
-
+*/
+    
     @Test
-    public void testFindThePath() {
-        vertices = new ArrayList<>();
-        
+    public void testAlgoFindsThePath() {
         vertices = dijkstra.findPath(testmap, 0, 0, 0, 7);
         assertEquals(11, vertices.size());
         
@@ -56,9 +57,9 @@ public class DijkstraTest {
         assertEquals(9, vertices.size());
     }
     
+    
     @Test
     public void testAlgoDontFindThePath() { 
-        vertices = new ArrayList<>();
         testmap = new int[][]{
             {1, 1, 1, 1, 1, 1, 1, 1},
             {1, 1, 1, 1, 1, 1, 1, 1},
@@ -80,5 +81,24 @@ public class DijkstraTest {
         assertEquals(false, isFound);
     }
     
-    
+    @Test
+    public void testAlgoFindsTheShortestPath() { 
+        testmap = new int[][]{
+            {1, 0, 1, 1, 0, 0, 0, 1, 0},
+            {1, 0, 1, 1, 0, 0, 0, 1, 0},
+            {1, 0, 1, 1, 1, 1, 1, 0, 1},
+            {1, 1, 1, 1, 1, 1, 1, 0, 1},
+            {1, 0, 1, 0, 1, 0, 1, 1, 0},
+            {1, 1, 1, 0, 1, 0, 1, 1, 1},
+            {1, 0, 1, 0, 1, 0, 1, 1, 0},
+            {1, 0, 1, 0, 1, 1, 0, 0, 1},
+            {1, 1, 1, 0, 1, 1, 0, 0, 0},
+        };
+        
+        vertices = dijkstra.findPath(testmap, 0, 0, 7, 8);
+        assertEquals(11, vertices.size());
+        
+        vertices = dijkstra.findPath(testmap, 3, 8, 8, 0);
+        assertEquals(10, vertices.size());
+    }
 }

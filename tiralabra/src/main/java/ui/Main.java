@@ -67,7 +67,7 @@ public class Main extends Application {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }*/
             ArrayList<Vertice> shortestPath = new ArrayList<>();
-            shortestPath = dijkstra.findPath(pixelmap, 0, 0, 5, 4);
+            shortestPath = dijkstra.findPath(pixelmap, 0, 0, 7, 8);
             System.out.println(shortestPath);
             JFrame frame = new JFrame();
             frame.setSize(1200, 1200);
