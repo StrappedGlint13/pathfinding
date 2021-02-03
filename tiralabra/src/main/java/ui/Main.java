@@ -67,8 +67,8 @@ public class Main extends Application {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }*/
             ArrayList<Vertice> shortestPath = new ArrayList<>();
-            shortestPath = dijkstra.findPath(pixelmap, 0, 0, 0, 1);
-            
+            shortestPath = dijkstra.findPath(pixelmap, 0, 0, 5, 4);
+            System.out.println(shortestPath);
             JFrame frame = new JFrame();
             frame.setSize(1200, 1200);
             JLabel label = new JLabel(new ImageIcon(img));
@@ -86,7 +86,7 @@ public class Main extends Application {
         searchComponents.getChildren().addAll(searchInstructions, textfield, searchButton);
         Scene searchPanel = new Scene(searchComponents);
         stage.setScene(searchPanel);
-        stage.show();
+        stage.show(); 
     }
     
     public static void main(String[] args) {

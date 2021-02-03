@@ -21,29 +21,63 @@ import utils.Vertice;
 public class DijkstraTest {
 
     Dijkstra dijkstra;
+    ArrayList vertices;
     int[][] testmap;
     
     @Before
     public void setUp() {
         dijkstra = new Dijkstra();
         testmap = new int[][]{
-            {1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 0, 0, 0, 0, 0, 0, 1},
             {1, 0, 0, 0, 0, 0, 0, 1},
             {1, 0, 0, 0, 0, 0, 0, 1},
             {1, 1, 1, 1, 1, 1, 1, 1},
         };
-    }
+        
     /*
     @Test
     public void testConstructor() {
         ArrayList<Vertice> path = dijkstra.findPath(testmap, 0, 0, 1, 1);
         assertEquals(1, path.size());
     }*/
+    }
 
     @Test
-    public void testFindingMap() {
-        ArrayList<Vertice> path = dijkstra.findPath(testmap, 0, 0, 3, 0);
-        assertEquals(3, path.size());
+    public void testFindThePath() {
+        vertices = new ArrayList<>();
+        
+        vertices = dijkstra.findPath(testmap, 0, 0, 0, 7);
+        assertEquals(11, vertices.size());
+        
+        vertices = dijkstra.findPath(testmap, 0, 0, 3, 0);
+        assertEquals(3, vertices.size());
+        
+        vertices = dijkstra.findPath(testmap, 3, 7, 0, 0);
+        assertEquals(9, vertices.size());
+    }
+    
+    @Test
+    public void testAlgoDontFindThePath() { 
+        vertices = new ArrayList<>();
+        testmap = new int[][]{
+            {1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 0, 0, 0, 1, 1},
+            {1, 1, 1, 0, 1, 0, 1, 1},
+            {1, 1, 1, 0, 0, 0, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1},
+        };
+
+        vertices = dijkstra.findPath(testmap, 0, 0, 5, 4);
+        boolean isFound = true;
+        
+        if (vertices == null) {
+            isFound = false;
+        }
+        
+        assertEquals(false, isFound);
     }
     
     

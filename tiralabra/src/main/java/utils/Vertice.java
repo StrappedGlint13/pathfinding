@@ -17,7 +17,7 @@ public class Vertice implements Comparable<Vertice>{
     private int column;
     private int distance;
     private Vertice previous;
-
+    
     public Vertice(int row, int column) {
         this.row = row;
         this.column = column;
@@ -28,7 +28,7 @@ public class Vertice implements Comparable<Vertice>{
     public Vertice(int row, int column, int distance, Vertice previous) {
         this.row = row;
         this.column = column;
-        this.distance = 0;
+        this.distance = distance;
         this.previous = previous;
     }
 

@@ -15,6 +15,6 @@ import utils.Vertice;
  * @author matibrax
  */
 public interface SearchInterface {
-    boolean checkLimits(int[][]map, int r, int c, int n);
+    boolean checkLimits(int[][]map, int r, int c, int rowLength, int columnLength);
     public ArrayList<Vertice> createShortestPath(Vertice vertice);
 }
