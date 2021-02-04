@@ -23,7 +23,7 @@ public class Dijkstra implements SearchInterface {
     
     public ArrayList<Vertice> findPath(int[][]map, int startR, int startC, int endR, int endC) {
         //current data structures
-
+        /*
         map = new int[][]{
             {1, 0, 1, 1, 0, 0, 0, 1, 0},
             {1, 0, 1, 1, 0, 0, 0, 1, 0},
@@ -34,7 +34,7 @@ public class Dijkstra implements SearchInterface {
             {1, 0, 1, 0, 1, 0, 1, 1, 0},
             {1, 0, 1, 0, 1, 1, 0, 0, 1},
             {1, 1, 1, 0, 1, 1, 0, 0, 0},
-        };
+        };*/
         int rowLength = map.length;  
         int columnLength = map[0].length;
 

@@ -10,7 +10,9 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
+import utils.Vertice;
 
 /**
  *
@@ -32,6 +34,7 @@ public class ImageHandler {
     }
     
     // Add drawing functionality when we have the best path
+    /*
     public BufferedImage draw(BufferedImage img, int width, int heigth) throws Exception {
         for (int j = 0; j < heigth; j++) {
             for (int k = 0; k < width; k++) {
@@ -41,6 +44,19 @@ public class ImageHandler {
         
         
         return img;
+    }*/
+
+  public BufferedImage drawShortestPath(BufferedImage img, ArrayList<Vertice> shortestPath) {   
+        for (int i = 1; i < shortestPath.size() - 1; i++) {
+            Vertice v = shortestPath.get(i);
+            img.setRGB(v.getRow(), v.getColumn(), Color.GREEN.getRGB());
+            for (int rowMove = -1; rowMove < 2; rowMove++) {
+                for (int columnMove = -1; columnMove < 2; columnMove++) {
+                    img.setRGB(v.getRow() - rowMove, v.getColumn() - columnMove, Color.GREEN.getRGB());
+                }
+            }
+        }
+        return img;
     }
-   
+ 
 }

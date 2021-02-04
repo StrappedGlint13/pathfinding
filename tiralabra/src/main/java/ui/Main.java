@@ -7,15 +7,21 @@ package ui;
 
 import algorithms.Dijkstra;
 import io.IOimage;
+import java.awt.BorderLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -23,6 +29,7 @@ import javafx.stage.Stage;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JTextField;
 import utils.Vertice;
 
 
@@ -33,23 +40,46 @@ import utils.Vertice;
  * @author matibrax
  */
 public class Main extends Application {
- 
 
     @Override
     public void start(Stage stage) throws Exception {
         
-        Button searchButton = new Button("Reveal the map");
+        Button revealTheMapButton = new Button("Reveal the map");
         TextField textfield = new TextField("https://movingai.com/benchmarks/street/Denver_2_256.png");
         
-        searchButton.setOnAction(e -> {
-            Dijkstra dijkstra = new Dijkstra();
+        // Coordinates Scene and instructions
+        
+          Label ohjeteksti = new Label("Click first starting point and then ending point \n"
+                  + "Algorithms will find the way");
+          Button startSearchButton = new Button("Search");
+          Label startingPointLabel = new Label("Start here");
+          Label endingPointLabel = new Label("End here");
+
+          // 1.2 luodaan asettelu ja lisätään komponentit siihen
+          GridPane asettelu = new GridPane();
+          
+          asettelu.add(ohjeteksti, 0, 1);
+          asettelu.add(startSearchButton, 0, 2);
+          asettelu.add(startingPointLabel, 0, 3);
+          asettelu.add(endingPointLabel, 0, 4);
+
+          asettelu.setPrefSize(300, 180);
+          asettelu.setAlignment(Pos.BASELINE_RIGHT);
+          asettelu.setVgap(10);
+          asettelu.setHgap(10);
+          asettelu.setPadding(new Insets(20, 20, 20, 20));
+        
+          Scene actionPanel = new Scene(asettelu);
+        
+        
+        revealTheMapButton.setOnAction(e -> {
             String url = textfield.getText();
             IOimage io = new IOimage();
             ImageHandler imgHand = new ImageHandler();
             BufferedImage img = io.readImage(url);
 
-            int height = 1000;
-            int width = 1000;
+            int height = 800;
+            int width = 800;
 
             try {
                 img = imgHand.resizeImage(img, height, width);
@@ -66,15 +96,68 @@ public class Main extends Application {
             } catch (Exception ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }*/
-            ArrayList<Vertice> shortestPath = new ArrayList<>();
-            shortestPath = dijkstra.findPath(pixelmap, 0, 0, 7, 8);
-            System.out.println(shortestPath);
-            JFrame frame = new JFrame();
-            frame.setSize(1200, 1200);
+     
+            JFrame frame = new JFrame("Pathing");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(height, width);
             JLabel label = new JLabel(new ImageIcon(img));
             frame.add(label);
+
+            JTextField coordinates = new JTextField();;
+            coordinates.setText("Start point: not set"); 
+            frame.add(coordinates,BorderLayout.SOUTH);
+            
+            frame.addMouseListener(new MouseListener() {
+                int clicked = 0;
+                int startRow = -1;
+                int startColumn = -1;
+                public void mousePressed(MouseEvent e) { }
+                public void mouseReleased(MouseEvent e) { }
+                public void mouseEntered(MouseEvent e) { }
+                public void mouseExited(MouseEvent e) { }
+                public void mouseClicked(MouseEvent e) { 
+                  int x = e.getX();
+                  int y = e.getY();
+  
+                  if (clicked == 1) {
+                    coordinates.setText("Shortest path from coordinates " 
+                            + startRow + " , " + startColumn + " to " + x + " , " + y);
+                    Dijkstra dijkstra = new Dijkstra();
+                    ArrayList<Vertice> shortestPath = new ArrayList<>();
+                    shortestPath = dijkstra.findPath(pixelmap, startRow, startColumn, x, y);
+                    System.out.println(shortestPath);
+                    
+                    BufferedImage img = io.readImage(url);
+
+                    try {
+                        img = imgHand.resizeImage(img, height, width);
+                    } catch (Exception ex) {
+                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                    img = imgHand.drawShortestPath(img, shortestPath);
+
+                    JFrame shortestPathFrame = new JFrame("Pathing");
+                    shortestPathFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    shortestPathFrame.setSize(height, width);
+                    JLabel label = new JLabel(new ImageIcon(img));
+                    shortestPathFrame.add(label);
+                    frame.setVisible(false);
+                    shortestPathFrame.setVisible(true);
+                    
+                  } else if (e.getClickCount() == 1) {
+                      startRow = x;
+                      startColumn = y;  
+                      coordinates.setText("Start point: " + startRow + " , " + startColumn);
+                      clicked++;
+                  }
+                }
+            });
+
             frame.setVisible(true);
-         
+            
+            
+            stage.setScene(actionPanel);
         });
         
     
@@ -83,9 +166,10 @@ public class Main extends Application {
         HBox searchComponents = new HBox(10);
         Label searchInstructions = new Label("URL of the map (PNG)");
         searchInstructions.setFont(Font.font("Arial", FontWeight.BOLD, 15));
-        searchComponents.getChildren().addAll(searchInstructions, textfield, searchButton);
+        searchComponents.getChildren().addAll(searchInstructions, textfield, revealTheMapButton);
         Scene searchPanel = new Scene(searchComponents);
         stage.setScene(searchPanel);
+            
         stage.show(); 
     }
     

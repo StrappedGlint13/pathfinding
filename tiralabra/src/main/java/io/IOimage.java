@@ -11,8 +11,10 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import static javax.swing.JOptionPane.showMessageDialog;
+import utils.Vertice;
 
 /**
  *
@@ -22,6 +24,8 @@ import static javax.swing.JOptionPane.showMessageDialog;
  */
 
 public class IOimage {
+
+    
     private URL url;
     
     public IOimage() {
@@ -39,4 +43,5 @@ public class IOimage {
         }
         return null;
     }
+    
 }
