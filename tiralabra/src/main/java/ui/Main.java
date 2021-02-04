@@ -29,6 +29,7 @@ import javafx.stage.Stage;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import static javax.swing.JOptionPane.showMessageDialog;
 import javax.swing.JTextField;
 import utils.Vertice;
 
@@ -43,9 +44,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        
         Button revealTheMapButton = new Button("Reveal the map");
-        TextField textfield = new TextField("https://movingai.com/benchmarks/street/Denver_2_256.png");
+        TextField textfield = new TextField("https://movingai.com/benchmarks/street/Milan_0_256.png");
         
         // Coordinates Scene and instructions
         
@@ -120,13 +120,20 @@ public class Main extends Application {
                   int y = e.getY();
   
                   if (clicked == 1) {
+                    JTextField coordinates = new JTextField();;
                     coordinates.setText("Shortest path from coordinates " 
                             + startRow + " , " + startColumn + " to " + x + " , " + y);
                     Dijkstra dijkstra = new Dijkstra();
                     ArrayList<Vertice> shortestPath = new ArrayList<>();
                     shortestPath = dijkstra.findPath(pixelmap, startRow, startColumn, x, y);
-                    System.out.println(shortestPath);
+                    // System.out.println(shortestPath);
+                    if (shortestPath == null) {
+                        showMessageDialog(null, "There is no path between the starting and ending point you chose.");
+                    }
                     
+                    if (shortestPath.isEmpty()) {
+                        showMessageDialog(null, "You did not clicked the land!");
+                    }
                     BufferedImage img = io.readImage(url);
 
                     try {
@@ -136,15 +143,14 @@ public class Main extends Application {
                     }
                     
                     img = imgHand.drawShortestPath(img, shortestPath);
-
                     JFrame shortestPathFrame = new JFrame("Pathing");
                     shortestPathFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     shortestPathFrame.setSize(height, width);
                     JLabel label = new JLabel(new ImageIcon(img));
                     shortestPathFrame.add(label);
+                    shortestPathFrame.add(coordinates,BorderLayout.SOUTH);                 
                     frame.setVisible(false);
-                    shortestPathFrame.setVisible(true);
-                    
+                    shortestPathFrame.setVisible(true);  
                   } else if (e.getClickCount() == 1) {
                       startRow = x;
                       startColumn = y;  
@@ -162,7 +168,6 @@ public class Main extends Application {
         
     
         // Search panel
-  
         HBox searchComponents = new HBox(10);
         Label searchInstructions = new Label("URL of the map (PNG)");
         searchInstructions.setFont(Font.font("Arial", FontWeight.BOLD, 15));

@@ -15,7 +15,7 @@ package utils;
 public class Vertice implements Comparable<Vertice>{
     private int row;
     private int column;
-    private int distance;
+    private double distance;
     private Vertice previous;
     
     public Vertice(int row, int column) {
@@ -25,7 +25,7 @@ public class Vertice implements Comparable<Vertice>{
         this.previous = null;
     }
     
-    public Vertice(int row, int column, int distance, Vertice previous) {
+    public Vertice(int row, int column, double distance, Vertice previous) {
         this.row = row;
         this.column = column;
         this.distance = distance;
@@ -55,7 +55,7 @@ public class Vertice implements Comparable<Vertice>{
         }
     }
     
-    public int getDistance() {
+    public double getDistance() {
         return distance;
     }
 

@@ -18,7 +18,9 @@ import utils.Vertice;
  */
 
 public class Dijkstra implements SearchInterface {
+    final double diagonalMovement;
     public Dijkstra() {
+        this.diagonalMovement = 1.4;
     }
     
     public ArrayList<Vertice> findPath(int[][]map, int startR, int startC, int endR, int endC) {
@@ -34,11 +36,12 @@ public class Dijkstra implements SearchInterface {
             {1, 0, 1, 0, 1, 0, 1, 1, 0},
             {1, 0, 1, 0, 1, 1, 0, 0, 1},
             {1, 1, 1, 0, 1, 1, 0, 0, 0},
-        };*/
+        };
+        */
         int rowLength = map.length;  
         int columnLength = map[0].length;
 
-        int[][] distance = new int[rowLength][columnLength];
+        double[][] distance = new double[rowLength][columnLength];
         boolean[][] visited = new boolean[rowLength][columnLength];
         PriorityQueue<Vertice> heap =  new PriorityQueue<>();
         
@@ -51,11 +54,11 @@ public class Dijkstra implements SearchInterface {
         //testing purposes
         if (map[startR][startC] == 0) {
             System.out.println("Starting point is in the wall!");
-            return null;
+            return new ArrayList<>();
         }
         if(map[endR][endC] == 0) {
             System.out.println("Ending point is in the wall!");
-            return null;
+            return new ArrayList<>();
         }
         
         //Start and end vertices
@@ -66,8 +69,8 @@ public class Dijkstra implements SearchInterface {
         heap.add(startPoint);
         while(!heap.isEmpty()) {
             Vertice currentV = heap.poll();
-            System.out.println("Handling: " + currentV);
-            System.out.println("Distance from the starting point: " + currentV.getDistance());
+            //System.out.println("Handling: " + currentV);
+            //System.out.println("Distance from the starting point: " + currentV.getDistance());
             int currentRow = currentV.getRow();
             int currentColumn = currentV.getColumn();
             
@@ -83,14 +86,14 @@ public class Dijkstra implements SearchInterface {
             visited[currentRow][currentColumn] = true;
             
             //start moving
-            for (int rowMove = -1; rowMove < 2; rowMove++) {
-                for (int columnMove = -1; columnMove < 2; columnMove++) {
+            for (int rowStep = -1; rowStep < 2; rowStep++) {
+                for (int columnStep = -1; columnStep < 2; columnStep++) {
                     //if we are at the starting point
-                    if(rowMove == 0 && columnMove == 0) {
+                    if(rowStep == 0 && columnStep == 0) {
                         continue;
                     }
-                    int moveOneRow = currentRow + rowMove;
-                    int moveOneColumn = currentColumn + columnMove;
+                    int moveOneRow = currentRow + rowStep;
+                    int moveOneColumn = currentColumn + columnStep;
                     
                     if (!checkLimits(map, moveOneRow, moveOneColumn, rowLength, columnLength)) {
                         continue;
@@ -101,7 +104,13 @@ public class Dijkstra implements SearchInterface {
                         continue;
                     }
                     
-                    int nextDistance = currentV.getDistance() + 1;
+                    double nextDistance = currentV.getDistance() + diagonalMovement;
+                    
+                    if (movingStraight(rowStep, columnStep)) {
+                        nextDistance = currentV.getDistance() + 1;
+                    }
+                    
+                    
                     //check, if we have not went to this vertice
                     if(nextDistance < distance[moveOneRow][moveOneColumn]) {
                         distance[moveOneRow][moveOneColumn] = nextDistance;
@@ -130,5 +139,19 @@ public class Dijkstra implements SearchInterface {
             vertice = vertice.getPrevious();
         }
         return shortestPath;
+    }
+
+    private boolean movingStraight(int moveOneRow, int moveOneColumn) {
+        if (moveOneRow == 0 && moveOneColumn == 1) { // right
+            return true;
+        } else if (moveOneRow == 0 && moveOneColumn == -1) { // left
+            return true;
+        } else if (moveOneRow == -1 && moveOneColumn == 0) { // down
+            return true;
+        } else if (moveOneRow == 1 && moveOneColumn == 0) { // up
+            return true;
+        } else {
+            return false;
+        }
     }
 }

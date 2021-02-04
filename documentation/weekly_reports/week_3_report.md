@@ -6,7 +6,7 @@ Time used: 4 + = x hours.
 
 Wednesday: I made some debugging and tests for Dijkstra. Finally, all the tests ran successfully and the algorithm finds the shortest path. Tomorrow, I'll be focusing on improving the GUI, so that I can actually see the algorithm working more visual way. 
 
-Thursday: I started implementing Dijkstra's algorithm to the program. I also made utils like Vertice and Edge for making a net from pixels. 
+Thursday: I managed to made workable GUI with drawing element and picking up the coordinates that user clicks. I saw, that my algorithm was making some sort of tik-tak-toe, but then I realized, that I can't move same distance straightforward and diagonally. I explored the web, and made distances 1 and 1.4, and now I can actually see that the Dijkstra is working! Tomorrow I'll start implementing the A* to the program and write more tests. I have also a couple of odd errors, that I'll be looking into. 
 
 Friday: I made preliminary version of Dijkstra that is working and write some tests. 
 

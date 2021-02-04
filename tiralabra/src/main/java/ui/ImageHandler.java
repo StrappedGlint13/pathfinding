@@ -22,7 +22,9 @@ import utils.Vertice;
  */
 
 public class ImageHandler {
-    public ImageHandler() {   
+    Color pathColor;
+    public ImageHandler() {  
+        pathColor = new Color(255, 178, 102);
     }
    
     public BufferedImage resizeImage(BufferedImage img, int width, int heigth) throws Exception {
@@ -49,14 +51,28 @@ public class ImageHandler {
   public BufferedImage drawShortestPath(BufferedImage img, ArrayList<Vertice> shortestPath) {   
         for (int i = 1; i < shortestPath.size() - 1; i++) {
             Vertice v = shortestPath.get(i);
-            img.setRGB(v.getRow(), v.getColumn(), Color.GREEN.getRGB());
-            for (int rowMove = -1; rowMove < 2; rowMove++) {
-                for (int columnMove = -1; columnMove < 2; columnMove++) {
-                    img.setRGB(v.getRow() - rowMove, v.getColumn() - columnMove, Color.GREEN.getRGB());
-                }
-            }
+            //img = draw(img, v);
+            img = drawGrid(img, v);
         }
         return img;
     }
+  
+  public BufferedImage drawGrid(BufferedImage img, Vertice v) {
+      int black = new Color(0, 0, 0).getRGB();
+      for (int drawRow = -1; drawRow < 2; drawRow++) {
+                for (int drawCol = -1; drawCol < 2; drawCol++) {
+                    if (img.getRGB(v.getRow() - drawRow, v.getColumn() - drawCol) == black) {
+                        continue;
+                    }
+                    img.setRGB(v.getRow() - drawRow, v.getColumn() - drawCol, pathColor.getRGB());
+                }
+            }
+      return img;
+  }
+  
+  public BufferedImage draw(BufferedImage img, Vertice v) {
+        img.setRGB(v.getRow(), v.getColumn(), pathColor.getRGB());
+      return img;
+  }
  
 }
