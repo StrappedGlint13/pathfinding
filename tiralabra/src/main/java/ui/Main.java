@@ -48,26 +48,26 @@ public class Main extends Application {
         TextField textfield = new TextField("https://movingai.com/benchmarks/street/Milan_0_256.png");
         
         // Coordinates Scene and instructions
-          Label header = new Label("Instructions");
-          header.setFont(Font.font("Arial", FontWeight.BOLD,  20)); 
-          Label instructions = new Label("1. click is the start \n"
-                  + "2. click is the finish\n\n"
-                  + "You are able to see your \n"
-                  + "coordinates at the bottom \n"
-                  + "left corner of the window.");
+        Label header = new Label("Instructions");
+        header.setFont(Font.font("Arial", FontWeight.BOLD,  20)); 
+        Label instructions = new Label("1. click is the start \n"
+                + "2. click is the finish\n\n"
+                + "You are able to see your \n"
+                + "coordinates at the bottom \n"
+                + "left corner of the window.");
 
-          GridPane instrSetup = new GridPane();
+        GridPane instrSetup = new GridPane();
           
-          instrSetup.setStyle("-fx-background-color:POWDERBLUE");
-          instrSetup.add(header, 0, 1);
-          instrSetup.add(instructions, 0, 2);
-          instrSetup.setPrefSize(250, 200);
-          instrSetup.setAlignment(Pos.BASELINE_RIGHT);
-          instrSetup.setVgap(10);
-          instrSetup.setHgap(10);
-          instrSetup.setPadding(new Insets(20, 20, 0, 20));
+        instrSetup.setStyle("-fx-background-color:POWDERBLUE");
+        instrSetup.add(header, 0, 1);
+        instrSetup.add(instructions, 0, 2);
+        instrSetup.setPrefSize(250, 200);
+        instrSetup.setAlignment(Pos.BASELINE_RIGHT);
+        instrSetup.setVgap(10);
+        instrSetup.setHgap(10);
+        instrSetup.setPadding(new Insets(20, 20, 0, 20));
         
-          Scene actionPanel = new Scene(instrSetup);
+        Scene actionPanel = new Scene(instrSetup);
         
         
         revealTheMapButton.setOnAction(e -> {
@@ -114,49 +114,49 @@ public class Main extends Application {
                 public void mouseEntered(MouseEvent e) { }
                 public void mouseExited(MouseEvent e) { }
                 public void mouseClicked(MouseEvent e) { 
-                  int x = e.getX();
-                  int y = e.getY();
+                    int x = e.getX();
+                    int y = e.getY();
   
-                  if (clicked == 1) {
-                    JTextField coordinates = new JTextField();;
-                    coordinates.setText("Shortest path from coordinates " 
+                    if (clicked == 1) {
+                        JTextField coordinates = new JTextField();;
+                        coordinates.setText("Shortest path from coordinates " 
                             + startRow + " , " + startColumn + " to " + x + " , " + y);
-                    Dijkstra dijkstra = new Dijkstra();
-                    ArrayList<Vertice> shortestPath = new ArrayList<>();
-                    shortestPath = dijkstra.findPath(pixelmap, startRow, startColumn, x, y);
-                    // System.out.println(shortestPath);
-                    if (shortestPath == null) {
-                        showMessageDialog(null, "There is no path between the starting and ending point you chose.");
-                    }
+                        Dijkstra dijkstra = new Dijkstra();
+                        ArrayList<Vertice> shortestPath = new ArrayList<>();
+                        shortestPath = dijkstra.findPath(pixelmap, startRow, startColumn, x, y);
+                        // System.out.println(shortestPath);
+                        if (shortestPath == null) {
+                            showMessageDialog(null, "There is no path between the starting and ending point you chose.");
+                        }
                     
-                    if (shortestPath.isEmpty()) {
-                        showMessageDialog(null, "You did not clicked the land!");
-                    }
-                    BufferedImage img = io.readImage(url);
+                        if (shortestPath.isEmpty()) {
+                            showMessageDialog(null, "You did not clicked the land!");
+                        }
+                        BufferedImage img = io.readImage(url);
 
-                    try {
-                        img = imgHand.resizeImage(img, height, width);
-                    } catch (Exception ex) {
-                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                        try {
+                            img = imgHand.resizeImage(img, height, width);
+                        } catch (Exception ex) {
+                            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                        img = imgHand.drawShortestPath(img, shortestPath);
+                        JFrame shortestPathFrame = new JFrame("Pathing");
+                        shortestPathFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                        shortestPathFrame.setSize(height, width);
+                        JLabel label = new JLabel(new ImageIcon(img));
+                        shortestPathFrame.add(label);
+                        shortestPathFrame.add(coordinates,BorderLayout.SOUTH);                 
+                        shortestPathFrame.setVisible(true); 
+                        frame.setVisible(false);
+                    } else if (e.getClickCount() == 1) {
+                        startRow = x;
+                        startColumn = y;  
+                        coordinates.setText("Start point: " + startRow + " , " + startColumn);
+                        clicked++;
                     }
-                    
-                    img = imgHand.drawShortestPath(img, shortestPath);
-                    JFrame shortestPathFrame = new JFrame("Pathing");
-                    shortestPathFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    shortestPathFrame.setSize(height, width);
-                    JLabel label = new JLabel(new ImageIcon(img));
-                    shortestPathFrame.add(label);
-                    shortestPathFrame.add(coordinates,BorderLayout.SOUTH);                 
-                    shortestPathFrame.setVisible(true); 
-                    frame.setVisible(false);
-                  } else if (e.getClickCount() == 1) {
-                      startRow = x;
-                      startColumn = y;  
-                      coordinates.setText("Start point: " + startRow + " , " + startColumn);
-                      clicked++;
-                  }
                 }
-            });
+                });
 
             frame.setVisible(true);
             

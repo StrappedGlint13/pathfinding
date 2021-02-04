@@ -12,7 +12,7 @@
         <module name="OneStatementPerLine"/>
         <module name="MethodLength">
             <property name="tokens" value="METHOD_DEF"/>
-            <property name="max" value="100"/>
+            <property name="max" value="200"/>
             <property name="countEmpty" value="false"/>
         </module>
 
