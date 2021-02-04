@@ -1,6 +1,6 @@
 # Week 3
 
-Time used: 4 + = x hours.
+Time used: 4 + 5 = x hours.
 
 ## What have you done this week?
 

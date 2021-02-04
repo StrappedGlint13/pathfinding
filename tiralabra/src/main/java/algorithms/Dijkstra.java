@@ -51,17 +51,11 @@ public class Dijkstra implements SearchInterface {
             }
         }
         
-        //testing purposes
-        if (map[startR][startC] == 0) {
-            System.out.println("Starting point is in the wall!");
+        //check if the user clicked obstacle
+        if (map[startR][startC] == 0 || map[endR][endC] == 0) {
             return new ArrayList<>();
         }
-        if(map[endR][endC] == 0) {
-            System.out.println("Ending point is in the wall!");
-            return new ArrayList<>();
-        }
-        
-        //Start and end vertices
+       
         Vertice startPoint = new Vertice(startR, startC);
         distance[startR][startC] = 0;
         
@@ -109,9 +103,7 @@ public class Dijkstra implements SearchInterface {
                     if (movingStraight(rowStep, columnStep)) {
                         nextDistance = currentV.getDistance() + 1;
                     }
-                    
-                    
-                    //check, if we have not went to this vertice
+                     
                     if(nextDistance < distance[moveOneRow][moveOneColumn]) {
                         distance[moveOneRow][moveOneColumn] = nextDistance;
                         Vertice next = new Vertice(moveOneRow, moveOneColumn, nextDistance, currentV);

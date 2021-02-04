@@ -48,28 +48,26 @@ public class Main extends Application {
         TextField textfield = new TextField("https://movingai.com/benchmarks/street/Milan_0_256.png");
         
         // Coordinates Scene and instructions
-        
-          Label ohjeteksti = new Label("Click first starting point and then ending point \n"
-                  + "Algorithms will find the way");
-          Button startSearchButton = new Button("Search");
-          Label startingPointLabel = new Label("Start here");
-          Label endingPointLabel = new Label("End here");
+          Label header = new Label("Instructions");
+          header.setFont(Font.font("Arial", FontWeight.BOLD,  20)); 
+          Label instructions = new Label("1. click is the start \n"
+                  + "2. click is the finish\n\n"
+                  + "You are able to see your \n"
+                  + "coordinates at the bottom \n"
+                  + "left corner of the window.");
 
-          // 1.2 luodaan asettelu ja lisätään komponentit siihen
-          GridPane asettelu = new GridPane();
+          GridPane instrSetup = new GridPane();
           
-          asettelu.add(ohjeteksti, 0, 1);
-          asettelu.add(startSearchButton, 0, 2);
-          asettelu.add(startingPointLabel, 0, 3);
-          asettelu.add(endingPointLabel, 0, 4);
-
-          asettelu.setPrefSize(300, 180);
-          asettelu.setAlignment(Pos.BASELINE_RIGHT);
-          asettelu.setVgap(10);
-          asettelu.setHgap(10);
-          asettelu.setPadding(new Insets(20, 20, 20, 20));
+          instrSetup.setStyle("-fx-background-color:POWDERBLUE");
+          instrSetup.add(header, 0, 1);
+          instrSetup.add(instructions, 0, 2);
+          instrSetup.setPrefSize(250, 200);
+          instrSetup.setAlignment(Pos.BASELINE_RIGHT);
+          instrSetup.setVgap(10);
+          instrSetup.setHgap(10);
+          instrSetup.setPadding(new Insets(20, 20, 0, 20));
         
-          Scene actionPanel = new Scene(asettelu);
+          Scene actionPanel = new Scene(instrSetup);
         
         
         revealTheMapButton.setOnAction(e -> {
@@ -149,8 +147,8 @@ public class Main extends Application {
                     JLabel label = new JLabel(new ImageIcon(img));
                     shortestPathFrame.add(label);
                     shortestPathFrame.add(coordinates,BorderLayout.SOUTH);                 
+                    shortestPathFrame.setVisible(true); 
                     frame.setVisible(false);
-                    shortestPathFrame.setVisible(true);  
                   } else if (e.getClickCount() == 1) {
                       startRow = x;
                       startColumn = y;  
@@ -169,6 +167,7 @@ public class Main extends Application {
     
         // Search panel
         HBox searchComponents = new HBox(10);
+        searchComponents.setStyle("-fx-background-color:POWDERBLUE");
         Label searchInstructions = new Label("URL of the map (PNG)");
         searchInstructions.setFont(Font.font("Arial", FontWeight.BOLD, 15));
         searchComponents.getChildren().addAll(searchInstructions, textfield, revealTheMapButton);
