@@ -127,24 +127,26 @@ public class Main extends Application {
                         long startD = System.nanoTime();
                         Dijkstra dijkstra = new Dijkstra();
                         ArrayList<Vertex> shortestPathDijkstra = new ArrayList<>();
-                        //double dDinstance = shortestPathDijkstra.get(shortestPathDijkstra.size()).getDistance();
                         long endD = System.nanoTime();
                         
                         System.out.println("Dijkstra runs " +((endD - startD)/1e9) + " seconds");
-                        //System.out.println("Dijkstra distance is " + dDinstance);
-                        
+                                               
                         long startA = System.nanoTime();
                         AStar aStar = new AStar();
                         ArrayList<Vertex> shortestPathAStar = new ArrayList<>();
-                        //double aDinstance = shortestPathAStar.get(shortestPathAStar.size()).getDistance();
                         long endA= System.nanoTime();
                         
                         System.out.println("A* runs " +((endA-startA)/1e9)+ " seconds");
-                        //System.out.println("A* distance is " + aDinstance);
                         
                         shortestPathAStar = aStar.findPath(pixelmap, startRow, startColumn, x, y);
                         shortestPathDijkstra = dijkstra.findPath(pixelmap, startRow, startColumn, x, y);
                         
+                        /*
+                        double dDinstance = shortestPathDijkstra.get(0).getDistance();
+                        double aDinstance = shortestPathAStar.get(0).getDistance();
+                        System.out.println("Dijkstra distance is " + dDinstance);
+                        System.out.println("A* distance is " + aDinstance);
+                        */
                         
                         if (shortestPathAStar == null) {
                             showMessageDialog(null, "There is no path between the starting and ending point you chose.");
@@ -180,8 +182,6 @@ public class Main extends Application {
                 });
 
             frame.setVisible(true);
-            
-            
             stage.setScene(actionPanel);
         });
         

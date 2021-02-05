@@ -62,6 +62,7 @@ public class AStar implements SearchInterface {
         heap.add(startPoint);
         while(!heap.isEmpty()) {
             Vertex currentV = heap.poll();
+     
             //System.out.println("Handling: " + currentV);
             //System.out.println("Distance from the starting point: " + currentV.getDistance());
             int currentRow = currentV.getRow();
@@ -97,14 +98,15 @@ public class AStar implements SearchInterface {
                         continue;
                     }
                     
-                    double nextDistance = currentV.getDistance() + diagonalMovement + heuristic(startR, startC, endR, endC);
+                    double nextDistance = currentV.getDistance() + diagonalMovement;
                     
                     if (movingStraight(rowStep, columnStep)) {
-                        nextDistance = currentV.getDistance() + 1 + heuristic(startR, startC, endR, endC);
+                        nextDistance = currentV.getDistance() + 1;
                     }
                      
                     if(nextDistance < distance[moveOneRow][moveOneColumn]) {
                         distance[moveOneRow][moveOneColumn] = nextDistance;
+                        nextDistance = nextDistance + heuristic(startR, startC, endR, endC);
                         Vertex next = new Vertex(moveOneRow, moveOneColumn, nextDistance, currentV);
                         heap.add(next);
                     }

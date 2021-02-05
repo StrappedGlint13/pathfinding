@@ -1,4 +1,4 @@
-# pathfinding
+# Pathfinding
 Tiralabra
 
 ![GitHub Actions](https://github.com/StrappedGlint13/pathfinding/workflows/Java%20CI%20with%20Gradle/badge.svg)
@@ -14,3 +14,6 @@ Tiralabra
 
 
 [Week 2](https://github.com/StrappedGlint13/pathfinding/blob/main/documentation/weekly_reports/week_2_report.md)
+
+
+[Week 3](https://github.com/StrappedGlint13/pathfinding/blob/main/documentation/weekly_reports/week_3_report.md)
