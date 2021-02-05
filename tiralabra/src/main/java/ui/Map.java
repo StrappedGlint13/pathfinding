@@ -7,7 +7,7 @@ package ui;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import utils.Vertice;
+import utils.Vertex;
 
 /**
  *

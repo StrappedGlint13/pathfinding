@@ -31,7 +31,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import static javax.swing.JOptionPane.showMessageDialog;
 import javax.swing.JTextField;
-import utils.Vertice;
+import utils.Vertex;
 
 
 /**
@@ -122,7 +122,7 @@ public class Main extends Application {
                         coordinates.setText("Shortest path from coordinates " 
                             + startRow + " , " + startColumn + " to " + x + " , " + y);
                         Dijkstra dijkstra = new Dijkstra();
-                        ArrayList<Vertice> shortestPath = new ArrayList<>();
+                        ArrayList<Vertex> shortestPath = new ArrayList<>();
                         shortestPath = dijkstra.findPath(pixelmap, startRow, startColumn, x, y);
                         // System.out.println(shortestPath);
                         if (shortestPath == null) {

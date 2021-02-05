@@ -12,20 +12,20 @@ package utils;
  * @author matibrax
  */
 
-public class Vertice implements Comparable<Vertice>{
+public class Vertex implements Comparable<Vertex>{
     private int row;
     private int column;
     private double distance;
-    private Vertice previous;
+    private Vertex previous;
     
-    public Vertice(int row, int column) {
+    public Vertex(int row, int column) {
         this.row = row;
         this.column = column;
         this.distance = 0;
         this.previous = null;
     }
     
-    public Vertice(int row, int column, double distance, Vertice previous) {
+    public Vertex(int row, int column, double distance, Vertex previous) {
         this.row = row;
         this.column = column;
         this.distance = distance;
@@ -40,12 +40,12 @@ public class Vertice implements Comparable<Vertice>{
         return column;
     }
 
-    public Vertice getPrevious() {
+    public Vertex getPrevious() {
         return previous;
     }
 
     @Override   
-    public int compareTo(Vertice v2) {
+    public int compareTo(Vertex v2) {
         if (this.distance < v2.distance) {
             return -1;
         } else if (this.distance > v2.distance) {

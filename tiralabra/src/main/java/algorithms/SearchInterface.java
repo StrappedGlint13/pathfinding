@@ -6,7 +6,7 @@
 package algorithms;
 
 import java.util.ArrayList;
-import utils.Vertice;
+import utils.Vertex;
 
 /**
  *
@@ -16,5 +16,5 @@ import utils.Vertice;
  */
 public interface SearchInterface {
     boolean checkLimits(int[][]map, int r, int c, int rowLength, int columnLength);
-    public ArrayList<Vertice> createShortestPath(Vertice vertice);
+    public ArrayList<Vertex> createShortestPath(Vertex vertice);
 }

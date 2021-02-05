@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import utils.Vertice;
+import utils.Vertex;
 
 /**
  *
@@ -39,7 +39,7 @@ public class DijkstraTest {
     @Test
     public void testStartingPointAndDistance() {
         vertices = dijkstra.findPath(testmap, 0, 0, 0, 0);
-        Vertice v = new Vertice(0,0,0,null);
+        Vertex v = new Vertex(0,0,0,null);
         assertEquals(v, vertices.get(0));
       
     }

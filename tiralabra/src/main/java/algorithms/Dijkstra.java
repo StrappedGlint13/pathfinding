@@ -8,7 +8,7 @@ package algorithms;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
-import utils.Vertice;
+import utils.Vertex;
 
 /**
  *
@@ -23,7 +23,7 @@ public class Dijkstra implements SearchInterface {
         this.diagonalMovement = 1.4;
     }
     
-    public ArrayList<Vertice> findPath(int[][]map, int startR, int startC, int endR, int endC) {
+    public ArrayList<Vertex> findPath(int[][]map, int startR, int startC, int endR, int endC) {
         //current data structures
         /*
         map = new int[][]{
@@ -43,7 +43,7 @@ public class Dijkstra implements SearchInterface {
 
         double[][] distance = new double[rowLength][columnLength];
         boolean[][] visited = new boolean[rowLength][columnLength];
-        PriorityQueue<Vertice> heap =  new PriorityQueue<>();
+        PriorityQueue<Vertex> heap =  new PriorityQueue<>();
         
         for (int r = 0; r < rowLength; r++) {
             for (int c = 0; c < columnLength; c++) {
@@ -56,13 +56,13 @@ public class Dijkstra implements SearchInterface {
             return new ArrayList<>();
         }
        
-        Vertice startPoint = new Vertice(startR, startC);
+        Vertex startPoint = new Vertex(startR, startC);
         distance[startR][startC] = 0;
         
         //Start searching
         heap.add(startPoint);
         while(!heap.isEmpty()) {
-            Vertice currentV = heap.poll();
+            Vertex currentV = heap.poll();
             //System.out.println("Handling: " + currentV);
             //System.out.println("Distance from the starting point: " + currentV.getDistance());
             int currentRow = currentV.getRow();
@@ -106,7 +106,7 @@ public class Dijkstra implements SearchInterface {
                      
                     if(nextDistance < distance[moveOneRow][moveOneColumn]) {
                         distance[moveOneRow][moveOneColumn] = nextDistance;
-                        Vertice next = new Vertice(moveOneRow, moveOneColumn, nextDistance, currentV);
+                        Vertex next = new Vertex(moveOneRow, moveOneColumn, nextDistance, currentV);
                         heap.add(next);
                     }
                 }
@@ -124,8 +124,8 @@ public class Dijkstra implements SearchInterface {
     }
 
     @Override
-    public ArrayList<Vertice> createShortestPath(Vertice vertice) {
-        ArrayList<Vertice> shortestPath = new ArrayList<>();
+    public ArrayList<Vertex> createShortestPath(Vertex vertice) {
+        ArrayList<Vertex> shortestPath = new ArrayList<>();
         while (vertice.getPrevious() != null) {
             shortestPath.add(vertice);
             vertice = vertice.getPrevious();

@@ -14,7 +14,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import static javax.swing.JOptionPane.showMessageDialog;
-import utils.Vertice;
+import utils.Vertex;
 
 /**
  *

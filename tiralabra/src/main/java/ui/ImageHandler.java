@@ -12,7 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
-import utils.Vertice;
+import utils.Vertex;
 
 /**
  *
@@ -48,16 +48,16 @@ public class ImageHandler {
         return img;
     }*/
 
-    public BufferedImage drawShortestPath(BufferedImage img, ArrayList<Vertice> shortestPath) {   
+    public BufferedImage drawShortestPath(BufferedImage img, ArrayList<Vertex> shortestPath) {   
         for (int i = 1; i < shortestPath.size() - 1; i++) {
-            Vertice v = shortestPath.get(i);
+            Vertex v = shortestPath.get(i);
             //img = draw(img, v);
             img = drawGrid(img, v);
         }
         return img;
     }
   
-    public BufferedImage drawGrid(BufferedImage img, Vertice v) {
+    public BufferedImage drawGrid(BufferedImage img, Vertex v) {
         int black = new Color(0, 0, 0).getRGB();
         for (int drawRow = -1; drawRow < 2; drawRow++) {
             for (int drawCol = -1; drawCol < 2; drawCol++) {
@@ -70,7 +70,7 @@ public class ImageHandler {
         return img;
     }
   
-    public BufferedImage draw(BufferedImage img, Vertice v) {
+    public BufferedImage draw(BufferedImage img, Vertex v) {
         img.setRGB(v.getRow(), v.getColumn(), pathColor.getRGB());
         return img;
     }
