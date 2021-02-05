@@ -5,21 +5,19 @@
  */
 package algorithms;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 import utils.Vertex;
 
 /**
  *
- * Algorithm that searches the shortest path. 
- * 
  * @author matibrax
  */
-
-public class Dijkstra implements SearchInterface {
+public class AStar implements SearchInterface {
     final double diagonalMovement;
-    public Dijkstra() {
+    
+    
+    public AStar() {
         this.diagonalMovement = 1.4;
     }
     
@@ -37,8 +35,8 @@ public class Dijkstra implements SearchInterface {
             {1, 0, 1, 0, 1, 0, 1, 1, 0},
             {1, 0, 1, 0, 1, 1, 0, 0, 1},
             {1, 1, 1, 0, 1, 1, 0, 0, 0},
-        };*/
-
+        };
+        */
         int rowLength = map.length;  
         int columnLength = map[0].length;
 
@@ -99,10 +97,10 @@ public class Dijkstra implements SearchInterface {
                         continue;
                     }
                     
-                    double nextDistance = currentV.getDistance() + diagonalMovement;
+                    double nextDistance = currentV.getDistance() + diagonalMovement + heuristic(startR, startC, endR, endC);
                     
                     if (movingStraight(rowStep, columnStep)) {
-                        nextDistance = currentV.getDistance() + 1;
+                        nextDistance = currentV.getDistance() + 1 + heuristic(startR, startC, endR, endC);
                     }
                      
                     if(nextDistance < distance[moveOneRow][moveOneColumn]) {
@@ -114,6 +112,13 @@ public class Dijkstra implements SearchInterface {
             }                  
         }
         return null;
+    }
+    
+    private int heuristic(int startR, int startC, int endR, int endC) {
+        // Manhattan distance for A
+        int absX = (startR - endR) > 0 ? (startR - endR) : -(startR - endR);
+        int absY = (startC - endC) > 0 ? (startC - endC) : -(startC - endC);
+        return absX + absY;
     }
 
     @Override
@@ -133,7 +138,6 @@ public class Dijkstra implements SearchInterface {
         }
         return shortestPath;
     }
-    
     @Override
     public boolean movingStraight(int moveOneRow, int moveOneColumn) {
         if (moveOneRow == 0 && moveOneColumn == 1) { // right

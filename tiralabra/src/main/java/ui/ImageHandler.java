@@ -22,9 +22,11 @@ import utils.Vertex;
  */
 
 public class ImageHandler {
-    Color pathColor;
+    Color colorDijkstra;
+    Color colorAstar;
     public ImageHandler() {  
-        pathColor = new Color(255, 178, 102);
+        colorDijkstra = new Color(255, 178, 102);
+        colorAstar = new Color(255, 51, 51);
     }
    
     public BufferedImage resizeImage(BufferedImage img, int width, int heigth) throws Exception {
@@ -34,30 +36,34 @@ public class ImageHandler {
         writer.dispose();
         return resizedImage;
     }
-    
-    // Add drawing functionality when we have the best path
-    /*
-    public BufferedImage draw(BufferedImage img, int width, int heigth) throws Exception {
-        for (int j = 0; j < heigth; j++) {
-            for (int k = 0; k < width; k++) {
-                img.setRGB(j, k, Color.green.getRGB());
-            }
-        }
-        
-        
-        return img;
-    }*/
 
-    public BufferedImage drawShortestPath(BufferedImage img, ArrayList<Vertex> shortestPath) {   
-        for (int i = 1; i < shortestPath.size() - 1; i++) {
-            Vertex v = shortestPath.get(i);
+    public BufferedImage drawShortestPath(BufferedImage img, ArrayList<Vertex> shortestPathAStar, ArrayList<Vertex> shortestPathDijkstra) {   
+        int d = 0;
+        int a = 1;
+        for (int i = 1; i < shortestPathDijkstra.size() - 1; i++) {
+            Vertex v = shortestPathDijkstra.get(i);
             //img = draw(img, v);
-            img = drawGrid(img, v);
+            img = drawGrid(img, v, d);
         }
+        
+        
+        for (int i = 1; i < shortestPathAStar.size() - 1; i++) {
+            Vertex v = shortestPathAStar.get(i);
+            //img = draw(img, v);
+            img = drawGrid(img, v, a);
+        }
+        
         return img;
     }
   
-    public BufferedImage drawGrid(BufferedImage img, Vertex v) {
+    public BufferedImage drawGrid(BufferedImage img, Vertex v, int color) {
+        Color pathColor = new Color(0,0,0);
+        if (color == 0) {
+            pathColor = colorDijkstra;
+        } else {
+            pathColor = colorAstar;
+        }
+        
         int black = new Color(0, 0, 0).getRGB();
         for (int drawRow = -1; drawRow < 2; drawRow++) {
             for (int drawCol = -1; drawCol < 2; drawCol++) {
@@ -70,8 +76,4 @@ public class ImageHandler {
         return img;
     }
   
-    public BufferedImage draw(BufferedImage img, Vertex v) {
-        img.setRGB(v.getRow(), v.getColumn(), pathColor.getRGB());
-        return img;
-    }
 }
