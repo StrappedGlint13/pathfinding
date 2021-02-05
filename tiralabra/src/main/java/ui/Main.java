@@ -5,6 +5,7 @@
  */
 package ui;
 
+import algorithms.AStar;
 import algorithms.Dijkstra;
 import io.IOimage;
 import java.awt.BorderLayout;
@@ -121,15 +122,37 @@ public class Main extends Application {
                         JTextField coordinates = new JTextField();;
                         coordinates.setText("Shortest path from coordinates " 
                             + startRow + " , " + startColumn + " to " + x + " , " + y);
+                        
+                        //Algorithms
+                        long startD = System.nanoTime();
                         Dijkstra dijkstra = new Dijkstra();
-                        ArrayList<Vertex> shortestPath = new ArrayList<>();
-                        shortestPath = dijkstra.findPath(pixelmap, startRow, startColumn, x, y);
-                        // System.out.println(shortestPath);
-                        if (shortestPath == null) {
+                        ArrayList<Vertex> shortestPathDijkstra = new ArrayList<>();
+                        long endD = System.nanoTime();
+                        
+                        System.out.println("Dijkstra runs " +((endD - startD)/1e9) + " seconds");
+                                               
+                        long startA = System.nanoTime();
+                        AStar aStar = new AStar();
+                        ArrayList<Vertex> shortestPathAStar = new ArrayList<>();
+                        long endA= System.nanoTime();
+                        
+                        System.out.println("A* runs " +((endA-startA)/1e9)+ " seconds");
+                        
+                        shortestPathAStar = aStar.findPath(pixelmap, startRow, startColumn, x, y);
+                        shortestPathDijkstra = dijkstra.findPath(pixelmap, startRow, startColumn, x, y);
+                        
+                        /*
+                        double dDinstance = shortestPathDijkstra.get(0).getDistance();
+                        double aDinstance = shortestPathAStar.get(0).getDistance();
+                        System.out.println("Dijkstra distance is " + dDinstance);
+                        System.out.println("A* distance is " + aDinstance);
+                        */
+                        
+                        if (shortestPathAStar == null) {
                             showMessageDialog(null, "There is no path between the starting and ending point you chose.");
                         }
                     
-                        if (shortestPath.isEmpty()) {
+                        if (shortestPathAStar.isEmpty()) {
                             showMessageDialog(null, "You did not clicked the land!");
                         }
                         BufferedImage img = io.readImage(url);
@@ -140,7 +163,7 @@ public class Main extends Application {
                             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                         }
 
-                        img = imgHand.drawShortestPath(img, shortestPath);
+                        img = imgHand.drawShortestPath(img, shortestPathAStar, shortestPathDijkstra);
                         JFrame shortestPathFrame = new JFrame("Pathing");
                         shortestPathFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                         shortestPathFrame.setSize(height, width);
@@ -159,8 +182,6 @@ public class Main extends Application {
                 });
 
             frame.setVisible(true);
-            
-            
             stage.setScene(actionPanel);
         });
         
