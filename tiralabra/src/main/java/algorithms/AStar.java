@@ -11,14 +11,17 @@ import utils.Vertex;
 
 /**
  *
+ * Algorithm that searches the shortest path. 
+ * 
  * @author matibrax
  */
+
 public class AStar implements SearchInterface {
     final double diagonalMovement;
     
     
     public AStar() {
-        this.diagonalMovement = 1.4;
+        this.diagonalMovement = Math.sqrt(2);
     }
     
     @Override
@@ -49,7 +52,6 @@ public class AStar implements SearchInterface {
                 distance[r][c] = Integer.MAX_VALUE;
             }
         }
-        
         //check if the user clicked obstacle
         if (map[startR][startC] == 0 || map[endR][endC] == 0) {
             return new ArrayList<>();
@@ -106,7 +108,7 @@ public class AStar implements SearchInterface {
                      
                     if(nextDistance < distance[moveOneRow][moveOneColumn]) {
                         distance[moveOneRow][moveOneColumn] = nextDistance;
-                        nextDistance = nextDistance + heuristic(startR, startC, endR, endC);
+                        nextDistance = nextDistance + heuristic(endR, endC, moveOneRow, moveOneColumn);
                         Vertex next = new Vertex(moveOneRow, moveOneColumn, nextDistance, currentV);
                         heap.add(next);
                     }
@@ -116,11 +118,11 @@ public class AStar implements SearchInterface {
         return null;
     }
     
-    private int heuristic(int startR, int startC, int endR, int endC) {
-        // Manhattan distance for A
-        int absX = (startR - endR) > 0 ? (startR - endR) : -(startR - endR);
-        int absY = (startC - endC) > 0 ? (startC - endC) : -(startC - endC);
-        return absX + absY;
+    private double heuristic(int endX, int endY, int currentX, int currentY) {
+        // Euclidean distance for A*
+        double dX = (currentX-endX)*(currentX-endX);
+        double dY = (currentY-endY)*(currentY-endY);
+        return Math.sqrt(dX + dY);
     }
 
     @Override
@@ -138,6 +140,7 @@ public class AStar implements SearchInterface {
             shortestPath.add(vertice);
             vertice = vertice.getPrevious();
         }
+        
         return shortestPath;
     }
     @Override

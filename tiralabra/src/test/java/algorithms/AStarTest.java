@@ -99,4 +99,23 @@ public class AStarTest {
         vertices = astar.findPath(testmap, 3, 8, 8, 0);
         assertEquals(10, vertices.size());
     }
+    
+    @Test
+    public void testAlgoFindsTheShortestPathFromThreeWalls() { 
+        testmap = new int[][]{
+            {1, 1, 1, 1, 1, 1, 0, 1, 1 ,1, 1, 1, 1,},
+            {1, 1, 0, 0, 1, 0, 0, 1, 1 ,0, 0, 1, 1,},
+            {1, 1, 0, 0, 1, 0, 0, 1, 1 ,0, 0, 1, 1,},
+            {1, 1, 0, 0, 1, 0, 0, 1, 1 ,0, 0, 1, 1,},
+            {1, 1, 0, 0, 1, 0, 0, 1, 1 ,0, 0, 1, 1,},
+            {1, 1, 0, 0, 1, 0, 0, 1, 1 ,0, 0, 1, 1,},
+            {1, 1, 0, 0, 1, 0, 0, 1, 1 ,0, 0, 1, 1,},
+            {1, 1, 0, 0, 1, 0, 0, 1, 1 ,0, 0, 1, 1,},
+            {1, 1, 0, 0, 1, 1, 1, 1, 1 ,0, 0, 1, 1,},
+        };
+        
+        vertices = astar.findPath(testmap, 8, 0, 4, 12);
+        assertEquals(31, vertices.size());
+        
+    }
 }

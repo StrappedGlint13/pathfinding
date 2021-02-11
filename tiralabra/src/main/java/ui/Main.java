@@ -46,7 +46,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         Button revealTheMapButton = new Button("Reveal the map");
-        TextField textfield = new TextField("https://movingai.com/benchmarks/street/Milan_0_256.png");
+        TextField textfield = new TextField("https://movingai.com/benchmarks/maze/maze512-16-0.png");
         
         // Coordinates Scene and instructions
         Label header = new Label("Instructions");
@@ -141,12 +141,8 @@ public class Main extends Application {
                         shortestPathAStar = aStar.findPath(pixelmap, startRow, startColumn, x, y);
                         shortestPathDijkstra = dijkstra.findPath(pixelmap, startRow, startColumn, x, y);
                         
-                        /*
-                        double dDinstance = shortestPathDijkstra.get(0).getDistance();
-                        double aDinstance = shortestPathAStar.get(0).getDistance();
-                        System.out.println("Dijkstra distance is " + dDinstance);
-                        System.out.println("A* distance is " + aDinstance);
-                        */
+                        System.out.println(shortestPathAStar.size());
+                        System.out.println(shortestPathDijkstra.size());
                         
                         if (shortestPathAStar == null) {
                             showMessageDialog(null, "There is no path between the starting and ending point you chose.");
