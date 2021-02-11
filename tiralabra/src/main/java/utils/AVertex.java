@@ -7,28 +7,21 @@ package utils;
 
 /**
  *
- * A Class for the vertices and edges.
+ * A Class for the vertices in A*
  * 
  * @author matibrax
  */
 
-public class Vertex implements Comparable<Vertex>{
+public class AVertex implements Comparable<AVertex>{
     private int row;
     private int column;
-    double distance;
-    private Vertex previous;
+    private double heuristics;
+    private AVertex previous;
     
-    public Vertex(int row, int column) {
+    public AVertex(int row, int column, double heuristics, AVertex previous) {
         this.row = row;
         this.column = column;
-        this.distance = 0;
-        this.previous = null;
-    }
-    
-    public Vertex(int row, int column, double distance, Vertex previous) {
-        this.row = row;
-        this.column = column;
-        this.distance = distance;
+        this.heuristics = heuristics;
         this.previous = previous;
     }
 
@@ -40,27 +33,27 @@ public class Vertex implements Comparable<Vertex>{
         return column;
     }
 
-    public Vertex getPrevious() {
+    public AVertex getPrevious() {
         return previous;
     }
 
     @Override   
-    public int compareTo(Vertex v2) {
-        if (this.distance < v2.distance) {
+    public int compareTo(AVertex v2) {
+        if (this.heuristics < v2.heuristics) {
             return -1;
-        } else if (this.distance > v2.distance) {
+        } else if (this.heuristics > v2.heuristics) {
             return 1;
         } else {
             return 0;
         }
     }
     
-    public double getDistance() {
-        return distance;
+    public double getHeuristics() {
+        return heuristics;
     }
 
     public void setDistance(int distance) {
-        this.distance = distance;
+        this.heuristics = distance;
     }
     @Override
     public String toString() {

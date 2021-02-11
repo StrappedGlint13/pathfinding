@@ -32,6 +32,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import static javax.swing.JOptionPane.showMessageDialog;
 import javax.swing.JTextField;
+import utils.AVertex;
 import utils.Vertex;
 
 
@@ -46,7 +47,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         Button revealTheMapButton = new Button("Reveal the map");
-        TextField textfield = new TextField("https://movingai.com/benchmarks/maze/maze512-16-0.png");
+        TextField textfield = new TextField("https://movingai.com/benchmarks/street/Boston_0_512.png");
         
         // Coordinates Scene and instructions
         Label header = new Label("Instructions");
@@ -56,9 +57,7 @@ public class Main extends Application {
                 + "You are able to see your \n"
                 + "coordinates at the bottom \n"
                 + "left corner of the window.");
-
         GridPane instrSetup = new GridPane();
-          
         instrSetup.setStyle("-fx-background-color:POWDERBLUE");
         instrSetup.add(header, 0, 1);
         instrSetup.add(instructions, 0, 2);
@@ -67,9 +66,7 @@ public class Main extends Application {
         instrSetup.setVgap(10);
         instrSetup.setHgap(10);
         instrSetup.setPadding(new Insets(20, 20, 0, 20));
-        
-        Scene actionPanel = new Scene(instrSetup);
-        
+        Scene instrPanel = new Scene(instrSetup);   
         
         revealTheMapButton.setOnAction(e -> {
             String url = textfield.getText();
@@ -124,33 +121,35 @@ public class Main extends Application {
                             + startRow + " , " + startColumn + " to " + x + " , " + y);
                         
                         //Algorithms
-                        long startD = System.nanoTime();
+                        
                         Dijkstra dijkstra = new Dijkstra();
                         ArrayList<Vertex> shortestPathDijkstra = new ArrayList<>();
-                        long endD = System.nanoTime();
-                        
-                        System.out.println("Dijkstra runs " +((endD - startD)/1e9) + " seconds");
-                                               
-                        long startA = System.nanoTime();
                         AStar aStar = new AStar();
-                        ArrayList<Vertex> shortestPathAStar = new ArrayList<>();
+                        ArrayList<AVertex> shortestPathAStar = new ArrayList<>();
+
+                        long startA = System.nanoTime();
+                        shortestPathAStar = aStar.findPath(pixelmap, startRow, startColumn, x, y);
                         long endA= System.nanoTime();
                         
                         System.out.println("A* runs " +((endA-startA)/1e9)+ " seconds");
                         
-                        shortestPathAStar = aStar.findPath(pixelmap, startRow, startColumn, x, y);
+                        long startD = System.nanoTime();
                         shortestPathDijkstra = dijkstra.findPath(pixelmap, startRow, startColumn, x, y);
+                        long endD = System.nanoTime();
+                                                
+                        System.out.println("Dijkstra runs " +((endD - startD)/1e9) + " seconds");
                         
-                        System.out.println(shortestPathAStar.size());
-                        System.out.println(shortestPathDijkstra.size());
                         
                         if (shortestPathAStar == null) {
                             showMessageDialog(null, "There is no path between the starting and ending point you chose.");
                         }
+                        System.out.println("Number of vertices in Dijkstra: " + shortestPathDijkstra.size());
                     
                         if (shortestPathAStar.isEmpty()) {
                             showMessageDialog(null, "You did not clicked the land!");
                         }
+                        System.out.println("Number of vertices in A*: " + shortestPathAStar.size());
+                        
                         BufferedImage img = io.readImage(url);
 
                         try {
@@ -178,7 +177,7 @@ public class Main extends Application {
                 });
 
             frame.setVisible(true);
-            stage.setScene(actionPanel);
+            stage.setScene(instrPanel);
         });
         
     
@@ -190,7 +189,6 @@ public class Main extends Application {
         searchComponents.getChildren().addAll(searchInstructions, textfield, revealTheMapButton);
         Scene searchPanel = new Scene(searchComponents);
         stage.setScene(searchPanel);
-            
         stage.show(); 
     }
     

@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
+import utils.AVertex;
 import utils.Vertex;
 
 /**
@@ -37,7 +38,7 @@ public class ImageHandler {
         return resizedImage;
     }
 
-    public BufferedImage drawShortestPath(BufferedImage img, ArrayList<Vertex> shortestPathAStar, ArrayList<Vertex> shortestPathDijkstra) {   
+    public BufferedImage drawShortestPath(BufferedImage img, ArrayList<AVertex> shortestPathAStar, ArrayList<Vertex> shortestPathDijkstra) {   
         int d = 0;
         int a = 1;
         for (int i = 1; i < shortestPathDijkstra.size() - 1; i++) {
@@ -48,11 +49,31 @@ public class ImageHandler {
         
         
         for (int i = 1; i < shortestPathAStar.size() - 1; i++) {
-            Vertex v = shortestPathAStar.get(i);
+            AVertex v = shortestPathAStar.get(i);
             //img = draw(img, v);
-            img = drawGrid(img, v, a);
+            img = drawAGrid(img, v, a);
         }
         
+        return img;
+    }
+    
+    public BufferedImage drawAGrid(BufferedImage img, AVertex v, int color) {
+        Color pathColor = new Color(0,0,0);
+        if (color == 0) {
+            pathColor = colorDijkstra;
+        } else {
+            pathColor = colorAstar;
+        }
+        
+        int black = new Color(0, 0, 0).getRGB();
+        for (int drawRow = -1; drawRow < 2; drawRow++) {
+            for (int drawCol = -1; drawCol < 2; drawCol++) {
+                if (img.getRGB(v.getRow() - drawRow, v.getColumn() - drawCol) == black) {
+                    continue;
+                }
+                img.setRGB(v.getRow() - drawRow, v.getColumn() - drawCol, pathColor.getRGB());
+            }
+        }
         return img;
     }
   

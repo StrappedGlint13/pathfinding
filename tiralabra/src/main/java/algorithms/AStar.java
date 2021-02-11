@@ -7,7 +7,7 @@ package algorithms;
 
 import java.util.ArrayList;
 import java.util.PriorityQueue;
-import utils.Vertex;
+import utils.AVertex;
 
 /**
  *
@@ -16,16 +16,15 @@ import utils.Vertex;
  * @author matibrax
  */
 
-public class AStar implements SearchInterface {
+public class AStar {
     final double diagonalMovement;
     
     
     public AStar() {
-        this.diagonalMovement = Math.sqrt(2);
+        this.diagonalMovement = 1.4142135623730951;
     }
     
-    @Override
-    public ArrayList<Vertex> findPath(int[][]map, int startR, int startC, int endR, int endC) {
+    public ArrayList<AVertex> findPath(int[][]map, int startR, int startC, int endR, int endC) {
         //current data structures
         /*
         map = new int[][]{
@@ -45,7 +44,7 @@ public class AStar implements SearchInterface {
 
         double[][] distance = new double[rowLength][columnLength];
         boolean[][] visited = new boolean[rowLength][columnLength];
-        PriorityQueue<Vertex> heap =  new PriorityQueue<>();
+        PriorityQueue<AVertex> heap =  new PriorityQueue<>();
         
         for (int r = 0; r < rowLength; r++) {
             for (int c = 0; c < columnLength; c++) {
@@ -56,25 +55,22 @@ public class AStar implements SearchInterface {
         if (map[startR][startC] == 0 || map[endR][endC] == 0) {
             return new ArrayList<>();
         }
-       
-        Vertex startPoint = new Vertex(startR, startC);
-        distance[startR][startC] = 0;
+         
+        AVertex startPoint = new AVertex(startR, startC, 0, null);
+        distance[startR][startC] = heuristics(endR, endC, startR, startC);
         
         //Start searching
         heap.add(startPoint);
         while(!heap.isEmpty()) {
-            Vertex currentV = heap.poll();
+            AVertex currentV = heap.poll();
      
-            //System.out.println("Handling: " + currentV);
-            //System.out.println("Distance from the starting point: " + currentV.getDistance());
             int currentRow = currentV.getRow();
             int currentColumn = currentV.getColumn();
             
             if (currentRow == endR && currentColumn == endC) {
                 return createShortestPath(currentV);
             }
-           
-            
+              
             if (visited[currentRow][currentColumn]) {
                 continue;
             }
@@ -100,16 +96,15 @@ public class AStar implements SearchInterface {
                         continue;
                     }
                     
-                    double nextDistance = currentV.getDistance() + diagonalMovement;
+                    double nextDistance = currentV.getHeuristics() + 1;
                     
-                    if (movingStraight(rowStep, columnStep)) {
-                        nextDistance = currentV.getDistance() + 1;
+                    if (!movingStraight(rowStep, columnStep)) {
+                        nextDistance = currentV.getHeuristics() + diagonalMovement;
                     }
-                     
+            
                     if(nextDistance < distance[moveOneRow][moveOneColumn]) {
-                        distance[moveOneRow][moveOneColumn] = nextDistance;
-                        nextDistance = nextDistance + heuristic(endR, endC, moveOneRow, moveOneColumn);
-                        Vertex next = new Vertex(moveOneRow, moveOneColumn, nextDistance, currentV);
+                        distance[moveOneRow][moveOneColumn] = nextDistance + heuristics(endR, endC, moveOneRow, moveOneColumn);
+                        AVertex next = new AVertex(moveOneRow, moveOneColumn, nextDistance, currentV);
                         heap.add(next);
                     }
                 }
@@ -118,14 +113,11 @@ public class AStar implements SearchInterface {
         return null;
     }
     
-    private double heuristic(int endX, int endY, int currentX, int currentY) {
+    public double heuristics(int endX, int endY, int currentX, int currentY) {
         // Euclidean distance for A*
-        double dX = (currentX-endX)*(currentX-endX);
-        double dY = (currentY-endY)*(currentY-endY);
-        return Math.sqrt(dX + dY);
+        return Math.sqrt((currentX-endX)*(currentX-endX) + (currentY-endY)*(currentY-endY));
     }
 
-    @Override
     public boolean checkLimits(int[][]map, int r, int c, int rowLength, int columnLength) {
         if (r < 0 || c < 0 || r >= rowLength || c >= columnLength) {
             return false;
@@ -133,9 +125,8 @@ public class AStar implements SearchInterface {
         return true;
     }
 
-    @Override
-    public ArrayList<Vertex> createShortestPath(Vertex vertice) {
-        ArrayList<Vertex> shortestPath = new ArrayList<>();
+    public ArrayList<AVertex> createShortestPath(AVertex vertice) {
+        ArrayList<AVertex> shortestPath = new ArrayList<>();
         while (vertice.getPrevious() != null) {
             shortestPath.add(vertice);
             vertice = vertice.getPrevious();
@@ -143,7 +134,7 @@ public class AStar implements SearchInterface {
         
         return shortestPath;
     }
-    @Override
+    
     public boolean movingStraight(int moveOneRow, int moveOneColumn) {
         if (moveOneRow == 0 && moveOneColumn == 1) { // right
             return true;
@@ -157,4 +148,5 @@ public class AStar implements SearchInterface {
             return false;
         }
     }
+
 }

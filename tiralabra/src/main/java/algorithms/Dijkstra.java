@@ -20,7 +20,7 @@ import utils.Vertex;
 public class Dijkstra implements SearchInterface {
     final double diagonalMovement;
     public Dijkstra() {
-        this.diagonalMovement = 1.414213562;
+        this.diagonalMovement = 1.4142135623730951;
     }
     
     @Override
