@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package io;
+package ui;
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -18,19 +13,25 @@ import utils.Vertex;
 
 /**
  *
- * Class that imports the image with given URL. . 
+ * Class that imports the image with given URL.
  * 
  * @author matibrax
  */
 
 public class IOimage {
-
-    
     private URL url;
     
     public IOimage() {
         this.url = url;
     }
+    
+    /**
+    * Method creates a reads given URL and forming BufferedImage.
+    *
+    * @param imageUrl given URL.
+    * 
+    * @return BufferedImage from the source.
+    */
     
     public BufferedImage readImage(String imageUrl) {
         try {

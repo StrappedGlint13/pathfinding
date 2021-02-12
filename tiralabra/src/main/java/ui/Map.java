@@ -31,6 +31,12 @@ public class Map {
         this.land = new int[height][width];
     }
     
+    /**
+    * Method that generates binary map. 
+    * 
+    * @return 2D-integer-table with 0 (obstacle) and 1 (land). 
+    */
+    
     public int[][] generateMaps() {
         for (int r = 0; r < this.height; r++) {
             for (int c = 0; c < width; c++) {

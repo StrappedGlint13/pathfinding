@@ -7,7 +7,7 @@ package utils;
 
 /**
  *
- * A Class for the vertices and edges.
+ * A Class for the vertices.
  * 
  * @author matibrax
  */
@@ -15,14 +15,16 @@ package utils;
 public class Vertex implements Comparable<Vertex>{
     private int row;
     private int column;
-    private double distance;
+    double distance;
     private Vertex previous;
+    private double heuristic;
     
     public Vertex(int row, int column) {
         this.row = row;
         this.column = column;
         this.distance = 0;
         this.previous = null;
+        this.heuristic = 0;
     }
     
     public Vertex(int row, int column, double distance, Vertex previous) {
@@ -30,6 +32,15 @@ public class Vertex implements Comparable<Vertex>{
         this.column = column;
         this.distance = distance;
         this.previous = previous;
+        this.heuristic = 0;
+    }
+
+    public double getHeuristic() {
+        return heuristic;
+    }
+
+    public void setHeuristic(double heuristic) {
+        this.heuristic = heuristic;
     }
 
     public int getRow() {

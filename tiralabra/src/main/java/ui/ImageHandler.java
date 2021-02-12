@@ -29,6 +29,16 @@ public class ImageHandler {
         colorAstar = new Color(255, 51, 51);
     }
    
+    /**
+    * Method resizes the BufferedImage. 
+    *
+    * @param img given BufferedImage.
+    * @param width target width.
+    * @param heigth target height.
+    * 
+    * @return resized BufferedImage.
+    */
+    
     public BufferedImage resizeImage(BufferedImage img, int width, int heigth) throws Exception {
         BufferedImage resizedImage = new BufferedImage(width, heigth, BufferedImage.TYPE_INT_ARGB);
         Graphics2D writer = resizedImage.createGraphics();
@@ -37,6 +47,16 @@ public class ImageHandler {
         return resizedImage;
     }
 
+    /**
+    * Method draws a shortest path. 
+    *
+    * @param img given BufferedImage.
+    * @param shortestPathAStar list of vertex from the A* algorithm.
+    * @param shortestPathDijkstra  list of vertex from the Dijkstra algorithm.
+    * 
+    * @return BufferedImage, where are shortest paths drawn.
+    */
+    
     public BufferedImage drawShortestPath(BufferedImage img, ArrayList<Vertex> shortestPathAStar, ArrayList<Vertex> shortestPathDijkstra) {   
         int d = 0;
         int a = 1;
@@ -55,6 +75,16 @@ public class ImageHandler {
         
         return img;
     }
+   
+    /**
+    * Method draws a shortest path with 3x3 pixel-maze. 
+    *
+    * @param img given BufferedImage.
+    * @param v pixel-vertex that is being manipulated.
+    * @param color colour that is set for specific algorithm.
+    * 
+    * @return BufferedImage, with the grid line of shortest path. 
+    */
   
     public BufferedImage drawGrid(BufferedImage img, Vertex v, int color) {
         Color pathColor = new Color(0,0,0);

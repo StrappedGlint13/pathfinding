@@ -5,6 +5,7 @@
  */
 package io;
 
+import ui.IOimage;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import org.junit.After;

@@ -18,13 +18,13 @@ import static org.junit.Assert.*;
  * @author matibrax
  */
 public class AStarTest {
-    AStar astar;
+    SearchInterface a;
     ArrayList vertices;
     int[][] testmap;
     
     @Before
     public void setUp() {
-        astar = new AStar();
+        a = new AStar();
         testmap = new int[][]{
             {1, 0, 0, 0, 0, 0, 0, 1},
             {1, 0, 0, 0, 0, 0, 0, 1},
@@ -45,13 +45,13 @@ public class AStarTest {
     
     @Test
     public void testAlgoFindsThePath() {
-        vertices = astar.findPath(testmap, 0, 0, 0, 7);
+        vertices = a.findPath(testmap, 0, 0, 0, 7);
         assertEquals(11, vertices.size());
         
-        vertices = astar.findPath(testmap, 0, 0, 3, 0);
+        vertices = a.findPath(testmap, 0, 0, 3, 0);
         assertEquals(3, vertices.size());
         
-        vertices = astar.findPath(testmap, 3, 7, 0, 0);
+        vertices = a.findPath(testmap, 3, 7, 0, 0);
         assertEquals(9, vertices.size());
     }
     
@@ -69,7 +69,7 @@ public class AStarTest {
             {1, 1, 1, 1, 1, 1, 1, 1},
         };
 
-        vertices = astar.findPath(testmap, 0, 0, 5, 4);
+        vertices = a.findPath(testmap, 0, 0, 5, 4);
         boolean isFound = true;
         
         if (vertices == null) {
@@ -93,10 +93,29 @@ public class AStarTest {
             {1, 1, 1, 0, 1, 1, 0, 0, 0},
         };
         
-        vertices = astar.findPath(testmap, 0, 0, 7, 8);
+        vertices = a.findPath(testmap, 0, 0, 7, 8);
         assertEquals(11, vertices.size());
         
-        vertices = astar.findPath(testmap, 3, 8, 8, 0);
+        vertices = a.findPath(testmap, 3, 8, 8, 0);
         assertEquals(10, vertices.size());
+    }
+    
+    @Test
+    public void testAlgoFindsTheShortestPathFromThreeWalls() { 
+        testmap = new int[][]{
+            {1, 1, 1, 1, 1, 1, 0, 1, 1 ,1, 1, 1, 1,},
+            {1, 1, 0, 0, 1, 0, 0, 1, 1 ,0, 0, 1, 1,},
+            {1, 1, 0, 0, 1, 0, 0, 1, 1 ,0, 0, 1, 1,},
+            {1, 1, 0, 0, 1, 0, 0, 1, 1 ,0, 0, 1, 1,},
+            {1, 1, 0, 0, 1, 0, 0, 1, 1 ,0, 0, 1, 1,},
+            {1, 1, 0, 0, 1, 0, 0, 1, 1 ,0, 0, 1, 1,},
+            {1, 1, 0, 0, 1, 0, 0, 1, 1 ,0, 0, 1, 1,},
+            {1, 1, 0, 0, 1, 0, 0, 1, 1 ,0, 0, 1, 1,},
+            {1, 1, 0, 0, 1, 1, 1, 1, 1 ,0, 0, 1, 1,},
+        };
+        
+        vertices = a.findPath(testmap, 8, 0, 4, 12);
+        assertEquals(31, vertices.size());
+        
     }
 }
