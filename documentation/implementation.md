@@ -2,7 +2,7 @@
 
 Project builds for three different levels. Below is package-diagram of the program:
 
-<img src="https://github.com/StrappedGlint13/pathfinding/blob/main/documentation/images/package_yuml.png" width="300")>
+<img src="https://github.com/StrappedGlint13/pathfinding/blob/main/documentation/images/package_yuml.png" width="300">
 
 `ui` package contains all the elements that are needed for user interface. These are IOImage, ImageHandler, Main and Map -classes. `algorithms` package contains A* and Dijkstra with methods combining interface SearhInterface. `utis` are package for the data structures. 
 
