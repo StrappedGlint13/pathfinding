@@ -9,7 +9,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import static javax.swing.JOptionPane.showMessageDialog;
-import utils.Vertex;
+import data_structures.Vertex;
 
 /**
  *
