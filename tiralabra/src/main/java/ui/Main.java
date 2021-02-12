@@ -7,7 +7,6 @@ package ui;
 
 import algorithms.AStar;
 import algorithms.Dijkstra;
-import io.IOimage;
 import java.awt.BorderLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -142,12 +141,14 @@ public class Main extends Application {
                             showMessageDialog(null, "You did not clicked the land!");
                         }
                         System.out.println("Number of vertices in A*: " + shortestPathAStar.size());
+                        System.out.println("Distance from start: " + shortestPathAStar.get(0).getDistance());
                         
                         if (shortestPathAStar == null) {
                             showMessageDialog(null, "There is no path between the starting and ending point you chose.");
                         }
                         
                         System.out.println("Number of vertices in Dijkstra: " + shortestPathDijkstra.size());
+                        System.out.println("Distance from start: " + shortestPathDijkstra.get(0).getDistance());
                         BufferedImage img = io.readImage(url);
 
                         try {

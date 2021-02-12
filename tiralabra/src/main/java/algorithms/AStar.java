@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package algorithms;
 
 import java.util.ArrayList;
@@ -21,28 +16,25 @@ public class AStar implements SearchInterface {
     final double diagonalMovement;
     
     public AStar() {
-        this.diagonalMovement = 1.4142135623730951;
+        this.diagonalMovement = Math.sqrt(2);
     }
+    /**
+    * Method creates a shortest path.
+    *
+    * @param map given pixel-map.
+    * @param startR start row, x-coordinate.
+    * @param startC start column, y-coordinate.
+    * @param endR end row, point x-coordinate.
+    * @param endC end column, point y-coordinate.
+    * 
+    * @return shortest path as a list of Vertices.
+    */
     
     @Override
     public ArrayList<Vertex> findPath(int[][]map, int startR, int startC, int endR, int endC) {
-        //current data structures
-        /*
-        map = new int[][]{
-            {1, 0, 1, 1, 0, 0, 0, 1, 0},
-            {1, 0, 1, 1, 0, 0, 0, 1, 0},
-            {1, 0, 1, 1, 1, 1, 1, 0, 1},
-            {1, 1, 1, 1, 1, 1, 1, 0, 1},
-            {1, 0, 1, 0, 1, 0, 1, 1, 0},
-            {1, 1, 1, 0, 1, 0, 1, 1, 1},
-            {1, 0, 1, 0, 1, 0, 1, 1, 0},
-            {1, 0, 1, 0, 1, 1, 0, 0, 1},
-            {1, 1, 1, 0, 1, 1, 0, 0, 0},
-        };
-        */
         int rowLength = map.length;  
         int columnLength = map[0].length;
-
+    
         double[][] distance = new double[rowLength][columnLength];
         boolean[][] visited = new boolean[rowLength][columnLength];
         PriorityQueue<Vertex> heap =  new PriorityQueue<>(Comparator.comparingDouble(Vertex::getHeuristic));
@@ -61,7 +53,6 @@ public class AStar implements SearchInterface {
         distance[startR][startC] = 0;
         startPoint.setHeuristic(heuristics(endR, endC, startR, startC));
         
-        //Start searching
         heap.add(startPoint);
         while(!heap.isEmpty()) {
             Vertex currentV = heap.poll();
@@ -79,10 +70,8 @@ public class AStar implements SearchInterface {
             
             visited[currentRow][currentColumn] = true;
             
-            //start moving
             for (int rowStep = -1; rowStep < 2; rowStep++) {
                 for (int columnStep = -1; columnStep < 2; columnStep++) {
-                    //if we are at the starting point
                     if(rowStep == 0 && columnStep == 0) {
                         continue;
                     }
@@ -92,8 +81,7 @@ public class AStar implements SearchInterface {
                     if (!checkLimits(map, moveOneRow, moveOneColumn, rowLength, columnLength)) {
                         continue;
                     }
-                    
-                    //if there is an obstacle
+
                     if (map[moveOneRow][moveOneColumn] == 0) {
                         continue;
                     }
@@ -116,10 +104,35 @@ public class AStar implements SearchInterface {
         return null;
     }
     
-    public double heuristics(int endX, int endY, int currentX, int currentY) {
+    
+    
+    /**
+    * Method for A* to estimate Euclidean distance.
+    *
+    * @param currentX current x-coordinate.
+    * @param currentY current y-coordinate.
+    * @param endX end x-coordinate.
+    * @param endY end y-coordinate.
+    * 
+    * @return Euclidean distance.
+    */
+    
+    private double heuristics(int endX, int endY, int currentX, int currentY) {
         // Euclidean distance for A*
         return Math.sqrt((currentX-endX)*(currentX-endX) + (currentY-endY)*(currentY-endY));
     }
+    
+    /**
+    * Method for checking the limits of moving.
+    *
+    * @param map given pixel-map.
+    * @param c current y-coordinate.
+    * @param r current x-coordinate.
+    * @param rowLength dimension of the rows.
+    * @param columnLength dimension of the columns.
+    * 
+    * @return true or false, depends on if we are in the limits. 
+    */
 
     @Override
     public boolean checkLimits(int[][]map, int r, int c, int rowLength, int columnLength) {
@@ -129,6 +142,17 @@ public class AStar implements SearchInterface {
         return true;
     }
 
+    /**
+    * Method for creating the shortest path of Vertex recursively.
+    *
+    * @param vertice currently handling vertex.
+    * 
+    * @return list of vertex for the shortest path, if there is previous vertex, 
+    * call the method again, if null is found from the "previous",
+    * we are at the starting vertex. 
+    * 
+    */
+    
     @Override
     public ArrayList<Vertex> createShortestPath(Vertex vertice) {
         ArrayList<Vertex> shortestPath = new ArrayList<>();

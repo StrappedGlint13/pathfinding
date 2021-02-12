@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package algorithms;
 
 import java.util.ArrayDeque;
@@ -20,8 +15,20 @@ import utils.Vertex;
 public class Dijkstra implements SearchInterface {
     final double diagonalMovement;
     public Dijkstra() {
-        this.diagonalMovement = 1.4142135623730951;
+        this.diagonalMovement = Math.sqrt(2);
     }
+    
+    /**
+    * Method creates a shortest path.
+    *
+    * @param map given pixel-map.
+    * @param startR start row, x-coordinate.
+    * @param startC start column, y-coordinate.
+    * @param endR end row, point x-coordinate.
+    * @param endC end column, point y-coordinate.
+    * 
+    * @return shortest path as a list of Vertices.
+    */
     
     @Override
     public ArrayList<Vertex> findPath(int[][]map, int startR, int startC, int endR, int endC) {
@@ -115,6 +122,18 @@ public class Dijkstra implements SearchInterface {
         }
         return null;
     }
+    
+    /**
+    * Method for checking the limits of moving.
+    *
+    * @param map given pixel-map.
+    * @param c current y-coordinate.
+    * @param r current x-coordinate.
+    * @param rowLength dimension of the rows.
+    * @param columnLength dimension of the columns.
+    * 
+    * @return true or false, depends on if we are in the limits. 
+    */
 
     @Override
     public boolean checkLimits(int[][]map, int r, int c, int rowLength, int columnLength) {
@@ -123,6 +142,17 @@ public class Dijkstra implements SearchInterface {
         }
         return true;
     }
+    
+    /**
+    * Method for creating the shortest path of Vertex recursively.
+    *
+    * @param vertice currently handling verte
+    * 
+    * @return list of vertex for the shortest path, if there is previous vertex, 
+    * call the method again, if null is found from the "previous",
+    * we are at the starting vertex. 
+    * 
+    */
 
     @Override
     public ArrayList<Vertex> createShortestPath(Vertex vertice) {

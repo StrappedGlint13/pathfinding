@@ -7,7 +7,7 @@ package utils;
 
 /**
  *
- * A Class for the vertices and edges.
+ * A Class for the vertices.
  * 
  * @author matibrax
  */

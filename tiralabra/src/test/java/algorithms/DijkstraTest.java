@@ -20,13 +20,13 @@ import utils.Vertex;
  */
 public class DijkstraTest {
 
-    Dijkstra dijkstra;
+    SearchInterface d;
     ArrayList vertices;
     int[][] testmap;
     
     @Before
     public void setUp() {
-        dijkstra = new Dijkstra();
+        d = new Dijkstra();
         testmap = new int[][]{
             {1, 0, 0, 0, 0, 0, 0, 1},
             {1, 0, 0, 0, 0, 0, 0, 1},
@@ -38,7 +38,7 @@ public class DijkstraTest {
     /*
     @Test
     public void testStartingPointAndDistance() {
-        vertices = dijkstra.findPath(testmap, 0, 0, 0, 0);
+        vertices = d.findPath(testmap, 0, 0, 0, 0);
         Vertex v = new Vertex(0,0,0,null);
         assertEquals(v, vertices.get(0));
       
@@ -47,13 +47,13 @@ public class DijkstraTest {
     
     @Test
     public void testAlgoFindsThePath() {
-        vertices = dijkstra.findPath(testmap, 0, 0, 0, 7);
+        vertices = d.findPath(testmap, 0, 0, 0, 7);
         assertEquals(11, vertices.size());
         
-        vertices = dijkstra.findPath(testmap, 0, 0, 3, 0);
+        vertices = d.findPath(testmap, 0, 0, 3, 0);
         assertEquals(3, vertices.size());
         
-        vertices = dijkstra.findPath(testmap, 3, 7, 0, 0);
+        vertices = d.findPath(testmap, 3, 7, 0, 0);
         assertEquals(9, vertices.size());
     }
     
@@ -71,7 +71,7 @@ public class DijkstraTest {
             {1, 1, 1, 1, 1, 1, 1, 1},
         };
 
-        vertices = dijkstra.findPath(testmap, 0, 0, 5, 4);
+        vertices = d.findPath(testmap, 0, 0, 5, 4);
         boolean isFound = true;
         
         if (vertices == null) {
@@ -95,10 +95,10 @@ public class DijkstraTest {
             {1, 1, 1, 0, 1, 1, 0, 0, 0},
         };
         
-        vertices = dijkstra.findPath(testmap, 0, 0, 7, 8);
+        vertices = d.findPath(testmap, 0, 0, 7, 8);
         assertEquals(11, vertices.size());
         
-        vertices = dijkstra.findPath(testmap, 3, 8, 8, 0);
+        vertices = d.findPath(testmap, 3, 8, 8, 0);
         assertEquals(10, vertices.size());
     }
 }
