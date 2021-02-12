@@ -6,8 +6,9 @@
 package algorithms;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.PriorityQueue;
-import utils.AVertex;
+import utils.Vertex;
 
 /**
  *
@@ -16,15 +17,15 @@ import utils.AVertex;
  * @author matibrax
  */
 
-public class AStar {
+public class AStar implements SearchInterface {
     final double diagonalMovement;
-    
     
     public AStar() {
         this.diagonalMovement = 1.4142135623730951;
     }
     
-    public ArrayList<AVertex> findPath(int[][]map, int startR, int startC, int endR, int endC) {
+    @Override
+    public ArrayList<Vertex> findPath(int[][]map, int startR, int startC, int endR, int endC) {
         //current data structures
         /*
         map = new int[][]{
@@ -44,7 +45,7 @@ public class AStar {
 
         double[][] distance = new double[rowLength][columnLength];
         boolean[][] visited = new boolean[rowLength][columnLength];
-        PriorityQueue<AVertex> heap =  new PriorityQueue<>();
+        PriorityQueue<Vertex> heap =  new PriorityQueue<>(Comparator.comparingDouble(Vertex::getHeuristic));
         
         for (int r = 0; r < rowLength; r++) {
             for (int c = 0; c < columnLength; c++) {
@@ -55,14 +56,15 @@ public class AStar {
         if (map[startR][startC] == 0 || map[endR][endC] == 0) {
             return new ArrayList<>();
         }
-         
-        AVertex startPoint = new AVertex(startR, startC, 0, null);
-        distance[startR][startC] = heuristics(endR, endC, startR, startC);
+
+        Vertex startPoint = new Vertex(startR, startC, 0, null);
+        distance[startR][startC] = 0;
+        startPoint.setHeuristic(heuristics(endR, endC, startR, startC));
         
         //Start searching
         heap.add(startPoint);
         while(!heap.isEmpty()) {
-            AVertex currentV = heap.poll();
+            Vertex currentV = heap.poll();
      
             int currentRow = currentV.getRow();
             int currentColumn = currentV.getColumn();
@@ -96,15 +98,16 @@ public class AStar {
                         continue;
                     }
                     
-                    double nextDistance = currentV.getHeuristics() + 1;
+                    double nextDistance = currentV.getDistance() + 1;
                     
-                    if (!movingStraight(rowStep, columnStep)) {
-                        nextDistance = currentV.getHeuristics() + diagonalMovement;
+                    if (rowStep == 0 || columnStep == 0) {
+                        nextDistance = currentV.getDistance() + diagonalMovement;
                     }
-            
+                    
                     if(nextDistance < distance[moveOneRow][moveOneColumn]) {
-                        distance[moveOneRow][moveOneColumn] = nextDistance + heuristics(endR, endC, moveOneRow, moveOneColumn);
-                        AVertex next = new AVertex(moveOneRow, moveOneColumn, nextDistance, currentV);
+                        distance[moveOneRow][moveOneColumn] = nextDistance;
+                        Vertex next = new Vertex(moveOneRow, moveOneColumn, nextDistance, currentV);
+                        next.setHeuristic(nextDistance + heuristics(endR, endC, moveOneRow, moveOneColumn));
                         heap.add(next);
                     }
                 }
@@ -118,6 +121,7 @@ public class AStar {
         return Math.sqrt((currentX-endX)*(currentX-endX) + (currentY-endY)*(currentY-endY));
     }
 
+    @Override
     public boolean checkLimits(int[][]map, int r, int c, int rowLength, int columnLength) {
         if (r < 0 || c < 0 || r >= rowLength || c >= columnLength) {
             return false;
@@ -125,28 +129,15 @@ public class AStar {
         return true;
     }
 
-    public ArrayList<AVertex> createShortestPath(AVertex vertice) {
-        ArrayList<AVertex> shortestPath = new ArrayList<>();
+    @Override
+    public ArrayList<Vertex> createShortestPath(Vertex vertice) {
+        ArrayList<Vertex> shortestPath = new ArrayList<>();
         while (vertice.getPrevious() != null) {
             shortestPath.add(vertice);
             vertice = vertice.getPrevious();
         }
         
         return shortestPath;
-    }
-    
-    public boolean movingStraight(int moveOneRow, int moveOneColumn) {
-        if (moveOneRow == 0 && moveOneColumn == 1) { // right
-            return true;
-        } else if (moveOneRow == 0 && moveOneColumn == -1) { // left
-            return true;
-        } else if (moveOneRow == -1 && moveOneColumn == 0) { // down
-            return true;
-        } else if (moveOneRow == 1 && moveOneColumn == 0) { // up
-            return true;
-        } else {
-            return false;
-        }
     }
 
 }

@@ -32,7 +32,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import static javax.swing.JOptionPane.showMessageDialog;
 import javax.swing.JTextField;
-import utils.AVertex;
 import utils.Vertex;
 
 
@@ -47,7 +46,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         Button revealTheMapButton = new Button("Reveal the map");
-        TextField textfield = new TextField("https://movingai.com/benchmarks/street/Boston_0_512.png");
+        TextField textfield = new TextField("https://movingai.com/benchmarks/maze/maze512-16-7.png");
         
         // Coordinates Scene and instructions
         Label header = new Label("Instructions");
@@ -125,7 +124,7 @@ public class Main extends Application {
                         Dijkstra dijkstra = new Dijkstra();
                         ArrayList<Vertex> shortestPathDijkstra = new ArrayList<>();
                         AStar aStar = new AStar();
-                        ArrayList<AVertex> shortestPathAStar = new ArrayList<>();
+                        ArrayList<Vertex> shortestPathAStar = new ArrayList<>();
 
                         long startA = System.nanoTime();
                         shortestPathAStar = aStar.findPath(pixelmap, startRow, startColumn, x, y);
@@ -137,19 +136,18 @@ public class Main extends Application {
                         shortestPathDijkstra = dijkstra.findPath(pixelmap, startRow, startColumn, x, y);
                         long endD = System.nanoTime();
                                                 
-                        System.out.println("Dijkstra runs " +((endD - startD)/1e9) + " seconds");
+                        System.out.println("Dijkstra runs " +((endD - startD)/1e9) + " seconds"); 
                         
-                        
-                        if (shortestPathAStar == null) {
-                            showMessageDialog(null, "There is no path between the starting and ending point you chose.");
-                        }
-                        System.out.println("Number of vertices in Dijkstra: " + shortestPathDijkstra.size());
-                    
                         if (shortestPathAStar.isEmpty()) {
                             showMessageDialog(null, "You did not clicked the land!");
                         }
                         System.out.println("Number of vertices in A*: " + shortestPathAStar.size());
                         
+                        if (shortestPathAStar == null) {
+                            showMessageDialog(null, "There is no path between the starting and ending point you chose.");
+                        }
+                        
+                        System.out.println("Number of vertices in Dijkstra: " + shortestPathDijkstra.size());
                         BufferedImage img = io.readImage(url);
 
                         try {

@@ -101,10 +101,10 @@ public class Dijkstra implements SearchInterface {
                     
                     double nextDistance = currentV.getDistance() + diagonalMovement;
                     
-                    if (movingStraight(rowStep, columnStep)) {
+                    if (rowStep == 0 || columnStep == 0) {
                         nextDistance = currentV.getDistance() + 1;
                     }
-                     
+                                
                     if(nextDistance < distance[moveOneRow][moveOneColumn]) {
                         distance[moveOneRow][moveOneColumn] = nextDistance;
                         Vertex next = new Vertex(moveOneRow, moveOneColumn, nextDistance, currentV);
@@ -134,18 +134,5 @@ public class Dijkstra implements SearchInterface {
         return shortestPath;
     }
     
-    @Override
-    public boolean movingStraight(int moveOneRow, int moveOneColumn) {
-        if (moveOneRow == 0 && moveOneColumn == 1) { // right
-            return true;
-        } else if (moveOneRow == 0 && moveOneColumn == -1) { // left
-            return true;
-        } else if (moveOneRow == -1 && moveOneColumn == 0) { // down
-            return true;
-        } else if (moveOneRow == 1 && moveOneColumn == 0) { // up
-            return true;
-        } else {
-            return false;
-        }
-    }
+
 }

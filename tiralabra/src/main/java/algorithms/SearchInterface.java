@@ -18,5 +18,4 @@ public interface SearchInterface {
     boolean checkLimits(int[][]map, int r, int c, int rowLength, int columnLength);
     public ArrayList<Vertex> createShortestPath(Vertex vertice);
     public ArrayList<Vertex> findPath(int[][]map, int startR, int startC, int endR, int endC);
-    public boolean movingStraight(int moveOneRow, int moveOneColumn);
 }
