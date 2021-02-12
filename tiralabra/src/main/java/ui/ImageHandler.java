@@ -12,7 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
-import data_structures.Vertex;
+import datastructures.Vertex;
 
 /**
  *

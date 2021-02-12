@@ -6,7 +6,7 @@
 package algorithms;
 
 import java.util.ArrayList;
-import data_structures.Vertex;
+import datastructures.Vertex;
 
 /**
  *

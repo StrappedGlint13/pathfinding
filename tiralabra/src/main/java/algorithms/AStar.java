@@ -3,7 +3,7 @@ package algorithms;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.PriorityQueue;
-import data_structures.Vertex;
+import datastructures.Vertex;
 
 /**
  *

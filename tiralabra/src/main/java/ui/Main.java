@@ -31,7 +31,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import static javax.swing.JOptionPane.showMessageDialog;
 import javax.swing.JTextField;
-import data_structures.Vertex;
+import datastructures.Vertex;
 
 
 /**
