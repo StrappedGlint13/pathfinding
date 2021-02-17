@@ -131,7 +131,7 @@ public class Dijkstra implements SearchInterface {
     /**
     * Method for creating the shortest path of Vertex recursively.
     *
-    * @param vertice currently handling verte
+    * @param vertice currently handling vertex
     * 
     * @return list of vertex for the shortest path, if there is previous vertex, 
     * call the method again, if null is found from the "previous",
@@ -151,3 +151,5 @@ public class Dijkstra implements SearchInterface {
     
 
 }
+
+

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ui;
 
 import algorithms.AStar;
@@ -45,7 +40,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         Button revealTheMapButton = new Button("Reveal the map");
-        TextField textfield = new TextField("https://movingai.com/benchmarks/maze/maze512-16-7.png");
+        TextField textfield = new TextField("https://movingai.com/benchmarks/street/Paris_1_1024.png");
         
         // Coordinates Scene and instructions
         Label header = new Label("Instructions");
@@ -82,15 +77,7 @@ public class Main extends Application {
             }
             Map map = new Map(img, height, width);
             int[][] pixelmap = map.generateMaps();
-            
-            
-            /* Will be used when best path is known. 
-            try {
-                img = imgHand.draw(img, 200, 200);
-            } catch (Exception ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            }*/
-     
+              
             JFrame frame = new JFrame("Pathing");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(height, width);
@@ -122,6 +109,7 @@ public class Main extends Application {
                         
                         Dijkstra dijkstra = new Dijkstra();
                         ArrayList<Vertex> shortestPathDijkstra = new ArrayList<>();
+                        
                         AStar aStar = new AStar();
                         ArrayList<Vertex> shortestPathAStar = new ArrayList<>();
 
@@ -141,14 +129,14 @@ public class Main extends Application {
                             showMessageDialog(null, "You did not clicked the land!");
                         }
                         System.out.println("Number of vertices in A*: " + shortestPathAStar.size());
-                        System.out.println("Distance from start: " + shortestPathAStar.get(0).getDistance());
+                        System.out.println("Distance from the start: " + shortestPathAStar.get(0).getDistance());
                         
                         if (shortestPathAStar == null) {
                             showMessageDialog(null, "There is no path between the starting and ending point you chose.");
                         }
                         
                         System.out.println("Number of vertices in Dijkstra: " + shortestPathDijkstra.size());
-                        System.out.println("Distance from start: " + shortestPathDijkstra.get(0).getDistance());
+                        System.out.println("Distance from the start: " + shortestPathDijkstra.get(0).getDistance());
                         BufferedImage img = io.readImage(url);
 
                         try {

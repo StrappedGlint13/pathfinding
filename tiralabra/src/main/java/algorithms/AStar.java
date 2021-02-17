@@ -86,11 +86,11 @@ public class AStar implements SearchInterface {
                         continue;
                     }
                     
-                    double nextDistance = currentV.getDistance() + 1;
+                    double nextDistance = currentV.getDistance() + diagonalMovement;
                     
                     //if moving diagonally
                     if (rowStep == 0 || columnStep == 0) {
-                        nextDistance = currentV.getDistance() + diagonalMovement;
+                        nextDistance = currentV.getDistance() + 1;
                     }
                     
                     if(nextDistance < distance[moveOneRow][moveOneColumn]) {
