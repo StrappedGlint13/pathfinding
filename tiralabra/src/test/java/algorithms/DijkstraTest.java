@@ -35,15 +35,16 @@ public class DijkstraTest {
         };
         vertices = new ArrayList<>();
     }
-    /*
+
     @Test
-    public void testStartingPointAndDistance() {
-        vertices = d.findPath(testmap, 0, 0, 0, 0);
-        Vertex v = new Vertex(0,0,0,null);
-        assertEquals(v, vertices.get(0));
-      
+    public void testAlgoFindThePath() {
+        testmap = new int[][]{
+            {1, 0},
+            {0, 1},
+        };
+        vertices = d.findPath(testmap, 0, 0, 1, 1);
+        assertEquals(1, vertices.size());
     }
-*/
     
     @Test
     public void testAlgoFindsThePath() {
@@ -57,7 +58,7 @@ public class DijkstraTest {
         assertEquals(9, vertices.size());
     }
     
-    
+
     @Test
     public void testAlgoDontFindThePath() { 
         testmap = new int[][]{
@@ -80,25 +81,29 @@ public class DijkstraTest {
         
         assertEquals(false, isFound);
     }
-    
+
+
     @Test
     public void testAlgoFindsTheShortestPath() { 
         testmap = new int[][]{
             {1, 0, 1, 1, 0, 0, 0, 1, 0},
             {1, 0, 1, 1, 0, 0, 0, 1, 0},
-            {1, 0, 1, 1, 1, 1, 1, 0, 1},
-            {1, 1, 1, 1, 1, 1, 1, 0, 1},
-            {1, 0, 1, 0, 1, 0, 1, 1, 0},
-            {1, 1, 1, 0, 1, 0, 1, 1, 1},
-            {1, 0, 1, 0, 1, 0, 1, 1, 0},
-            {1, 0, 1, 0, 1, 1, 0, 0, 1},
-            {1, 1, 1, 0, 1, 1, 0, 0, 0},
+            {1, 0, 1, 16, 1, 1, 1, 0, 1},
+            {1, 1, 16, 1, 16, 1, 1, 0, 1},
+            {1, 0, 16, 0, 1, 0, 1, 1, 0},
+            {1, 16, 1, 0, 1, 0, 1, 1, 1},
+            {16, 0, 1, 0, 1, 0, 1, 1, 0},
+            {16, 0, 1, 0, 1, 1, 0, 0, 1},
+            {16, 1, 1, 0, 1, 1, 0, 0, 0},
         };
-        
+     
         vertices = d.findPath(testmap, 0, 0, 7, 8);
         assertEquals(11, vertices.size());
-        
+       
         vertices = d.findPath(testmap, 3, 8, 8, 0);
+        for (int i = 0; i < vertices.size(); i++) {
+            System.out.println(vertices.get(i));
+        }
         assertEquals(10, vertices.size());
     }
 }

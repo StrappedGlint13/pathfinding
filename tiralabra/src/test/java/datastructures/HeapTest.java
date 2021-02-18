@@ -41,10 +41,10 @@ public class HeapTest {
         assertEquals(4, testHeap.getSize());
         
     }
-    
+    //fix
     @Test
     public void addingWorks() {
-        Vertex newRoot = new Vertex(2, 1, 0, null);
+        Vertex newRoot = new Vertex(2, 1, -1, null);
         testHeap.add(newRoot);
         assertEquals(newRoot.getRow(), testHeap.getRoot().getRow());
         assertEquals(newRoot.getColumn(), testHeap.getRoot().getColumn());
@@ -52,7 +52,7 @@ public class HeapTest {
         Vertex nextVertex = testHeap.getVertexFromIndex(1);
         assertEquals(nextVertex, testV1);
     }
-    
+
     @Test
     public void pollingWorks() {
         Vertex polledVertex = testHeap.poll();
@@ -63,12 +63,30 @@ public class HeapTest {
         assertEquals(polledVertex2, testV2);
         assertEquals(2, testHeap.getSize());
     }
-    
+
     @Test
     public void addingAndPollingWorks() {
-        Vertex testV5 = new Vertex(4, 5, Math.sqrt(2)+3, testV4);
-        Vertex testV6 = new Vertex(5, 6, Math.sqrt(2)+testV5.distance, testV5);
+        testHeap = new Heap();
+        Vertex testV5 = new Vertex(4, 5, 1, null);
+        Vertex testV6 = new Vertex(5, 6, Math.sqrt(2), testV5);
         Vertex testV7 = new Vertex(6, 7, Math.sqrt(2)+testV6.distance, testV6);
-        Vertex testV8 = new Vertex(7, 8, Math.sqrt(2)+testV7.distance, testV7); 
+        Vertex testV8 = new Vertex(5, 6, 1, testV7);
+        
+        testHeap.add(testV6);
+        testHeap.poll();
+        testHeap.add(testV5);
+        testHeap.add(testV8);
+        Vertex v = testHeap.poll();
+        assertEquals(v, testV5);
+        Vertex v2 = testHeap.poll();
+        assertEquals(v2, testV8);
+       
+        assertEquals(0, testHeap.getSize());
+        Vertex testV9 = new Vertex(4, 5, 1, null);
+        testHeap.add(testV9);
+        Vertex v3 = testHeap.poll();
+        assertEquals(v3, testV9);
+        assertEquals(0, testHeap.getSize());
+        
     }
 }

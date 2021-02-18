@@ -10,6 +10,8 @@ Algorithms are tested with AStarTest and DijkstraTest test classes.
 
 ## Data Structures
 
+Heap is tested with HeapTest unit tests. 
+
 ## How to test?
 
 Assumption is that the user has cloned this repository.

@@ -106,7 +106,6 @@ public class Main extends Application {
                             + startRow + " , " + startColumn + " to " + x + " , " + y);
                         
                         //Algorithms
-                        
                         Dijkstra dijkstra = new Dijkstra();
                         ArrayList<Vertex> shortestPathDijkstra = new ArrayList<>();
                         

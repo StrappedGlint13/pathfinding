@@ -1,6 +1,6 @@
 # Week 3
 
-Time used: 4 + 6 + 7 = 19 hours.
+Time used: 4 + 6 + 7 = 17 hours.
 
 ## What have you done this week?
 

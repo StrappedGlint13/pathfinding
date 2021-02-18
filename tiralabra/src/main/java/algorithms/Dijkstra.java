@@ -4,6 +4,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 import datastructures.Vertex;
+import datastructures.Heap;
 
 /**
  *
@@ -37,7 +38,7 @@ public class Dijkstra implements SearchInterface {
 
         double[][] distance = new double[rowLength][columnLength];
         boolean[][] visited = new boolean[rowLength][columnLength];
-        PriorityQueue<Vertex> heap =  new PriorityQueue<>();
+        Heap heap = new Heap();
         
         for (int r = 0; r < rowLength; r++) {
             for (int c = 0; c < columnLength; c++) {
@@ -55,8 +56,9 @@ public class Dijkstra implements SearchInterface {
         
         //Start searching
         heap.add(startPoint);
-        while(!heap.isEmpty()) {
+        while(heap.getSize()!=0) {
             Vertex currentV = heap.poll();
+           
             int currentRow = currentV.getRow();
             int currentColumn = currentV.getColumn();
             

@@ -12,7 +12,7 @@ package datastructures;
  * @author matibrax
  */
 
-public class Vertex implements Comparable<Vertex>{
+public class Vertex {
     private int row;
     private int column;
     double distance;
@@ -55,7 +55,6 @@ public class Vertex implements Comparable<Vertex>{
         return previous;
     }
 
-    @Override   
     public int compareTo(Vertex v2) {
         if (this.distance < v2.distance) {
             return -1;
