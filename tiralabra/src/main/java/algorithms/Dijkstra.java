@@ -57,12 +57,20 @@ public class Dijkstra implements SearchInterface {
         //Start searching
         heap.add(startPoint);
         while(heap.getSize()!=0) {
+            //System.out.println("Printing heap: ");
+            //for (int i = 0; i < heap.getSize(); i++) {   
+                //System.out.println(heap.getVertexFromIndex(i));
+            //}
+            //System.out.println("");
             Vertex currentV = heap.poll();
-           
+            //System.out.println("Polled vertex");
+            //System.out.println("V: " + currentV);
             int currentRow = currentV.getRow();
             int currentColumn = currentV.getColumn();
             
+            //found the path!
             if (currentRow == endR && currentColumn == endC) {
+                //System.out.println("Goal!! " + currentV);
                 return createShortestPath(currentV);
             }
            
@@ -80,28 +88,33 @@ public class Dijkstra implements SearchInterface {
                     if(rowStep == 0 && columnStep == 0) {
                         continue;
                     }
+                    
                     int moveOneRow = currentRow + rowStep;
                     int moveOneColumn = currentColumn + columnStep;
                     
+                    //we don't want double distances
+            
                     if (!checkLimits(map, moveOneRow, moveOneColumn, rowLength, columnLength)) {
                         continue;
                     }
-                    
+                                 
                     //if there is an obstacle
                     if (map[moveOneRow][moveOneColumn] == 0) {
                         continue;
                     }
                     
                     double nextDistance = currentV.getDistance() + diagonalMovement;
-                    
-                    //if moving diagonally
+                    boolean diagonallyMoved = true;
+                    //if we are moving straight
                     if (rowStep == 0 || columnStep == 0) {
                         nextDistance = currentV.getDistance() + 1;
+                        diagonallyMoved = false;
                     }
                                 
-                    if(nextDistance < distance[moveOneRow][moveOneColumn]) {
+                    if(nextDistance < distance[moveOneRow][moveOneColumn] || 
+                            nextDistance == distance[moveOneRow][moveOneColumn] && diagonallyMoved) {
                         distance[moveOneRow][moveOneColumn] = nextDistance;
-                        Vertex next = new Vertex(moveOneRow, moveOneColumn, nextDistance, currentV);
+                        Vertex next = new Vertex(moveOneRow, moveOneColumn, nextDistance, currentV, diagonallyMoved);
                         heap.add(next);
                     }
                 }

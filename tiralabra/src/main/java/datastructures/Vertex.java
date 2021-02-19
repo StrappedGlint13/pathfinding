@@ -17,7 +17,8 @@ public class Vertex {
     private int column;
     double distance;
     private Vertex previous;
-    private double heuristic;
+    private double heuristic; // this is only for A*
+    private boolean diagonallyMoved; // this is for comparsion, we are preferring diagonally moving
     
     public Vertex(int row, int column) {
         this.row = row;
@@ -25,14 +26,24 @@ public class Vertex {
         this.distance = 0;
         this.previous = null;
         this.heuristic = 0;
+        
     }
     
-    public Vertex(int row, int column, double distance, Vertex previous) {
+    public Vertex(int row, int column, double distance, Vertex previous, boolean diagonallyMoved) {
         this.row = row;
         this.column = column;
         this.distance = distance;
         this.previous = previous;
         this.heuristic = 0;
+        this.diagonallyMoved = diagonallyMoved;
+    }
+
+    public boolean isDiagonallyMoved() {
+        return diagonallyMoved;
+    }
+
+    public void setDiagonallyMoved(boolean diagonallyMoved) {
+        this.diagonallyMoved = diagonallyMoved;
     }
 
     public double getHeuristic() {
@@ -54,9 +65,14 @@ public class Vertex {
     public Vertex getPrevious() {
         return previous;
     }
-
+    
+    public boolean getDiagonalyMovement() {
+        return diagonallyMoved;
+    }
+    
     public int compareTo(Vertex v2) {
-        if (this.distance < v2.distance) {
+        if (this.distance < v2.distance || (this.distance == v2.distance && (this.diagonallyMoved
+                && !v2.getDiagonalyMovement()))) {
             return -1;
         } else if (this.distance > v2.distance) {
             return 1;
@@ -74,7 +90,8 @@ public class Vertex {
     }
     @Override
     public String toString() {
-        return "Vertice: row " + this.row + " column " + this.column;
+        return "Vertice: row " + this.row + " column " + this.column + " distance " + this.distance
+                + " diagonallyMoved " + this.diagonallyMoved;
     }
     
     

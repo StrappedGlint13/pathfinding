@@ -48,8 +48,8 @@ public class AStar implements SearchInterface {
         if (map[startR][startC] == 0 || map[endR][endC] == 0) {
             return new ArrayList<>();
         }
-
-        Vertex startPoint = new Vertex(startR, startC, 0, null);
+        boolean diagonallyMoved = true;
+        Vertex startPoint = new Vertex(startR, startC, 0, null, diagonallyMoved);
         distance[startR][startC] = 0;
         startPoint.setHeuristic(heuristics(endR, endC, startR, startC));
         
@@ -95,7 +95,7 @@ public class AStar implements SearchInterface {
                     
                     if(nextDistance < distance[moveOneRow][moveOneColumn]) {
                         distance[moveOneRow][moveOneColumn] = nextDistance;
-                        Vertex next = new Vertex(moveOneRow, moveOneColumn, nextDistance, currentV);
+                        Vertex next = new Vertex(moveOneRow, moveOneColumn, nextDistance, currentV, diagonallyMoved);
                         next.setHeuristic(nextDistance + heuristics(endR, endC, moveOneRow, moveOneColumn));
                         heap.add(next);
                     }
