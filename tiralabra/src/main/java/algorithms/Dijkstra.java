@@ -58,9 +58,9 @@ public class Dijkstra implements SearchInterface {
         heap.add(startPoint);
         while(heap.getSize()!=0) {
             //System.out.println("Printing heap: ");
-            //for (int i = 0; i < heap.getSize(); i++) {   
-                //System.out.println(heap.getVertexFromIndex(i));
-            //}
+            /*for (int i = 0; i < heap.getSize(); i++) {   
+                System.out.println(heap.getVertexFromIndex(i));
+            }*/
             //System.out.println("");
             Vertex currentV = heap.poll();
             //System.out.println("Polled vertex");

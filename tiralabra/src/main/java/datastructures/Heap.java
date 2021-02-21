@@ -17,59 +17,51 @@ public class Heap {
     }
 
     public void add(Vertex v) {
-        int childIndex = this.size++;
-        if (size > heap.length) {
+        if (size + 1 > heap.length) {
             expandHeap();
         }
-        
-        this.heap[childIndex] = v;
+        this.heap[size] = v;
+        size++;
+        int k = size-1;
+        Vertex parent = heap[getParent(k)];
 
-        while (childIndex > 0) {
-            int parentIndex = getParent(childIndex);
-            Vertex parent = this.heap[parentIndex];
-            // comparing distance
-            if (v.compareTo(this.heap[parentIndex]) < 0) {
-                //swap with parent
-                this.heap[parentIndex] = v;
-                this.heap[childIndex] = parent;
-                childIndex = parentIndex;
-            } else {
+        while (hasParent(k) && parent.compareTo(heap[k]) == 1) {
+            swap(getParent(k), k);
+            k = getParent(k);
+            if (k == 0) {
                 break;
             }
         } 
     }
     
+    public void swap(int v1, int v2) {
+        Vertex k = heap[v1];
+        heap[v1] = heap[v2];
+        heap[v2] = k;
+    }
+    
     public Vertex poll() {
-        size--;
         Vertex root = getRoot();
-        Vertex vertexOntheRun = getLast();
-        int i = 0;
-        this.heap[i] = vertexOntheRun;
-        int leftChild = getLeftChild(i);
-        
-        while(leftChild < size) {
-            int rightChild = getRightChild(i);
-            if (rightChild == size) {
-                Vertex betterCvertex = heap[leftChild];
-                if (heap[i].compareTo(heap[leftChild]) > 1) {
-                    heap[leftChild] = vertexOntheRun;
-                    heap[i] = betterCvertex;
-                    i = leftChild;
-                }
-                break;
-            } else {    
-                int betterChild = heap[leftChild].compareTo(heap[rightChild]) < 0 
-                        ? leftChild : rightChild;
-                Vertex betterCvertex = heap[betterChild];
-                if (heap[i].compareTo(heap[betterChild]) > 0) {
-                    heap[betterChild] = vertexOntheRun;
-                    heap[i] = betterCvertex;
-                    i = betterChild;
-                    leftChild = getLeftChild(i);
-                } else {
-                    return heap[i];
-                }
+        Vertex lastElement = getLast();
+        int k = 0;
+        this.heap[k] = lastElement;
+        size--;
+
+        while(hasLeftChild(k)) {
+            int rightChild = getRightChild(k);
+            int betterChild = getLeftChild(k);
+            Vertex rightChildVertex = heap[rightChild];
+            Vertex leftChildVertex = heap[betterChild];
+            
+            if (hasRightChild(k) && rightChildVertex.compareTo(leftChildVertex) == -1) {
+                betterChild = rightChild;
             }
+            if (heap[k].compareTo(heap[betterChild]) == -1) {
+                break;
+            } else {
+                swap(k, betterChild);
+            }
+            k = betterChild;
         }
         return root;
     } 
@@ -87,12 +79,36 @@ public class Heap {
     }
     
     public Vertex getLast() {
-        return this.heap[size];
+        return this.heap[size-1];
     }
     
     @Override
     public String toString() {
         return this.heap[0].toString();
+    }
+    
+    public boolean hasLeftChild(int k) {
+        if (getLeftChild(k) < size) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    public boolean hasRightChild(int k) {
+        if (getRightChild(k) < size) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    public boolean hasParent(int k) {
+        if (getParent(k) >= 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
     
     public int getParent(int k) {
@@ -111,7 +127,7 @@ public class Heap {
         return this.size;
     }
     
-    public Vertex getVertexFromIndex(int i) {
-        return this.heap[i];
+    public Vertex getVertexFromIndex(int k) {
+        return this.heap[k];
     }
 }

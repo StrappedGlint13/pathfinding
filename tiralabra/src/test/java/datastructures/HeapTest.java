@@ -79,9 +79,9 @@ public class HeapTest {
         testHeap.add(testV5);
         testHeap.add(testV8);
         Vertex v = testHeap.poll();
-        assertEquals(v, testV8);
+        assertEquals(v, testV5);
         Vertex v2 = testHeap.poll();
-        assertEquals(v2, testV5);
+        assertEquals(v2, testV8);
        
         assertEquals(0, testHeap.getSize());
         Vertex testV9 = new Vertex(4, 5, 1, null, true);
@@ -89,5 +89,12 @@ public class HeapTest {
         Vertex v3 = testHeap.poll();
         assertEquals(v3, testV9);
         assertEquals(0, testHeap.getSize());  
+    }
+    
+    @Test
+    public void printRootWorks() {
+        Vertex v = testHeap.poll();
+        String s = "Vertice: row " + 2 + " column " + 2 + " distance " + 0.0;
+        assertEquals(v.toString(), s);
     }
 }

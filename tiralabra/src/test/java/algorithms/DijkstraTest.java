@@ -82,7 +82,7 @@ public class DijkstraTest {
         assertEquals(false, isFound);
     }
 
-    /* This test is not working on the second case. "
+
     @Test
     public void testAlgoFindsTheShortestPath() { 
         testmap = new int[][]{
@@ -103,5 +103,5 @@ public class DijkstraTest {
         vertices = d.findPath(testmap, 3, 8, 8, 0);
         assertEquals(10, vertices.size());
     }
-    */
+
 }

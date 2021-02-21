@@ -40,7 +40,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         Button revealTheMapButton = new Button("Reveal the map");
-        TextField textfield = new TextField("https://movingai.com/benchmarks/street/Paris_1_1024.png");
+        TextField textfield = new TextField("https://movingai.com/benchmarks/street/Berlin_0_1024.png");
         
         // Coordinates Scene and instructions
         Label header = new Label("Instructions");

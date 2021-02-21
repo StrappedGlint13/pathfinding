@@ -90,8 +90,7 @@ public class Vertex {
     }
     @Override
     public String toString() {
-        return "Vertice: row " + this.row + " column " + this.column + " distance " + this.distance
-                + " diagonallyMoved " + this.diagonallyMoved;
+        return "Vertice: row " + this.row + " column " + this.column + " distance " + this.distance;
     }
     
     
