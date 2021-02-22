@@ -1,9 +1,10 @@
 package algorithms;
 
+import datastructures.Heap;
 import java.util.ArrayList;
+import datastructures.Vertex;
 import java.util.Comparator;
 import java.util.PriorityQueue;
-import datastructures.Vertex;
 
 /**
  *
@@ -14,9 +15,11 @@ import datastructures.Vertex;
 
 public class AStar implements SearchInterface {
     final double diagonalMovement;
+    boolean[][] visited;
     
     public AStar() {
         this.diagonalMovement = Math.sqrt(2);
+        this.visited = new boolean [1][1];
     }
     /**
     * Method creates a shortest path.
@@ -36,8 +39,8 @@ public class AStar implements SearchInterface {
         int columnLength = map[0].length;
     
         double[][] distance = new double[rowLength][columnLength];
-        boolean[][] visited = new boolean[rowLength][columnLength];
-        PriorityQueue<Vertex> heap =  new PriorityQueue<>(Comparator.comparingDouble(Vertex::getHeuristic));
+        visited = new boolean[rowLength][columnLength];
+        Heap heap = new Heap();
         
         for (int r = 0; r < rowLength; r++) {
             for (int c = 0; c < columnLength; c++) {
@@ -49,12 +52,12 @@ public class AStar implements SearchInterface {
             return new ArrayList<>();
         }
         boolean diagonallyMoved = true;
-        Vertex startPoint = new Vertex(startR, startC, 0, null, diagonallyMoved);
+        Vertex startPoint = new Vertex(startR, startC, 0, null);
         distance[startR][startC] = 0;
         startPoint.setHeuristic(heuristics(endR, endC, startR, startC));
         
         heap.add(startPoint);
-        while(!heap.isEmpty()) {
+        while(heap.getVertexFromIndex(0) != null) {
             Vertex currentV = heap.poll();
      
             int currentRow = currentV.getRow();
@@ -88,14 +91,14 @@ public class AStar implements SearchInterface {
                     
                     double nextDistance = currentV.getDistance() + diagonalMovement;
                     
-                    //if moving diagonally
+                    //if moving straight
                     if (rowStep == 0 || columnStep == 0) {
                         nextDistance = currentV.getDistance() + 1;
                     }
                     
                     if(nextDistance < distance[moveOneRow][moveOneColumn]) {
                         distance[moveOneRow][moveOneColumn] = nextDistance;
-                        Vertex next = new Vertex(moveOneRow, moveOneColumn, nextDistance, currentV, diagonallyMoved);
+                        Vertex next = new Vertex(moveOneRow, moveOneColumn, nextDistance, currentV);
                         next.setHeuristic(nextDistance + heuristics(endR, endC, moveOneRow, moveOneColumn));
                         heap.add(next);
                     }
@@ -163,6 +166,10 @@ public class AStar implements SearchInterface {
         }
         
         return shortestPath;
+    }
+    
+    public boolean[][] getVisited() {
+        return this.visited;
     }
 
 }

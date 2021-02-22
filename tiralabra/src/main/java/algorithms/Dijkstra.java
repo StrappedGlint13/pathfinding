@@ -15,8 +15,10 @@ import datastructures.Heap;
 
 public class Dijkstra implements SearchInterface {
     final double diagonalMovement;
+    public boolean visited[][];
     public Dijkstra() {
         this.diagonalMovement = Math.sqrt(2);
+        this.visited = new boolean [1][1];
     }
     
     /**
@@ -37,7 +39,7 @@ public class Dijkstra implements SearchInterface {
         int columnLength = map[0].length;
 
         double[][] distance = new double[rowLength][columnLength];
-        boolean[][] visited = new boolean[rowLength][columnLength];
+        visited = new boolean[rowLength][columnLength];
         Heap heap = new Heap();
         
         for (int r = 0; r < rowLength; r++) {
@@ -104,17 +106,14 @@ public class Dijkstra implements SearchInterface {
                     }
                     
                     double nextDistance = currentV.getDistance() + diagonalMovement;
-                    boolean diagonallyMoved = true;
                     //if we are moving straight
                     if (rowStep == 0 || columnStep == 0) {
                         nextDistance = currentV.getDistance() + 1;
-                        diagonallyMoved = false;
                     }
                                 
-                    if(nextDistance < distance[moveOneRow][moveOneColumn] || 
-                            nextDistance == distance[moveOneRow][moveOneColumn] && diagonallyMoved) {
+                    if(nextDistance < distance[moveOneRow][moveOneColumn]) {
                         distance[moveOneRow][moveOneColumn] = nextDistance;
-                        Vertex next = new Vertex(moveOneRow, moveOneColumn, nextDistance, currentV, diagonallyMoved);
+                        Vertex next = new Vertex(moveOneRow, moveOneColumn, nextDistance, currentV);
                         heap.add(next);
                     }
                 }
@@ -164,6 +163,9 @@ public class Dijkstra implements SearchInterface {
         return shortestPath;
     }
     
+    public boolean[][] getVisited() {
+        return this.visited;
+    }
 
 }
 

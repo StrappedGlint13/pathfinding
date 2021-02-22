@@ -40,8 +40,11 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         Button revealTheMapButton = new Button("Reveal the map");
-        TextField textfield = new TextField("https://movingai.com/benchmarks/street/Berlin_0_1024.png");
+        TextField textfield = new TextField("https://movingai.com/benchmarks/street/Boston_0_512.png");
         
+        // https://movingai.com/benchmarks/street/Boston_0_512.png boston
+        // https://movingai.com/benchmarks/maze/maze512-16-5.png laby
+        // https://movingai.com/benchmarks/dao/brc204d.png 
         // Coordinates Scene and instructions
         Label header = new Label("Instructions");
         header.setFont(Font.font("Arial", FontWeight.BOLD,  20)); 
@@ -128,12 +131,12 @@ public class Main extends Application {
                             showMessageDialog(null, "You did not clicked the land!");
                         }
                         System.out.println("Number of vertices in A*: " + shortestPathAStar.size());
-                        System.out.println("Distance from the start: " + shortestPathAStar.get(0).getDistance());
+                        System.out.println("Distance from the start: " + shortestPathAStar.get(0).getHeuristic());
                         
                         if (shortestPathAStar == null) {
                             showMessageDialog(null, "There is no path between the starting and ending point you chose.");
                         }
-                        
+              
                         System.out.println("Number of vertices in Dijkstra: " + shortestPathDijkstra.size());
                         System.out.println("Distance from the start: " + shortestPathDijkstra.get(0).getDistance());
                         BufferedImage img = io.readImage(url);
@@ -143,8 +146,10 @@ public class Main extends Application {
                         } catch (Exception ex) {
                             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                         }
-
-                        img = imgHand.drawShortestPath(img, shortestPathAStar, shortestPathDijkstra);
+                        
+                        boolean[][]visitedD = dijkstra.getVisited();
+                        boolean[][]visitedA = aStar.getVisited();
+                        img = imgHand.drawShortestPath(img, shortestPathAStar, shortestPathDijkstra, visitedD, visitedA);
                         JFrame shortestPathFrame = new JFrame("Pathing");
                         shortestPathFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                         shortestPathFrame.setSize(height, width);

@@ -16,6 +16,10 @@ public class Heap {
         this.size = 0;
     }
 
+    public Vertex[] getHeap() {
+        return heap;
+    }
+
     public void add(Vertex v) {
         if (size + 1 > heap.length) {
             expandHeap();
@@ -46,6 +50,11 @@ public class Heap {
         int k = 0;
         this.heap[k] = lastElement;
         size--;
+        
+        if (size == k) {
+            this.heap[k] = null;
+            return root;
+        }
 
         while(hasLeftChild(k)) {
             int rightChild = getRightChild(k);
@@ -56,7 +65,7 @@ public class Heap {
             if (hasRightChild(k) && rightChildVertex.compareTo(leftChildVertex) == -1) {
                 betterChild = rightChild;
             }
-            if (heap[k].compareTo(heap[betterChild]) == -1) {
+            if (heap[k].compareTo(heap[betterChild])== -1) {
                 break;
             } else {
                 swap(k, betterChild);
@@ -65,7 +74,7 @@ public class Heap {
         }
         return root;
     } 
- 
+
     public void expandHeap() {
         Vertex[] newHeap = new Vertex[size*2];
         for (int i = 0; i < heap.length; i++) {

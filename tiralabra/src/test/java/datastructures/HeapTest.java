@@ -18,7 +18,6 @@ import static org.junit.Assert.*;
  */
 public class HeapTest {
     Heap testHeap = new Heap();
-    boolean diagonallyMoved;
     Vertex testV1;
     Vertex testV2;
     Vertex testV3;
@@ -27,11 +26,10 @@ public class HeapTest {
     @Before
     public void setUp() {
         this.testHeap = testHeap;
-        this.diagonallyMoved = false;
-        testV1 = new Vertex(2, 2, 0, null, diagonallyMoved);
-        testV2 = new Vertex(2, 3, 1, testV1, diagonallyMoved);
-        testV3 = new Vertex(2, 4, 2, testV2, diagonallyMoved);
-        testV4 = new Vertex(3, 4, 3, testV3, diagonallyMoved);
+        testV1 = new Vertex(2, 2, 0, null);
+        testV2 = new Vertex(2, 3, 1, testV1);
+        testV3 = new Vertex(2, 4, 2, testV2);
+        testV4 = new Vertex(3, 4, 3, testV3);
         testHeap.add(testV1);
         testHeap.add(testV2);
         testHeap.add(testV3);
@@ -46,7 +44,7 @@ public class HeapTest {
     //fix
     @Test
     public void addingWorks() {
-        Vertex newRoot = new Vertex(2, 1, -1, null, diagonallyMoved);
+        Vertex newRoot = new Vertex(2, 1, -1, null);
         testHeap.add(newRoot);
         assertEquals(newRoot.getRow(), testHeap.getRoot().getRow());
         assertEquals(newRoot.getColumn(), testHeap.getRoot().getColumn());
@@ -69,10 +67,10 @@ public class HeapTest {
     @Test
     public void addingAndPollingWorks() {
         Heap testHeap = new Heap();
-        Vertex testV5 = new Vertex(4, 5, 1, null, diagonallyMoved);
-        Vertex testV6 = new Vertex(5, 6, Math.sqrt(2), testV5, true);
-        Vertex testV7 = new Vertex(6, 7, Math.sqrt(2)+testV6.distance, testV6, true);
-        Vertex testV8 = new Vertex(5, 6, 1, testV7, true);
+        Vertex testV5 = new Vertex(4, 5, 1, null);
+        Vertex testV6 = new Vertex(5, 6, Math.sqrt(2), testV5);
+        Vertex testV7 = new Vertex(6, 7, Math.sqrt(2)+testV6.getDistance(), testV6);
+        Vertex testV8 = new Vertex(5, 6, 1, testV7);
         
         testHeap.add(testV6);
         testHeap.poll();
@@ -84,11 +82,20 @@ public class HeapTest {
         assertEquals(v2, testV8);
        
         assertEquals(0, testHeap.getSize());
-        Vertex testV9 = new Vertex(4, 5, 1, null, true);
+        Vertex testV9 = new Vertex(4, 5, 1, null);
         testHeap.add(testV9);
         Vertex v3 = testHeap.poll();
         assertEquals(v3, testV9);
         assertEquals(0, testHeap.getSize());  
+    }
+    
+    @Test
+    public void heapIsEmptyAfterPolling() {
+        testHeap.poll();
+        testHeap.poll();
+        testHeap.poll();
+        testHeap.poll();
+        assertEquals(null, testHeap.getVertexFromIndex(0));
     }
     
     @Test
