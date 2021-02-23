@@ -14,11 +14,11 @@ import java.util.PriorityQueue;
  */
 
 public class AStar implements SearchInterface {
-    final double diagonalMovement;
+    final float diagonalMovement;
     boolean[][] visited;
     
     public AStar() {
-        this.diagonalMovement = Math.sqrt(2);
+        this.diagonalMovement = (float) Math.sqrt(2);
         this.visited = new boolean [1][1];
     }
     /**
@@ -38,20 +38,20 @@ public class AStar implements SearchInterface {
         int rowLength = map.length;  
         int columnLength = map[0].length;
     
-        double[][] distance = new double[rowLength][columnLength];
+        float[][] distance = new float[rowLength][columnLength];
         visited = new boolean[rowLength][columnLength];
         Heap heap = new Heap();
         
         for (int r = 0; r < rowLength; r++) {
             for (int c = 0; c < columnLength; c++) {
-                distance[r][c] = Integer.MAX_VALUE;
+                distance[r][c] = 10000000;
             }
         }
         //check if the user clicked obstacle
         if (map[startR][startC] == 0 || map[endR][endC] == 0) {
             return new ArrayList<>();
         }
-        boolean diagonallyMoved = true;
+
         Vertex startPoint = new Vertex(startR, startC, 0, null);
         distance[startR][startC] = 0;
         startPoint.setHeuristic(heuristics(endR, endC, startR, startC));
@@ -89,11 +89,11 @@ public class AStar implements SearchInterface {
                         continue;
                     }
                     
-                    double nextDistance = currentV.getDistance() + diagonalMovement;
+                    float nextDistance = (float) (currentV.getDistance() + diagonalMovement);
                     
                     //if moving straight
                     if (rowStep == 0 || columnStep == 0) {
-                        nextDistance = currentV.getDistance() + 1;
+                        nextDistance = (float) (currentV.getDistance() + 1);
                     }
                     
                     if(nextDistance < distance[moveOneRow][moveOneColumn]) {
@@ -121,9 +121,9 @@ public class AStar implements SearchInterface {
     * @return Euclidean distance.
     */
     
-    private double heuristics(int endX, int endY, int currentX, int currentY) {
+    private float heuristics(int endX, int endY, int currentX, int currentY) {
         // Euclidean distance for A*
-        return Math.sqrt((currentX-endX)*(currentX-endX) + (currentY-endY)*(currentY-endY));
+        return (float) (Math.sqrt(((currentX-endX)*(currentX-endX)) + (currentY-endY)*(currentY-endY)));
     }
     
     /**

@@ -41,16 +41,16 @@ public class HeapTest {
         assertEquals(4, testHeap.getSize());
         
     }
-    //fix
+
     @Test
     public void addingWorks() {
-        Vertex newRoot = new Vertex(2, 1, -1, null);
-        testHeap.add(newRoot);
-        assertEquals(newRoot.getRow(), testHeap.getRoot().getRow());
-        assertEquals(newRoot.getColumn(), testHeap.getRoot().getColumn());
+        Vertex indexOne = new Vertex(2, 1, 0, null);
+        testHeap.add(indexOne);
+        assertEquals(indexOne.getRow(), testHeap.getRoot().getRow());
+        assertEquals(2, testHeap.getRoot().getColumn());
         
         Vertex nextVertex = testHeap.getVertexFromIndex(1);
-        assertEquals(nextVertex, testV1);
+        assertEquals(nextVertex, indexOne);
     }
 
     @Test
@@ -68,8 +68,8 @@ public class HeapTest {
     public void addingAndPollingWorks() {
         Heap testHeap = new Heap();
         Vertex testV5 = new Vertex(4, 5, 1, null);
-        Vertex testV6 = new Vertex(5, 6, Math.sqrt(2), testV5);
-        Vertex testV7 = new Vertex(6, 7, Math.sqrt(2)+testV6.getDistance(), testV6);
+        Vertex testV6 = new Vertex(5, 6, (float) Math.sqrt(2), testV5);
+        Vertex testV7 = new Vertex(6, 7, (float) (Math.sqrt(2)+testV6.getDistance()), testV6);
         Vertex testV8 = new Vertex(5, 6, 1, testV7);
         
         testHeap.add(testV6);

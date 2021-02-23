@@ -27,6 +27,9 @@ import javax.swing.JLabel;
 import static javax.swing.JOptionPane.showMessageDialog;
 import javax.swing.JTextField;
 import datastructures.Vertex;
+import java.awt.Frame;
+import java.awt.event.MouseAdapter;
+import javax.swing.Spring;
 
 
 /**
@@ -40,7 +43,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         Button revealTheMapButton = new Button("Reveal the map");
-        TextField textfield = new TextField("https://movingai.com/benchmarks/street/Boston_0_512.png");
+        TextField textfield = new TextField("https://movingai.com/benchmarks/maze/maze512-16-5.png");
         
         // https://movingai.com/benchmarks/street/Boston_0_512.png boston
         // https://movingai.com/benchmarks/maze/maze512-16-5.png laby
@@ -48,16 +51,22 @@ public class Main extends Application {
         // Coordinates Scene and instructions
         Label header = new Label("Instructions");
         header.setFont(Font.font("Arial", FontWeight.BOLD,  20)); 
-        Label instructions = new Label("1. click is the start \n"
-                + "2. click is the finish\n\n"
+        Label instructions = new Label("1. click is the start.\n"
+                + "2. click is the finish.\n"
+                + "3. click will setup next search.\n\n"
                 + "You are able to see your \n"
                 + "coordinates at the bottom \n"
-                + "left corner of the window.");
+                + "left corner of the window.\n"
+                + "In addition, you are able to\n"
+                + "see your searches with additional info\n"
+                + "about the algorithms \n"
+                + "at the command line!");
         GridPane instrSetup = new GridPane();
+        
         instrSetup.setStyle("-fx-background-color:POWDERBLUE");
         instrSetup.add(header, 0, 1);
         instrSetup.add(instructions, 0, 2);
-        instrSetup.setPrefSize(250, 200);
+        instrSetup.setPrefSize(300, 300);
         instrSetup.setAlignment(Pos.BASELINE_RIGHT);
         instrSetup.setVgap(10);
         instrSetup.setHgap(10);
@@ -73,11 +82,7 @@ public class Main extends Application {
             int height = 800;
             int width = 800;
 
-            try {
-                img = imgHand.resizeImage(img, height, width);
-            } catch (Exception ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            img = imgHand.makeNewFrame(img, height, width);
             Map map = new Map(img, height, width);
             int[][] pixelmap = map.generateMaps();
               
@@ -91,18 +96,15 @@ public class Main extends Application {
             coordinates.setText("Start point: not set"); 
             frame.add(coordinates,BorderLayout.SOUTH);
             
-            frame.addMouseListener(new MouseListener() {
+            frame.addMouseListener(new MouseAdapter() {
                 int clicked = 0;
                 int startRow = -1;
                 int startColumn = -1;
-                public void mousePressed(MouseEvent e) { }
-                public void mouseReleased(MouseEvent e) { }
-                public void mouseEntered(MouseEvent e) { }
-                public void mouseExited(MouseEvent e) { }
                 public void mouseClicked(MouseEvent e) { 
                     int x = e.getX();
                     int y = e.getY();
-  
+                    ImageHandler imgFrameHandler = new ImageHandler();
+                    
                     if (clicked == 1) {
                         JTextField coordinates = new JTextField();;
                         coordinates.setText("Shortest path from coordinates " 
@@ -129,35 +131,48 @@ public class Main extends Application {
                         
                         if (shortestPathAStar.isEmpty()) {
                             showMessageDialog(null, "You did not clicked the land!");
+                            clicked = 0;
+                            x = -1;
+                            y = -1;
+                            return;
                         }
                         System.out.println("Number of vertices in A*: " + shortestPathAStar.size());
                         System.out.println("Distance from the start: " + shortestPathAStar.get(0).getHeuristic());
                         
                         if (shortestPathAStar == null) {
                             showMessageDialog(null, "There is no path between the starting and ending point you chose.");
+                            clicked = 0;
+                            x = -1;
+                            y = -1;
+                            return;
                         }
               
                         System.out.println("Number of vertices in Dijkstra: " + shortestPathDijkstra.size());
                         System.out.println("Distance from the start: " + shortestPathDijkstra.get(0).getDistance());
                         BufferedImage img = io.readImage(url);
-
-                        try {
-                            img = imgHand.resizeImage(img, height, width);
-                        } catch (Exception ex) {
-                            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                        img = imgFrameHandler.makeNewFrame(img, height, width);
                         
                         boolean[][]visitedD = dijkstra.getVisited();
                         boolean[][]visitedA = aStar.getVisited();
-                        img = imgHand.drawShortestPath(img, shortestPathAStar, shortestPathDijkstra, visitedD, visitedA);
+                        img = imgFrameHandler.drawShortestPath(img, shortestPathAStar, shortestPathDijkstra, visitedD, visitedA);
+                        
                         JFrame shortestPathFrame = new JFrame("Pathing");
                         shortestPathFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                         shortestPathFrame.setSize(height, width);
                         JLabel label = new JLabel(new ImageIcon(img));
+                       
                         shortestPathFrame.add(label);
                         shortestPathFrame.add(coordinates,BorderLayout.SOUTH);                 
                         shortestPathFrame.setVisible(true); 
                         frame.setVisible(false);
+                        
+                        shortestPathFrame.addMouseListener(new MouseAdapter() {
+                            public void mouseClicked(MouseEvent e) {
+                                frame.setVisible(true);
+                                clicked = 0;
+                                BufferedImage img = io.readImage(url);
+                                img = imgFrameHandler.makeNewFrame(img, height, width);
+                            }});
                     } else if (e.getClickCount() == 1) {
                         startRow = x;
                         startColumn = y;  
@@ -166,12 +181,11 @@ public class Main extends Application {
                     }
                 }
                 });
-
+            
             frame.setVisible(true);
             stage.setScene(instrPanel);
         });
-        
-    
+
         // Search panel
         HBox searchComponents = new HBox(10);
         searchComponents.setStyle("-fx-background-color:POWDERBLUE");

@@ -14,10 +14,10 @@ import datastructures.Heap;
  */
 
 public class Dijkstra implements SearchInterface {
-    final double diagonalMovement;
+    final float diagonalMovement;
     public boolean visited[][];
     public Dijkstra() {
-        this.diagonalMovement = Math.sqrt(2);
+        this.diagonalMovement = (float) Math.sqrt(2);
         this.visited = new boolean [1][1];
     }
     
@@ -38,13 +38,13 @@ public class Dijkstra implements SearchInterface {
         int rowLength = map.length;  
         int columnLength = map[0].length;
 
-        double[][] distance = new double[rowLength][columnLength];
+        float[][] distance = new float[rowLength][columnLength];
         visited = new boolean[rowLength][columnLength];
         Heap heap = new Heap();
         
         for (int r = 0; r < rowLength; r++) {
             for (int c = 0; c < columnLength; c++) {
-                distance[r][c] = Integer.MAX_VALUE;
+                distance[r][c] = 10000000;
             }
         }
         
@@ -92,9 +92,7 @@ public class Dijkstra implements SearchInterface {
                     }
                     
                     int moveOneRow = currentRow + rowStep;
-                    int moveOneColumn = currentColumn + columnStep;
-                    
-                    //we don't want double distances
+                    int moveOneColumn = currentColumn + columnStep;        
             
                     if (!checkLimits(map, moveOneRow, moveOneColumn, rowLength, columnLength)) {
                         continue;
@@ -105,10 +103,10 @@ public class Dijkstra implements SearchInterface {
                         continue;
                     }
                     
-                    double nextDistance = currentV.getDistance() + diagonalMovement;
+                    float nextDistance = (float) (currentV.getDistance() + diagonalMovement);
                     //if we are moving straight
                     if (rowStep == 0 || columnStep == 0) {
-                        nextDistance = currentV.getDistance() + 1;
+                        nextDistance = (float) (currentV.getDistance() + 1);
                     }
                                 
                     if(nextDistance < distance[moveOneRow][moveOneColumn]) {

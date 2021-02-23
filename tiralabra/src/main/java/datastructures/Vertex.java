@@ -15,9 +15,9 @@ package datastructures;
 public class Vertex {
     private int row;
     private int column;
-    private double distance;
+    private float distance;
     private Vertex previous;
-    private double heuristic; // this is only for A*
+    private float heuristic; // this is only for A*
       
     public Vertex(int row, int column) {
         this.row = row;
@@ -26,7 +26,7 @@ public class Vertex {
         this.previous = null;
     }
     
-    public Vertex(int row, int column, double distance, Vertex previous) {
+    public Vertex(int row, int column, float distance, Vertex previous) {
         this.row = row;
         this.column = column;
         this.distance = distance;
@@ -34,11 +34,11 @@ public class Vertex {
         this.heuristic = 0;
     }
 
-    public double getHeuristic() {
+    public float getHeuristic() {
         return heuristic;
     }
 
-    public void setHeuristic(double heuristic) {
+    public void setHeuristic(float heuristic) {
         this.heuristic = heuristic;
     }
 
@@ -69,8 +69,8 @@ public class Vertex {
     }
     
     public int compareWithHeuristics(Vertex v2) {
-        double difference = this.heuristic - v2.getHeuristic();
-        double distance = this.distance - v2.getDistance();
+        float difference = this.heuristic - v2.getHeuristic();
+        float distance = this.distance - v2.getDistance();
         
         if (difference + distance < 0){
             return -1;
@@ -81,7 +81,7 @@ public class Vertex {
         }
     }
 
-    public double getDistance() {
+    public float getDistance() {
         return distance;
     }
 

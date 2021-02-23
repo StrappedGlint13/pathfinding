@@ -8,11 +8,10 @@ package ui;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import javax.imageio.ImageIO;
 import datastructures.Vertex;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -30,11 +29,11 @@ public class ImageHandler {
     Color startingAndEndingPoints;
     int a = 0;
     public ImageHandler() { 
-        colorDijkstra = new Color(255,255,153);
+        colorDijkstra = new Color(0,0,204);
         colorAstar = new Color(255,0,0);
         visitedSameVertices = new Color(204,102,0);
         visitedAstar = new Color(255,175,175);
-        visitedDijkstra = new Color(255,255,0);
+        visitedDijkstra = new Color(51,153,255);
         startingAndEndingPoints = new Color(0,0,204);
     }
    
@@ -66,24 +65,20 @@ public class ImageHandler {
     * @return BufferedImage, where are shortest paths drawn.
     */
     
-    public BufferedImage drawShortestPath(BufferedImage img, ArrayList<Vertex> shortestPathAStar, ArrayList<Vertex> shortestPathDijkstra,
-    boolean[][] visitedDijkstra, boolean[][] visitedAstar) {   
+    public BufferedImage drawShortestPath(BufferedImage img, ArrayList<Vertex> shortestPathAStar, ArrayList<Vertex> shortestPathDijkstra, 
+                boolean[][] visitedDijkstra, boolean[][] visitedAstar) {   
         for (int i = 1; i < shortestPathDijkstra.size() - 1; i++) {
             Vertex v = shortestPathDijkstra.get(i);
-            img = drawGrid(img, v, a);   
+            img = drawGrid(img, v, 0);   
         }
-        img = drawVisited(img, visitedDijkstra);
+        img = drawVisited(img, visitedDijkstra, a);
         this.a = 1; // next A star
-        
         for (int i = 1; i < shortestPathAStar.size() - 1; i++) {
             Vertex v = shortestPathAStar.get(i);
-            if (i == 1 || i == shortestPathDijkstra.size() -1) {
-                img = drawGrid(img, v, startingAndEndingPoints.getRGB());
-                i++;
-            }
             img = drawGrid(img, v, a);
         }
-        img = drawVisited(img, visitedAstar);
+        
+        img = drawVisited(img, visitedAstar, a);
         return img;
     }
    
@@ -117,26 +112,37 @@ public class ImageHandler {
         return img;
     }
     
-    public BufferedImage drawVisited(BufferedImage img, boolean[][] visited) {
+    public BufferedImage drawVisited(BufferedImage img, boolean[][] visited, int color) {
+        Color visitedColor = new Color(0,0,0);
+        if (color == 0) {
+            visitedColor = visitedDijkstra;
+        } else {
+            visitedColor = visitedAstar;
+        }
+        
         for (int row = 0; row < visited.length; row++) {
             for (int col = 0; col < visited[0].length; col++) {
-                if (img.getRGB(row, col) == colorDijkstra.getRGB() || img.getRGB(row, col) == colorAstar.getRGB() ||
-                        img.getRGB(row, col) == colorDijkstra.getRGB()) {
+                if(!visited[row][col]) {
                     continue;
                 }
                 
-                if (visited[row][col] && img.getRGB(row, col) == Color.DARK_GRAY.getRGB()) {
-                    img.setRGB(row, col, visitedSameVertices.getRGB());
-                } else if (visited[row][col] && a == 1) {
-                    img.setRGB(row, col, visitedAstar.getRGB());
-                } else if (visited[row][col]) {
-                    img.setRGB(row, col, visitedDijkstra.getRGB());
-                } else {
+                if (img.getRGB(row, col) == colorDijkstra.getRGB() || img.getRGB(row, col) == colorAstar.getRGB() ||
+                       img.getRGB(row, col) == Color.BLACK.getRGB()) {
                     continue;
                 }
+                img.setRGB(row, col, visitedColor.getRGB());
             }
         }
         return img;
+    }
+    
+    public BufferedImage makeNewFrame(BufferedImage img, int height, int width) {
+        try {
+            return img = resizeImage(img, height, width);
+        } catch (Exception ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
   
 }

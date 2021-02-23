@@ -27,15 +27,10 @@ public class Heap {
         this.heap[size] = v;
         size++;
         int k = size-1;
-        Vertex parent = heap[getParent(k)];
-
-        while (hasParent(k) && parent.compareTo(heap[k]) == 1) {
-            swap(getParent(k), k);
+        while ((k > 1) && heap[k].compareTo(heap[getParent(k)]) < 0) {
+            swap(k, getParent(k));
             k = getParent(k);
-            if (k == 0) {
-                break;
-            }
-        } 
+        }
     }
     
     public void swap(int v1, int v2) {
@@ -62,10 +57,10 @@ public class Heap {
             Vertex rightChildVertex = heap[rightChild];
             Vertex leftChildVertex = heap[betterChild];
             
-            if (hasRightChild(k) && rightChildVertex.compareTo(leftChildVertex) == -1) {
+            if (hasRightChild(k) && rightChildVertex.compareTo(leftChildVertex) < 0) {
                 betterChild = rightChild;
             }
-            if (heap[k].compareTo(heap[betterChild])== -1) {
+            if (heap[k].compareTo(heap[betterChild]) < 0) {
                 break;
             } else {
                 swap(k, betterChild);
