@@ -83,21 +83,22 @@ public class JPS implements SearchInterface {
     
     private boolean move(Vertex currentV, int movementRow, int movementCol) {
         boolean found = false;
-            int nextRow = currentV.getRow() + movementRow;
-            int nextColumn = currentV.getColumn() + movementCol;
+        int nextRow = currentV.getRow() + movementRow;
+        int nextColumn = currentV.getColumn() + movementCol;
             
-            if (!checkLimits(map, nextRow, nextColumn, rowLength, columnLength)) {
-                return false; // here check forced neighbours
-            }
+        if (!checkLimits(map, nextRow, nextColumn, rowLength, columnLength)) {
+            return false; // here check forced neighbours
+        }
             
-            Vertex nextStep = new Vertex(nextRow, nextColumn, nextColumn, currentV);
-            if (foundTheEnd(nextStep)) {
-                found =  true;
-            }
-            if (found == true) {
-                return true;
-            }
-            move(nextStep, movementRow, movementCol);
+        Vertex nextStep = new Vertex(nextRow, nextColumn, nextColumn, currentV);
+        if (foundTheEnd(nextStep)) {
+            found =  true;
+        }
+        
+        if (found == true) {
+            return true;
+        }
+        move(nextStep, movementRow, movementCol);
         return found;
     }
     
@@ -111,7 +112,7 @@ public class JPS implements SearchInterface {
             } else if (move(currentV, 1, 1)) { // east-south
                 break;
             } else if(move(currentV, 1, -1)) { // west-south
-            
+                break;
             }
             roundMade = true;
         }
@@ -127,7 +128,7 @@ public class JPS implements SearchInterface {
             } else if (move(currentV, 1, 0)) { // down
                 break;
             } else if(move(currentV, 0, -1)) { // left
-            
+                break;
             }
             roundMade = true;
         }
@@ -168,9 +169,9 @@ public class JPS implements SearchInterface {
             return false;
         }
         
-       if (map[r][c] == 0) {
+        if (map[r][c] == 0) {
             return false;
-       }
+        }
         return true;
     }
 
