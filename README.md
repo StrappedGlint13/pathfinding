@@ -34,4 +34,7 @@ Tiralabra
 [Week 5](https://github.com/StrappedGlint13/pathfinding/blob/main/documentation/weekly_reports/week_5_report.md)
 
 
+[Week 6](https://github.com/StrappedGlint13/pathfinding/blob/main/documentation/weekly_reports/week_6_report.md)
+
+
 
