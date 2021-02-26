@@ -35,9 +35,91 @@ public class JPSTest {
     }
     
     @Test
-    public void testMovingRight() {
-        vertices = jps.findPath(testmap, 0, 0, 0, 4);
-        assertEquals(4, vertices.size());  
+    public void testMovingRightAndLeft() {
+        testmap = new int[][]{
+            {1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 0, 1, 1, 1, 1, 1},
+        };
+        vertices = jps.findPath(testmap, 3, 0, 3, 7);
+        assertEquals(7, vertices.size()); 
+        
+        vertices = jps.findPath(testmap, 7, 7, 7, 3);
+        assertEquals(4, vertices.size());
+    }
+    
+    @Test
+    public void testMovingUpAndDown() {
+        testmap = new int[][]{
+            {1},
+            {1},
+            {1},
+            {1},
+            {1},
+            {1},
+            {1},
+            {1},
+            {1},
+            {1},
+            {1},
+            {1},
+        };
+        vertices = jps.findPath(testmap, 0, 0, 11, 0);
+        assertEquals(11, vertices.size()); 
+        
+        vertices = jps.findPath(testmap, 11, 0, 0, 0);
+        assertEquals(11, vertices.size());
+    }
+    
+     @Test
+    public void testMovingManhattanWay() {
+        testmap = new int[][]{
+            {1, 0, 0, 1, 0, 1, 1, 1},
+            {1, 0, 0, 1, 0, 1, 1, 1},
+            {1, 0, 0, 1, 0, 1, 1, 1},
+            {1, 0, 0, 1, 0, 0, 0, 0},
+            {1, 1, 1, 1, 1, 1, 1, 1},
+            {0, 0, 0, 1, 0, 0, 0, 0},
+            {0, 0, 0, 1, 0, 0, 0, 0},
+            {0, 0, 0, 1, 0, 0, 0, 0},
+        };
+        vertices = jps.findPath(testmap, 4, 3, 7, 3);
+        assertEquals(3, vertices.size()); 
+    }
+    
+
+    @Test
+    public void testMovingDiagonally() {
+        testmap = new int[][]{
+            {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+            {1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1},
+            {1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1},
+            {1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1},
+            {1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1},
+            {1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1},
+            {1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1},
+            {1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1},
+            {1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1},
+            {1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1},
+            {1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1},
+            {1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1},
+        };
+        vertices = jps.findPath(testmap, 0, 0, 7, 7); // east-south
+        assertEquals(7, vertices.size()); 
+        
+        vertices = jps.findPath(testmap, 7, 4, 0, 11); // east-north
+        assertEquals(7, vertices.size());
+        
+        vertices = jps.findPath(testmap, 1, 11, 8, 4); // west-south
+        assertEquals(7, vertices.size());
+        
+        vertices = jps.findPath(testmap, 11, 7, 8, 4); // west-north
+        assertEquals(3, vertices.size()); 
     }
     
     @Test

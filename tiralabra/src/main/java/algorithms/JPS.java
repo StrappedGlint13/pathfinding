@@ -14,6 +14,7 @@ import datastructures.Vertex;
  * A Class for Jump Point Search -algorithm
  * 
  * @author matibrax
+ * 
  */
 
 public class JPS implements SearchInterface {
@@ -65,7 +66,8 @@ public class JPS implements SearchInterface {
         heap.add(startPoint);
         while(heap.getVertexFromIndex(0) != null) {
             Vertex currentV = heap.poll();
-            moveVerticallyAndHorizonatlly(currentV);             
+            jumpVerticallyAndHorizontally(currentV);
+            jumpDiagonally(currentV);
         }
         return l;
     }
@@ -79,45 +81,53 @@ public class JPS implements SearchInterface {
         return false;
     }
     
-    private boolean moveRight(Vertex currentV) {
+    private boolean move(Vertex currentV, int movementRow, int movementCol) {
         boolean found = false;
-            int columnPlusOne = currentV.getColumn() + 1;
-            int currentRow = currentV.getRow();
+            int nextRow = currentV.getRow() + movementRow;
+            int nextColumn = currentV.getColumn() + movementCol;
             
-            if (!checkLimits(map, currentRow, columnPlusOne, rowLength, columnLength)) {
+            if (!checkLimits(map, nextRow, nextColumn, rowLength, columnLength)) {
                 return false; // here check forced neighbours
             }
             
-            Vertex vertexOntheRight = new Vertex(currentRow, columnPlusOne, columnPlusOne, currentV);
-            if (foundTheEnd(vertexOntheRight)) {
+            Vertex nextStep = new Vertex(nextRow, nextColumn, nextColumn, currentV);
+            if (foundTheEnd(nextStep)) {
                 found =  true;
             }
             if (found == true) {
                 return true;
             }
-            moveRight(vertexOntheRight);
+            move(nextStep, movementRow, movementCol);
         return found;
     }
     
-    private boolean moveUp(Vertex currentV) {
-        boolean found = false;
-            int rowPlusOne = currentV.getRow() - 1;
-            Vertex vertexOntheRight = new Vertex(rowPlusOne, currentV.getRow(), rowPlusOne, currentV);
-            if (foundTheEnd(vertexOntheRight)) {
-                found =  true;
-            }
-            if (found == true) {
-                return true;
-            }
-            moveRight(vertexOntheRight);
-        return found;
-    }
-    
-    private void moveVerticallyAndHorizonatlly(Vertex currentV) {
+    private void jumpDiagonally(Vertex currentV) {
         boolean roundMade = false;
         while (!roundMade) {
-            if (moveRight(currentV)){
+            if (move(currentV, -1, 1)) { // east-north
                 break;
+            } else if (move(currentV, -1, -1)) { // west-north
+                break;
+            } else if (move(currentV, 1, 1)) { // east-south
+                break;
+            } else if(move(currentV, 1, -1)) { // west-south
+            
+            }
+            roundMade = true;
+        }
+    }
+    
+    private void jumpVerticallyAndHorizontally(Vertex currentV) {
+        boolean roundMade = false;
+        while (!roundMade) {
+            if (move(currentV, 0, 1)) { // right
+                break;
+            } else if (move(currentV, -1, 0)) { // up
+                break;
+            } else if (move(currentV, 1, 0)) { // down
+                break;
+            } else if(move(currentV, 0, -1)) { // left
+            
             }
             roundMade = true;
         }
@@ -125,7 +135,7 @@ public class JPS implements SearchInterface {
     
     
     /**
-    * Method for A* to estimate Euclidean distance.
+    * Method for JPS to estimate Euclidean distance.
     *
     * @param currentX current x-coordinate.
     * @param currentY current y-coordinate.
