@@ -29,6 +29,14 @@ public class Vertex {
         this.heuristic = 0;
     }
 
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    public void setColumn(int column) {
+        this.column = column;
+    }
+
     public float getHeuristic() {
         return heuristic;
     }
@@ -82,6 +90,10 @@ public class Vertex {
     @Override
     public String toString() {
         return "Vertice: row " + this.row + " column " + this.column + " distance " + this.distance;
+    }
+
+    public void setPrevious(Vertex previousV) {
+        this.previous = previousV;
     }
     
     
