@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package datastructures;
 
 /**
@@ -53,7 +48,6 @@ public class Vertex {
     public Vertex getPrevious() {
         return previous;
     }
-  
     
     public int compareTo(Vertex v2) {
         if (this.heuristic > 0 || v2.getHeuristic() > 0) {

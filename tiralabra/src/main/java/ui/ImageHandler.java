@@ -5,10 +5,10 @@
  */
 package ui;
 
+import datastructures.List;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import datastructures.Vertex;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -65,16 +65,16 @@ public class ImageHandler {
     * @return BufferedImage, where are shortest paths drawn.
     */
     
-    public BufferedImage drawShortestPath(BufferedImage img, ArrayList<Vertex> shortestPathAStar, ArrayList<Vertex> shortestPathDijkstra, 
+    public BufferedImage drawShortestPath(BufferedImage img, List shortestPathAStar, List shortestPathDijkstra, 
                 boolean[][] visitedDijkstra, boolean[][] visitedAstar) {   
         for (int i = 1; i < shortestPathDijkstra.size() - 1; i++) {
-            Vertex v = shortestPathDijkstra.get(i);
+            Vertex v = shortestPathDijkstra.getFromIndex(i);
             img = drawGrid(img, v, 0);   
         }
         img = drawVisited(img, visitedDijkstra, a);
         this.a = 1; // next A star
         for (int i = 1; i < shortestPathAStar.size() - 1; i++) {
-            Vertex v = shortestPathAStar.get(i);
+            Vertex v = shortestPathAStar.getFromIndex(i);
             img = drawGrid(img, v, a);
         }
         

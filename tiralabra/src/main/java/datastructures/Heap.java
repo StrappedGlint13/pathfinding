@@ -2,7 +2,7 @@ package datastructures;
 
 /**
  *
- * A class for Min-HeapTest.
+ * Data structure for Min-Binary heap.
  * 
  * @author matibrax
  */
@@ -12,13 +12,20 @@ public class Heap {
     private int size;
     
     public Heap() {
-        this.heap = new Vertex[16];
+        this.heap = new Vertex[1000];
         this.size = 0;
     }
-
+    
     public Vertex[] getHeap() {
         return heap;
     }
+    
+    /**
+    * Method adds a Vertex to the min-heap according its distance or distance + heuristics.
+    *
+    * @param v Vertex.
+    * 
+    */
 
     public void add(Vertex v) {
         if (size + 1 > heap.length) {
@@ -33,11 +40,26 @@ public class Heap {
         }
     }
     
+    /**
+    * Method swaps parent and child leaf.
+    *
+    * @param v1 leaf.
+    * @param v2 parent.
+    */
+    
     public void swap(int v1, int v2) {
         Vertex k = heap[v1];
         heap[v1] = heap[v2];
         heap[v2] = k;
     }
+    
+    /**
+    * Method for returning all the visited notes.
+    *
+    * 
+    * @return the root of the Heap. 
+    * 
+    */
     
     public Vertex poll() {
         Vertex root = getRoot();
@@ -69,6 +91,11 @@ public class Heap {
         }
         return root;
     } 
+    
+    /**
+    * Method for expanding the heap, if necessary.
+    *
+    */
 
     public void expandHeap() {
         Vertex[] newHeap = new Vertex[size*2];
@@ -91,6 +118,14 @@ public class Heap {
         return this.heap[0].toString();
     }
     
+    /**
+    * Method check if we have a left child.
+    *
+    * @param k index. 
+    * 
+    * @return true if we have a left child, else false.
+    */
+    
     public boolean hasLeftChild(int k) {
         if (getLeftChild(k) < size) {
             return true;
@@ -98,6 +133,14 @@ public class Heap {
             return false;
         }
     }
+    
+    /**
+    * Method check if we have a right child.
+    *
+    * @param k index. 
+    * 
+    * @return true if we have a right child, else false.
+    */
     
     public boolean hasRightChild(int k) {
         if (getRightChild(k) < size) {
@@ -107,6 +150,14 @@ public class Heap {
         }
     }
     
+    /**
+    * Method check if a leaf has a parent.
+    *
+    * @param k index. 
+    * 
+    * @return true if we have a parent, else false.
+    */
+    
     public boolean hasParent(int k) {
         if (getParent(k) >= 0) {
             return true;
@@ -115,13 +166,37 @@ public class Heap {
         }
     }
     
+    /**
+    * Method gets a parent of a leaf.
+    *
+    * @param k index. 
+    * 
+    * @return parents index.
+    */
+    
     public int getParent(int k) {
         return (k-1) / 2;
     }
     
+    /**
+    * Method gets a left leaf of a parent vertex.
+    *
+    * @param k index. 
+    * 
+    * @return parents left leaf.
+    */
+    
     public int getLeftChild(int k) {
         return (2 * k) + 1;
     }
+    
+    /**
+    * Method gets a right leaf of a parent vertex.
+    *
+    * @param k index. 
+    * 
+    * @return parents left leaf.
+    */
     
     public int getRightChild(int k) {
         return (2 * k) + 2;

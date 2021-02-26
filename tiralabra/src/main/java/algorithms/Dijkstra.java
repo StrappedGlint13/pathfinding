@@ -1,10 +1,8 @@
 package algorithms;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.PriorityQueue;
 import datastructures.Vertex;
 import datastructures.Heap;
+import datastructures.List;
 
 /**
  *
@@ -16,6 +14,7 @@ import datastructures.Heap;
 public class Dijkstra implements SearchInterface {
     final float diagonalMovement;
     public boolean visited[][];
+    
     public Dijkstra() {
         this.diagonalMovement = (float) Math.sqrt(2);
         this.visited = new boolean [1][1];
@@ -34,7 +33,7 @@ public class Dijkstra implements SearchInterface {
     */
     
     @Override
-    public ArrayList<Vertex> findPath(int[][]map, int startR, int startC, int endR, int endC) {
+    public List findPath(int[][]map, int startR, int startC, int endR, int endC) {
         int rowLength = map.length;  
         int columnLength = map[0].length;
 
@@ -48,9 +47,8 @@ public class Dijkstra implements SearchInterface {
             }
         }
         
-        //check if the user clicked obstacle
         if (map[startR][startC] == 0 || map[endR][endC] == 0) {
-            return new ArrayList<>();
+            return null; 
         }
        
         Vertex startPoint = new Vertex(startR, startC);
@@ -59,20 +57,12 @@ public class Dijkstra implements SearchInterface {
         //Start searching
         heap.add(startPoint);
         while(heap.getSize()!=0) {
-            //System.out.println("Printing heap: ");
-            /*for (int i = 0; i < heap.getSize(); i++) {   
-                System.out.println(heap.getVertexFromIndex(i));
-            }*/
-            //System.out.println("");
             Vertex currentV = heap.poll();
-            //System.out.println("Polled vertex");
-            //System.out.println("V: " + currentV);
             int currentRow = currentV.getRow();
             int currentColumn = currentV.getColumn();
             
             //found the path!
             if (currentRow == endR && currentColumn == endC) {
-                //System.out.println("Goal!! " + currentV);
                 return createShortestPath(currentV);
             }
            
@@ -152,8 +142,8 @@ public class Dijkstra implements SearchInterface {
     */
 
     @Override
-    public ArrayList<Vertex> createShortestPath(Vertex vertice) {
-        ArrayList<Vertex> shortestPath = new ArrayList<>();
+    public List createShortestPath(Vertex vertice) {
+        List shortestPath = new List();
         while (vertice.getPrevious() != null) {
             shortestPath.add(vertice);
             vertice = vertice.getPrevious();
@@ -165,6 +155,7 @@ public class Dijkstra implements SearchInterface {
         return this.visited;
     }
 
+   
 }
 
 

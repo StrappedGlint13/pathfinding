@@ -5,7 +5,7 @@
  */
 package algorithms;
 
-import java.util.ArrayList;
+import datastructures.List;
 import datastructures.Vertex;
 
 /**
@@ -16,6 +16,6 @@ import datastructures.Vertex;
  */
 public interface SearchInterface {
     boolean checkLimits(int[][]map, int r, int c, int rowLength, int columnLength);
-    public ArrayList<Vertex> createShortestPath(Vertex vertice);
-    public ArrayList<Vertex> findPath(int[][]map, int startR, int startC, int endR, int endC);
+    public List createShortestPath(Vertex vertice);
+    public List findPath(int[][]map, int startR, int startC, int endR, int endC);
 }

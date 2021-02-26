@@ -1,10 +1,8 @@
 package algorithms;
 
 import datastructures.Heap;
-import java.util.ArrayList;
+import datastructures.List;
 import datastructures.Vertex;
-import java.util.Comparator;
-import java.util.PriorityQueue;
 
 /**
  *
@@ -33,8 +31,8 @@ public class AStar implements SearchInterface {
     * @return shortest path as a list of Vertices.
     */
     
-    @Override
-    public ArrayList<Vertex> findPath(int[][]map, int startR, int startC, int endR, int endC) {
+    //@Override
+    public List findPath(int[][]map, int startR, int startC, int endR, int endC) {
         int rowLength = map.length;  
         int columnLength = map[0].length;
     
@@ -49,7 +47,7 @@ public class AStar implements SearchInterface {
         }
         //check if the user clicked obstacle
         if (map[startR][startC] == 0 || map[endR][endC] == 0) {
-            return new ArrayList<>();
+            return null;
         }
 
         Vertex startPoint = new Vertex(startR, startC, 0, null);
@@ -138,7 +136,7 @@ public class AStar implements SearchInterface {
     * @return true or false, depends on if we are in the limits. 
     */
 
-    @Override
+    //@Override
     public boolean checkLimits(int[][]map, int r, int c, int rowLength, int columnLength) {
         if (r < 0 || c < 0 || r >= rowLength || c >= columnLength) {
             return false;
@@ -157,9 +155,9 @@ public class AStar implements SearchInterface {
     * 
     */
     
-    @Override
-    public ArrayList<Vertex> createShortestPath(Vertex vertice) {
-        ArrayList<Vertex> shortestPath = new ArrayList<>();
+    //@Override
+    public List createShortestPath(Vertex vertice) {
+        List shortestPath = new List();
         while (vertice.getPrevious() != null) {
             shortestPath.add(vertice);
             vertice = vertice.getPrevious();
@@ -167,6 +165,15 @@ public class AStar implements SearchInterface {
         
         return shortestPath;
     }
+    
+    /**
+    * Method for returning all the visited notes.
+    * 
+    * @return list of vertex for the shortest path, if there is previous vertex, 
+    * call the method again, if null is found from the "previous",
+    * we are at the starting vertex. 
+    * 
+    */
     
     public boolean[][] getVisited() {
         return this.visited;

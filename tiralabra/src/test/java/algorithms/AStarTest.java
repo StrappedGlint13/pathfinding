@@ -5,11 +5,8 @@
  */
 package algorithms;
 
-import java.util.ArrayList;
-import org.junit.After;
-import org.junit.AfterClass;
+import datastructures.List;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -19,7 +16,7 @@ import static org.junit.Assert.*;
  */
 public class AStarTest {
     SearchInterface a;
-    ArrayList vertices;
+    List vertices;
     int[][] testmap;
     
     @Before
@@ -31,7 +28,7 @@ public class AStarTest {
             {1, 0, 0, 0, 0, 0, 0, 1},
             {1, 1, 1, 1, 1, 1, 1, 1},
         };
-        vertices = new ArrayList<>();
+        vertices = new List();
     }
     /*
     @Test

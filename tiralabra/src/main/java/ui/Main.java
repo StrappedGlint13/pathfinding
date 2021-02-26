@@ -2,13 +2,10 @@ package ui;
 
 import algorithms.AStar;
 import algorithms.Dijkstra;
+import datastructures.List;
 import java.awt.BorderLayout;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -26,10 +23,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import static javax.swing.JOptionPane.showMessageDialog;
 import javax.swing.JTextField;
-import datastructures.Vertex;
-import java.awt.Frame;
 import java.awt.event.MouseAdapter;
-import javax.swing.Spring;
 
 
 /**
@@ -100,6 +94,7 @@ public class Main extends Application {
                 int clicked = 0;
                 int startRow = -1;
                 int startColumn = -1;
+                @Override
                 public void mouseClicked(MouseEvent e) { 
                     int x = e.getX();
                     int y = e.getY();
@@ -112,10 +107,10 @@ public class Main extends Application {
                         
                         //Algorithms
                         Dijkstra dijkstra = new Dijkstra();
-                        ArrayList<Vertex> shortestPathDijkstra = new ArrayList<>();
+                        List shortestPathDijkstra = new List();
                         
                         AStar aStar = new AStar();
-                        ArrayList<Vertex> shortestPathAStar = new ArrayList<>();
+                        List shortestPathAStar = new List();
 
                         long startA = System.nanoTime();
                         shortestPathAStar = aStar.findPath(pixelmap, startRow, startColumn, x, y);
@@ -130,6 +125,9 @@ public class Main extends Application {
                         System.out.println("Dijkstra runs " +((endD - startD)/1e9) + " seconds"); 
                         
                         if (shortestPathAStar.isEmpty()) {
+                            for (int i = 0; i < shortestPathAStar.size(); i++) {
+                                System.out.println(shortestPathAStar.getFromIndex(i));
+                            }
                             showMessageDialog(null, "You did not clicked the land!");
                             clicked = 0;
                             x = -1;
@@ -137,7 +135,7 @@ public class Main extends Application {
                             return;
                         }
                         System.out.println("Number of vertices in A*: " + shortestPathAStar.size());
-                        System.out.println("Distance from the start: " + shortestPathAStar.get(0).getHeuristic());
+                        System.out.println("Distance from the start: " + shortestPathAStar.getFromIndex(0).getHeuristic());
                         
                         if (shortestPathAStar == null) {
                             showMessageDialog(null, "There is no path between the starting and ending point you chose.");
@@ -148,7 +146,8 @@ public class Main extends Application {
                         }
               
                         System.out.println("Number of vertices in Dijkstra: " + shortestPathDijkstra.size());
-                        System.out.println("Distance from the start: " + shortestPathDijkstra.get(0).getDistance());
+                        System.out.println("Distance from the start: " + shortestPathDijkstra.getFromIndex(0).getDistance());
+                        System.out.println("");
                         BufferedImage img = io.readImage(url);
                         img = imgFrameHandler.makeNewFrame(img, height, width);
                         
@@ -170,8 +169,6 @@ public class Main extends Application {
                             public void mouseClicked(MouseEvent e) {
                                 frame.setVisible(true);
                                 clicked = 0;
-                                BufferedImage img = io.readImage(url);
-                                img = imgFrameHandler.makeNewFrame(img, height, width);
                             }});
                     } else if (e.getClickCount() == 1) {
                         startRow = x;
