@@ -76,7 +76,7 @@ public class JPSTest {
         assertEquals(11, vertices.size());
     }
     
-     @Test
+    @Test
     public void testMovingManhattanWay() {
         testmap = new int[][]{
             {1, 0, 0, 1, 0, 1, 1, 1},
