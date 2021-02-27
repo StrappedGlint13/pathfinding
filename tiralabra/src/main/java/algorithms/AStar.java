@@ -65,10 +65,6 @@ public class AStar implements SearchInterface {
                 return createShortestPath(currentV);
             }
               
-            if (visited[currentRow][currentColumn]) {
-                continue;
-            }
-            
             visited[currentRow][currentColumn] = true;
             
             for (int rowStep = -1; rowStep < 2; rowStep++) {

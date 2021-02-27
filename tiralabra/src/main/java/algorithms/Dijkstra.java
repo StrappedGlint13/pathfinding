@@ -66,11 +66,6 @@ public class Dijkstra implements SearchInterface {
                 return createShortestPath(currentV);
             }
            
-            
-            if (visited[currentRow][currentColumn]) {
-                continue;
-            }
-            
             visited[currentRow][currentColumn] = true;
             
             //start moving
