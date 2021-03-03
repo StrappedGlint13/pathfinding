@@ -38,7 +38,7 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
         Button revealTheMapButton = new Button("Reveal the map");
         TextField textfield = new TextField("https://movingai.com/benchmarks/maze/maze512-16-5.png");
-        
+        textfield.setPrefWidth(450);
         // https://movingai.com/benchmarks/street/Boston_0_512.png boston
         // https://movingai.com/benchmarks/maze/maze512-16-5.png laby
         // https://movingai.com/benchmarks/dao/brc204d.png 
@@ -73,8 +73,8 @@ public class Main extends Application {
             ImageHandler imgHand = new ImageHandler();
             BufferedImage img = io.readImage(url);
 
-            int height = 800;
-            int width = 800;
+            int height = 1024;
+            int width = 1024;
 
             img = imgHand.makeNewFrame(img, height, width);
             Map map = new Map(img, height, width);
@@ -94,6 +94,7 @@ public class Main extends Application {
                 int clicked = 0;
                 int startRow = -1;
                 int startColumn = -1;
+                int searchNumber = 1;
                 @Override
                 public void mouseClicked(MouseEvent e) { 
                     int x = e.getX();
@@ -115,7 +116,7 @@ public class Main extends Application {
                         long startA = System.nanoTime();
                         shortestPathAStar = aStar.findPath(pixelmap, startRow, startColumn, x, y);
                         long endA= System.nanoTime();
-                        
+                        System.out.println(searchNumber + ". Search:");
                         System.out.println("A* runs " +((endA-startA)/1e9)+ " seconds");
                         
                         long startD = System.nanoTime();
@@ -155,7 +156,7 @@ public class Main extends Application {
                         boolean[][]visitedA = aStar.getVisited();
                         img = imgFrameHandler.drawShortestPath(img, shortestPathAStar, shortestPathDijkstra, visitedD, visitedA);
                         
-                        JFrame shortestPathFrame = new JFrame("Pathing");
+                        JFrame shortestPathFrame = new JFrame("Search nro. "+ searchNumber);
                         shortestPathFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                         shortestPathFrame.setSize(height, width);
                         JLabel label = new JLabel(new ImageIcon(img));
@@ -169,6 +170,7 @@ public class Main extends Application {
                             public void mouseClicked(MouseEvent e) {
                                 frame.setVisible(true);
                                 clicked = 0;
+                                searchNumber++;
                             }});
                     } else if (e.getClickCount() == 1) {
                         startRow = x;
@@ -184,7 +186,7 @@ public class Main extends Application {
         });
 
         // Search panel
-        HBox searchComponents = new HBox(10);
+        HBox searchComponents = new HBox(50);
         searchComponents.setStyle("-fx-background-color:POWDERBLUE");
         Label searchInstructions = new Label("URL of the map (PNG)");
         searchInstructions.setFont(Font.font("Arial", FontWeight.BOLD, 15));

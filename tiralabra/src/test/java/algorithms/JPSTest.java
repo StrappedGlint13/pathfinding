@@ -5,6 +5,7 @@
  */
 package algorithms;
 
+import datastructures.Heap;
 import datastructures.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -18,20 +19,71 @@ import static org.junit.Assert.*;
  * @author matibrax
  */
 public class JPSTest {
-    SearchInterface jps;
+    JPS jps;
     List vertices;
     int[][] testmap;
+    Heap heap;
     
     public JPSTest() {
     }
     
     @Before
     public void setUp() {
+        this.heap = new Heap();
         jps = new JPS();
         testmap = new int[][]{
             {1, 1, 1, 1, 1, 1, 1, 1},
         };
         vertices = new List();
+    }
+    
+    @Test
+    public void testmovingtogether() {
+        testmap = new int[][]{
+            {1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1},
+            {0, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 0, 1, 1, 1, 1},
+        };
+        //right diagonally and up
+        vertices = jps.findPath(testmap, 7, 0, 1, 5);
+        assertEquals(6, vertices.size());
+        
+        //right diagonally and right
+        vertices = jps.findPath(testmap, 6, 1, 3, 7);
+        assertEquals(6, vertices.size());
+        
+        // left diagonally
+        vertices = jps.findPath(testmap, 5, 3, 0, 0);
+        assertEquals(5, vertices.size());
+        
+        System.out.println("test");
+        //left diagonally up, left and diagonally down
+        vertices = jps.findPath(testmap, 7, 7, 7, 2);
+        assertEquals(10, vertices.size());
+           
+    }
+    
+ 
+    @Test
+    public void algoFindsTheForcedNeigboursFromTopAndBelow() {
+        testmap = new int[][]{
+            {1, 0, 1},
+            {1, 1, 1},
+            {1, 0, 1},
+        };
+        vertices = jps.findPath(testmap, 1, 0, 1, 2);
+        //assertEquals(2, vertices.size());
+        for (int i = 0; i < jps.getHeap().getSize(); i++) {
+            System.out.println("HEAP from index:"+ i + " " +jps.getHeap().getVertexFromIndex(i));
+            System.out.println("Previous" + jps.getHeap().getVertexFromIndex(i).getPrevious());
+            System.out.println("Heuristics" + jps.getHeap().getVertexFromIndex(i).getHeuristic());
+        }
+        assertEquals(4, jps.getHeap().getSize());
     }
     
     @Test

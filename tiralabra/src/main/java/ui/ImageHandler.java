@@ -21,17 +21,17 @@ import java.util.logging.Logger;
  */
 
 public class ImageHandler {
-    Color colorDijkstra;
-    Color colorAstar;
-    Color visitedSameVertices;
+    Color dijkstraPath;
+    Color astarPath;
+    Color samePathColor;
     Color visitedDijkstra;
     Color visitedAstar;
     Color startingAndEndingPoints;
     int a = 0;
     public ImageHandler() { 
-        colorDijkstra = new Color(0,0,204);
-        colorAstar = new Color(255,0,0);
-        visitedSameVertices = new Color(204,102,0);
+        dijkstraPath = new Color(0,0,204);
+        astarPath = new Color(255,0,0);
+        samePathColor = new Color(255,0,255);
         visitedAstar = new Color(255,175,175);
         visitedDijkstra = new Color(51,153,255);
         startingAndEndingPoints = new Color(0,0,204);
@@ -67,17 +67,13 @@ public class ImageHandler {
     
     public BufferedImage drawShortestPath(BufferedImage img, List shortestPathAStar, List shortestPathDijkstra, 
                 boolean[][] visitedDijkstra, boolean[][] visitedAstar) {   
-        for (int i = 1; i < shortestPathDijkstra.size() - 1; i++) {
-            Vertex v = shortestPathDijkstra.getFromIndex(i);
-            img = drawGrid(img, v, 0);   
+        for (int i = 0; i < shortestPathDijkstra.size() - 1; i++) {
+            Vertex d = shortestPathDijkstra.getFromIndex(i);
+            Vertex as = shortestPathAStar.getFromIndex(i);
+            img = drawGrid(img, d, as);   
         }
         img = drawVisited(img, visitedDijkstra, a);
         this.a = 1; // next A star
-        for (int i = 1; i < shortestPathAStar.size() - 1; i++) {
-            Vertex v = shortestPathAStar.getFromIndex(i);
-            img = drawGrid(img, v, a);
-        }
-        
         img = drawVisited(img, visitedAstar, a);
         return img;
     }
@@ -87,26 +83,33 @@ public class ImageHandler {
     * Method draws a shortest path with 3x3 pixel-maze. 
     *
     * @param img given BufferedImage.
-    * @param v pixel-vertex that is being manipulated.
+    * @param d pixel-vertex that is being manipulated.
     * @param color colour that is set for specific algorithm.
     * 
     * @return BufferedImage, with the grid line of shortest path. 
     */
   
-    public BufferedImage drawGrid(BufferedImage img, Vertex v, int color) {
-        Color pathColor = new Color(0,0,0);
-        if (color == 0) {
-            pathColor = colorDijkstra;
-        } else {
-            pathColor = colorAstar;
-        }
-        
+    public BufferedImage drawGrid(BufferedImage img, Vertex d, Vertex a) {
         for (int drawRow = -1; drawRow < 2; drawRow++) {
             for (int drawCol = -1; drawCol < 2; drawCol++) {
-                if (img.getRGB(v.getRow() - drawRow, v.getColumn() - drawCol) == Color.BLACK.getRGB()) {
-                    continue;
+                int currentRowD = d.getRow() - drawRow;
+                int currentColD = d.getColumn()- drawCol;
+                
+                int currentRowA = a.getRow() - drawRow;
+                int currentColA = a.getColumn()- drawCol;
+                
+                if (currentRowD == currentRowA && currentColD == currentColA) {
+                    if (img.getRGB(currentRowD, currentColD) != Color.BLACK.getRGB()) {
+                    img.setRGB(d.getRow() - drawRow, d.getColumn() - drawCol, samePathColor.getRGB());
+                    }
+                } else {
+                    if (img.getRGB(currentRowD, currentColD) != Color.BLACK.getRGB()) {
+                        img.setRGB(currentRowD, currentColD, dijkstraPath.getRGB());
+                    }
+                    if (img.getRGB(currentRowA, currentColA) != Color.BLACK.getRGB()) {
+                        img.setRGB(currentRowA, currentColA, astarPath.getRGB());
+                    }
                 }
-                img.setRGB(v.getRow() - drawRow, v.getColumn() - drawCol, pathColor.getRGB());
             }
         }
         return img;
@@ -126,11 +129,12 @@ public class ImageHandler {
                     continue;
                 }
                 
-                if (img.getRGB(row, col) == colorDijkstra.getRGB() || img.getRGB(row, col) == colorAstar.getRGB() ||
-                       img.getRGB(row, col) == Color.BLACK.getRGB()) {
+                if (img.getRGB(row, col) == samePathColor.getRGB() || img.getRGB(row, col) == dijkstraPath.getRGB() || img.getRGB(row, col) == astarPath.getRGB()) {
                     continue;
                 }
+             
                 img.setRGB(row, col, visitedColor.getRGB());
+            
             }
         }
         return img;
