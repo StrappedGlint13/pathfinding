@@ -58,6 +58,8 @@ public class Vertex {
     }
     
     public int compareTo(Vertex v2) {
+        //System.out.print("heuristic " + heuristic);
+        //System.out.println("vs V2: " + v2.getHeuristic());
         if (this.heuristic > 0 || v2.getHeuristic() > 0) {
             return compareWithHeuristics(v2);
         }
@@ -75,6 +77,7 @@ public class Vertex {
         float distance = this.distance - v2.getDistance();
         
         if (difference + distance < 0){
+            //System.out.println("V2");
             return -1;
         } else if (difference + distance > 0) {
             return 1;

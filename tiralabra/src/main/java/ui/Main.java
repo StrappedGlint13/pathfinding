@@ -2,6 +2,7 @@ package ui;
 
 import algorithms.AStar;
 import algorithms.Dijkstra;
+import algorithms.JPS;
 import datastructures.List;
 import java.awt.BorderLayout;
 import java.awt.event.MouseEvent;
@@ -112,18 +113,27 @@ public class Main extends Application {
                         
                         AStar aStar = new AStar();
                         List shortestPathAStar = new List();
+                        
+                        JPS jps = new JPS();
+                        List shortestPathJPS = new List();
 
+                        System.out.println(searchNumber + ". Search:");
+                        
                         long startA = System.nanoTime();
                         shortestPathAStar = aStar.findPath(pixelmap, startRow, startColumn, x, y);
                         long endA= System.nanoTime();
-                        System.out.println(searchNumber + ". Search:");
-                        System.out.println("A* runs " +((endA-startA)/1e9)+ " seconds");
                         
                         long startD = System.nanoTime();
                         shortestPathDijkstra = dijkstra.findPath(pixelmap, startRow, startColumn, x, y);
                         long endD = System.nanoTime();
-                                                
-                        System.out.println("Dijkstra runs " +((endD - startD)/1e9) + " seconds"); 
+                        
+                        long startJPS = System.nanoTime();
+                        shortestPathJPS = jps.findPath(pixelmap, startRow, startColumn, x, y);
+                        long endJPS = System.nanoTime();
+                        
+                        System.out.println("A* runs " +((endA-startA)/1e9)+ " seconds");
+                        System.out.println("Dijkstra runs " +((endD - startD)/1e9) + " seconds");
+                        System.out.println("JPS runs " +((endJPS - startJPS)/1e9) + " seconds"); 
                         
                         if (shortestPathAStar.isEmpty()) {
                             for (int i = 0; i < shortestPathAStar.size(); i++) {
@@ -148,13 +158,17 @@ public class Main extends Application {
               
                         System.out.println("Number of vertices in Dijkstra: " + shortestPathDijkstra.size());
                         System.out.println("Distance from the start: " + shortestPathDijkstra.getFromIndex(0).getDistance());
+                        
+                        System.out.println("Number of vertices in Jump Point Search: " + shortestPathJPS.size());
+                        System.out.println("Distance from the start: " + shortestPathJPS.getFromIndex(0).getDistance());
                         System.out.println("");
                         BufferedImage img = io.readImage(url);
                         img = imgFrameHandler.makeNewFrame(img, height, width);
                         
                         boolean[][]visitedD = dijkstra.getVisited();
                         boolean[][]visitedA = aStar.getVisited();
-                        img = imgFrameHandler.drawShortestPath(img, shortestPathAStar, shortestPathDijkstra, visitedD, visitedA);
+                        boolean[][]visitedJPS = jps.getVisited();
+                        img = imgFrameHandler.drawShortestPath(img, shortestPathAStar, shortestPathDijkstra, shortestPathJPS, visitedD, visitedA, visitedJPS);
                         
                         JFrame shortestPathFrame = new JFrame("Search nro. "+ searchNumber);
                         shortestPathFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

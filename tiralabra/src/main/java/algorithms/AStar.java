@@ -56,8 +56,17 @@ public class AStar implements SearchInterface {
         
         heap.add(startPoint);
         while(heap.getVertexFromIndex(0) != null) {
+            /*System.out.println("Heap:");
+            for (int i = 0; i < heap.getSize(); i++) {
+                System.out.println(heap.getVertexFromIndex(i) + "heuristics" + 
+                       heap.getVertexFromIndex(i).getHeuristic());
+            }
+            
+           
+            System.out.println("POLLED VERTICE: " +currentV + "heuristics" + 
+                       currentV.getHeuristic());
+            */
             Vertex currentV = heap.poll();
-     
             int currentRow = currentV.getRow();
             int currentColumn = currentV.getColumn();
             

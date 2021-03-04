@@ -24,6 +24,7 @@ public class ImageHandler {
     Color dijkstraPath;
     Color astarPath;
     Color samePathColor;
+    Color jpsPath;
     Color visitedDijkstra;
     Color visitedAstar;
     Color startingAndEndingPoints;
@@ -31,6 +32,7 @@ public class ImageHandler {
     public ImageHandler() { 
         dijkstraPath = new Color(0,0,204);
         astarPath = new Color(255,0,0);
+        jpsPath = new Color(255,255,0);
         samePathColor = new Color(255,0,255);
         visitedAstar = new Color(255,175,175);
         visitedDijkstra = new Color(51,153,255);
@@ -66,15 +68,18 @@ public class ImageHandler {
     */
     
     public BufferedImage drawShortestPath(BufferedImage img, List shortestPathAStar, List shortestPathDijkstra, 
-                boolean[][] visitedDijkstra, boolean[][] visitedAstar) {   
+                List shortestPathJPS, boolean[][] visitedDijkstra, boolean[][] visitedAstar, boolean[][] visitedJPS) {   
         for (int i = 0; i < shortestPathDijkstra.size() - 1; i++) {
             Vertex d = shortestPathDijkstra.getFromIndex(i);
             Vertex as = shortestPathAStar.getFromIndex(i);
-            img = drawGrid(img, d, as);   
+            Vertex jps = shortestPathJPS.getFromIndex(i);
+            img = drawGrid(img, d, as, jps);   
         }
         img = drawVisited(img, visitedDijkstra, a);
         this.a = 1; // next A star
         img = drawVisited(img, visitedAstar, a);
+        this.a = 2;
+        img = drawVisited(img, visitedJPS, a);
         return img;
     }
    
@@ -89,7 +94,7 @@ public class ImageHandler {
     * @return BufferedImage, with the grid line of shortest path. 
     */
   
-    public BufferedImage drawGrid(BufferedImage img, Vertex d, Vertex a) {
+    public BufferedImage drawGrid(BufferedImage img, Vertex d, Vertex a, Vertex jps) {
         for (int drawRow = -1; drawRow < 2; drawRow++) {
             for (int drawCol = -1; drawCol < 2; drawCol++) {
                 int currentRowD = d.getRow() - drawRow;
@@ -97,6 +102,9 @@ public class ImageHandler {
                 
                 int currentRowA = a.getRow() - drawRow;
                 int currentColA = a.getColumn()- drawCol;
+                
+                int currentRowJPS = jps.getRow() - drawRow;
+                int currentColJPS = jps.getColumn()- drawCol;
                 
                 if (currentRowD == currentRowA && currentColD == currentColA) {
                     if (img.getRGB(currentRowD, currentColD) != Color.BLACK.getRGB()) {
@@ -109,6 +117,7 @@ public class ImageHandler {
                     if (img.getRGB(currentRowA, currentColA) != Color.BLACK.getRGB()) {
                         img.setRGB(currentRowA, currentColA, astarPath.getRGB());
                     }
+                   
                 }
             }
         }
@@ -119,8 +128,10 @@ public class ImageHandler {
         Color visitedColor = new Color(0,0,0);
         if (color == 0) {
             visitedColor = visitedDijkstra;
-        } else {
+        } else if (color == 1){
             visitedColor = visitedAstar;
+        } else {
+            visitedColor = jpsPath;
         }
         
         for (int row = 0; row < visited.length; row++) {
