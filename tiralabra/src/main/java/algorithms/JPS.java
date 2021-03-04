@@ -85,48 +85,56 @@ public class JPS implements SearchInterface {
     }
     
     //moving right or left, checking forced neighbours
-    public void checkForcedNeighboursFromTheTopAndBelow(Vertex currentV) {
+    //Logic is that when we are moving right or left, we have row = 0, but column +1 or -1
+    // When we made the check from top and below we change this so that
+    // row = +-1 and column = 0
+    // If we are moving down or up this is contrary:
+    // row = +1 and column = 0 – is the way we are moving
+    
+    //moving right or left, checking forced neighbours
+    public boolean checkForcedNeighboursFromTheTopAndBelow(Vertex currentV) {
         int currentRow = currentV.getRow();
         int currentColumn = currentV.getColumn();
         float distance = currentV.getDistance() + diagonalMovement;
         boolean add = false; //if up or down is obstacle
         
-        if (currentRow-1 <= rowLength || currentRow-1 < 0 || currentColumn < 0 ||  
+        if (currentRow-1 <= rowLength && currentRow-1 >= 0 && currentColumn >= 0 &&  
                 currentColumn <= columnLength) { // check if we are still inside the boundraries
             if (map[currentRow-1][currentColumn] == 0) { // if there is an obstacle up
                 add = true;
                 if (checkLimits(map, currentRow-1, currentColumn+1, rowLength, columnLength)) {
-                    if (map[currentRow-1][currentColumn+1] == 1) { // if right-up is land
+                    if (map[currentRow-1][currentColumn+1] == 1 && visited[currentRow-1][currentColumn+1] == false) { // if right-up is land
                         Vertex rightUpNeighbour = new Vertex(currentRow-1, currentColumn+1, distance, currentV); 
                         rightUpNeighbour.setHeuristic(distance + heuristics(endR, endC, currentRow-1, currentColumn+1));
                         heap.add(rightUpNeighbour);
                     }
                 }
-                
+                /* This is for coming from left
                 if (checkLimits(map, currentRow-1, currentColumn-1, rowLength, columnLength)) {
                     if (map[currentRow-1][currentColumn-1] == 1) { // if east-west is land
                         Vertex leftUpNeighbour = new Vertex(currentRow-1, currentColumn-1, distance, currentV); 
                         leftUpNeighbour.setHeuristic(distance + heuristics(endR, endC, currentRow-1, currentColumn-1));
                         heap.add(leftUpNeighbour);
                     }
-                }   
+                } */  
             }
         }
      
-        if (currentRow+1 <= rowLength || currentRow+1 < 0 || currentColumn < 0 ||  
-                currentColumn <= columnLength) { // check if we are still inside the boundraries
+        if (currentRow+1 < rowLength && currentRow+1 >= 0 && currentColumn >= 0 &&  
+                currentColumn < columnLength) { // check if we are still inside the boundraries
             if (map[currentRow+1][currentColumn] == 0) { // if there is an obstacle down
                 add = true;
+                /* This is for coming from left
                 if (checkLimits(map, currentRow+1, currentColumn-1, rowLength, columnLength)) {
                     if (map[currentRow+1][currentColumn-1] == 1) { // if left-down is land
                         Vertex leftDownNeighbour = new Vertex(currentRow+1, currentColumn-1, distance, currentV); 
                         leftDownNeighbour.setHeuristic(distance + heuristics(endR, endC, currentRow+1, currentColumn-1));
                         heap.add(leftDownNeighbour);
                     }
-                }
+                }*/
                 
                 if (checkLimits(map, currentRow+1, currentColumn+1, rowLength, columnLength)) {
-                    if (map[currentRow+1][currentColumn+1] == 1) { // if right-down is land
+                    if (map[currentRow+1][currentColumn+1] == 1 && visited[currentRow+1][currentColumn+1] == false) { // if right-down is land
                         Vertex rightDownNeighbour = new Vertex(currentRow+1, currentColumn+1, distance, currentV); 
                         rightDownNeighbour.setHeuristic(distance + heuristics(endR, endC, currentRow+1, currentColumn+1));
                         heap.add(rightDownNeighbour);
@@ -138,6 +146,67 @@ public class JPS implements SearchInterface {
         if (add == true) {
             heap.add(currentV);
         }
+        return add;
+    }
+    
+    
+    public boolean checkForcedNeighboursFromTheRightAndLeft(Vertex currentV) {
+        System.out.println(currentV);
+        int currentRow = currentV.getRow();
+        int currentColumn = currentV.getColumn();
+        float distance = currentV.getDistance() + diagonalMovement;
+        boolean add = false; //if up or down is obstacle
+        
+        //left and right coming down
+        if (currentRow <= rowLength && currentRow >= 0 && currentColumn-1 >= 0 &&  
+                currentColumn-1 <= columnLength) { // check if we are still inside the boundraries
+            if (map[currentRow][currentColumn-1] == 0) { // if there is an obstacle up
+                add = true;
+                if (checkLimits(map, currentRow+1, currentColumn-1, rowLength, columnLength)) {
+                    if (map[currentRow+1][currentColumn-1] == 1 && visited[currentRow+1][currentColumn-1] == false) { // if right-up is land
+                        Vertex rightUpNeighbour = new Vertex(currentRow+1, currentColumn-1, distance, currentV); 
+                        rightUpNeighbour.setHeuristic(distance + heuristics(endR, endC, currentRow+1, currentColumn-1));
+                        heap.add(rightUpNeighbour);
+                    }
+                }
+                /* This is for coming from left
+                if (checkLimits(map, currentRow-1, currentColumn-1, rowLength, columnLength)) {
+                    if (map[currentRow-1][currentColumn-1] == 1) { // if east-west is land
+                        Vertex leftUpNeighbour = new Vertex(currentRow-1, currentColumn-1, distance, currentV); 
+                        leftUpNeighbour.setHeuristic(distance + heuristics(endR, endC, currentRow-1, currentColumn-1));
+                        heap.add(leftUpNeighbour);
+                    }
+                } */  
+            }
+        }
+        // right
+        if (currentRow < rowLength && currentRow >= 0 && currentColumn+1 >= 0 &&  
+                currentColumn+1 < columnLength) { // check if we are still inside the boundraries
+            if (map[currentRow][currentColumn+1] == 0) { // if there is an obstacle down
+                add = true;
+                /* This is for coming from left
+                if (checkLimits(map, currentRow+1, currentColumn-1, rowLength, columnLength)) {
+                    if (map[currentRow+1][currentColumn-1] == 1) { // if left-down is land
+                        Vertex leftDownNeighbour = new Vertex(currentRow+1, currentColumn-1, distance, currentV); 
+                        leftDownNeighbour.setHeuristic(distance + heuristics(endR, endC, currentRow+1, currentColumn-1));
+                        heap.add(leftDownNeighbour);
+                    }
+                }*/
+                
+                if (checkLimits(map, currentRow+1, currentColumn+1, rowLength, columnLength)) {
+                    if (map[currentRow+1][currentColumn+1] == 1 && visited[currentRow+1][currentColumn+1]) { // if right-down is land
+                        Vertex rightDownNeighbour = new Vertex(currentRow+1, currentColumn+1, distance, currentV); 
+                        rightDownNeighbour.setHeuristic(distance + heuristics(endR, endC, currentRow+1, currentColumn+1));
+                        heap.add(rightDownNeighbour);
+                    }
+                }   
+            }
+        } 
+        
+        if (add == true) {
+            heap.add(currentV);
+        }
+        return add;
     }
 
    
@@ -153,13 +222,26 @@ public class JPS implements SearchInterface {
             return false;
         }
         
+        //if we already checked this vertex
+        if (visited[nextRow][nextColumn]) {
+            return false;
+        }
+        
         Vertex nextStep = new Vertex(nextRow, nextColumn, newDistance, currentV);
         nextStep.setHeuristic(newDistance + heuristics(endR, endC, nextRow, nextColumn));
         
-        checkForcedNeighboursFromTheTopAndBelow(nextStep);
+        visited[nextRow][nextColumn] = true;
+        
+        if(checkForcedNeighboursFromTheTopAndBelow(nextStep)) {
+            return false; // stop
+        }
+        
+        if(checkForcedNeighboursFromTheRightAndLeft(nextStep)) {
+            return false; // stop
+        }
         
         if (foundTheEnd(nextStep)) {
-            return true;
+            return true; // stop
         }
 
         return move(nextStep, movementRow, movementCol);
@@ -176,8 +258,14 @@ public class JPS implements SearchInterface {
         if (!checkLimits(map, nextRow, nextColumn, rowLength, columnLength) || map[nextRow][nextColumn] == 0) {
             return false;
         }
+        //if we already checked this vertex
+        if (visited[nextRow][nextColumn]) {
+            return false;
+        }
+        
              
         Vertex nextStep = new Vertex(nextRow, nextColumn, newDistance, currentV);
+        visited[nextRow][nextColumn] = true;
         if (foundTheEnd(nextStep)) {
             return true;
         } else {
