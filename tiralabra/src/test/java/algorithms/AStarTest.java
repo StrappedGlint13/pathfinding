@@ -91,7 +91,7 @@ public class AStarTest {
         };
         
         vertices = a.findPath(testmap, 0, 0, 7, 8);
-        assertEquals(10, vertices.size()); // testing
+        assertEquals(11, vertices.size()); 
         
         vertices = a.findPath(testmap, 3, 8, 8, 0);
         assertEquals(10, vertices.size());

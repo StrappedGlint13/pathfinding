@@ -133,7 +133,8 @@ public class Main extends Application {
                         
                         System.out.println("A* runs " +((endA-startA)/1e9)+ " seconds");
                         System.out.println("Dijkstra runs " +((endD - startD)/1e9) + " seconds");
-                        System.out.println("JPS runs " +((endJPS - startJPS)/1e9) + " seconds"); 
+                        System.out.println("JPS runs " +((endJPS - startJPS)/1e9) + " seconds");
+                        System.out.println("");
                         
                         if (shortestPathAStar.isEmpty()) {
                             for (int i = 0; i < shortestPathAStar.size(); i++) {

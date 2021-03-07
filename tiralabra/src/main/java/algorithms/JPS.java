@@ -23,8 +23,8 @@ public class JPS implements SearchInterface {
     private int[][] map; 
     private int endR;
     private int endC;
-    private int rowLength;
-    private int columnLength;
+    private int rowLen;
+    private int colLen;
     List l;
     public Heap heap;
     private boolean[][] jumped;
@@ -47,18 +47,18 @@ public class JPS implements SearchInterface {
     * @return shortest path as a list of Vertices.
     */
     
-    //@Override
+    @Override
     public List findPath(int[][]map, int startR, int startC, int endR, int endC) {
         this.map = map;
         this.endR = endR;
         this.endC = endC;
-        this.rowLength = map.length;  
-        this.columnLength = map[0].length;
+        this.rowLen = map.length;  
+        this.colLen = map[0].length;
         this.l = new List();
         this.heap = new Heap();
         
-        visited = new boolean[rowLength][columnLength];
-        jumped = new boolean[rowLength][columnLength];
+        visited = new boolean[rowLen][colLen];
+        jumped = new boolean[rowLen][colLen];
         
         
         //check if the user clicked obstacle
@@ -68,20 +68,27 @@ public class JPS implements SearchInterface {
 
         Vertex startPoint = new Vertex(startR, startC, 0, null);
         startPoint.setHeuristic(heuristics(endR, endC, startR, startC));
-        jumped[startR][startR] = true;
+       
         heap.add(startPoint);
         
         while(heap.getVertexFromIndex(0) != null && l.isEmpty()) {
-            /*System.out.println("Heap:");
+            System.out.println("Heap:");
             for (int i = 0; i < heap.getSize(); i++) {
-                System.out.println(heap.getVertexFromIndex(i) + "heuristics" + 
-                       heap.getVertexFromIndex(i).getHeuristic());
-            }*/
+                System.out.println(heap.getVertexFromIndex(i) + "distance estimation:" + 
+                       (heap.getVertexFromIndex(i).getHeuristic()));
+            }
+            System.out.println("");
             
             Vertex currentV = heap.poll();
             
-            /*System.out.println("POLLED VERTICE: " +currentV + "heuristics" + 
-                       currentV.getHeuristic());*/
+            if (foundTheEnd(currentV)) {
+                break;
+            }
+            
+            jumped[startR][startC] = true;
+            
+            System.out.println("POLLED VERTICE: " +currentV + "heuristics" + 
+                       currentV.getHeuristic());
             jumpStraight(currentV);
         }
         return l;
@@ -89,6 +96,7 @@ public class JPS implements SearchInterface {
     
     private boolean foundTheEnd(Vertex v) {
         if (v.getRow() == endR && v.getColumn() == endC) {
+            System.out.println("Found it!");
             List l = createShortestPath(v);
             this.l = l;
             return true;
@@ -96,139 +104,83 @@ public class JPS implements SearchInterface {
         return false;
     }
     
-    //moving right or left, checking forced neighbours
-    //Logic is that when we are moving right or left, we have row = 0, but column +1 or -1
-    // When we made the check from top and below we change this so that
-    // row = +-1 and column = 0
-    // If we are moving down or up this is contrary:
-    // row = +1 and column = 0 – is the way we are moving
-    
-    //moving right or left, checking forced neighbours
-    public boolean checkForcedNeighboursFromTheTopAndBelow(Vertex currentV, int leftOrRight) {
-        int currentRow = currentV.getRow();
-        int currentColumn = currentV.getColumn();
-        float distance = currentV.getDistance() + diagonalMovement;
-        boolean add = false; //if up or down is obstacle
-        
-        if (currentRow-1 <= rowLength && currentRow-1 >= 0 && currentColumn >= 0 &&  
-                currentColumn <= columnLength) { // check if we are still inside the boundraries
-            if (map[currentRow-1][currentColumn] == 0) { // if there is an obstacle up
-                add = true;
-                if (checkLimits(map, currentRow-1, leftOrRight, rowLength, columnLength)) {
-                    if (map[currentRow-1][leftOrRight] == 1 && visited[currentRow-1][leftOrRight] == false) { // if right-up is land
-                        Vertex rightUpNeighbour = new Vertex(currentRow-1, leftOrRight, distance, currentV); 
-                        rightUpNeighbour.setHeuristic(distance + heuristics(endR, endC, currentRow-1, leftOrRight));
-                        jumped[rightUpNeighbour.getRow()][rightUpNeighbour.getColumn()] = true;
-                        heap.add(rightUpNeighbour);
-                    }
-                }
+    private void jumpStraight(Vertex curV) {
+        boolean roundMade = false;
+        while (!roundMade) {
+            if (move(curV, 0, 1)) { // right
+                break;
             }
-        }
-     
-        if (currentRow+1 < rowLength && currentRow+1 >= 0 && currentColumn >= 0 &&  
-                currentColumn < columnLength) { // check if we are still inside the boundraries
-            if (map[currentRow+1][currentColumn] == 0) { // if there is an obstacle down
-                add = true;
-                
-                
-                if (checkLimits(map, currentRow+1, leftOrRight, rowLength, columnLength)) {
-                    if (map[currentRow+1][leftOrRight] == 1 && visited[currentRow+1][leftOrRight] == false) { // if right-down is land
-                        Vertex rightDownNeighbour = new Vertex(currentRow+1, leftOrRight, distance, currentV); 
-                        rightDownNeighbour.setHeuristic(distance + heuristics(endR, endC, currentRow+1, leftOrRight));
-                        jumped[rightDownNeighbour.getRow()][rightDownNeighbour.getColumn()] = true;
-                        heap.add(rightDownNeighbour);
-                    }
-                }   
+            if (move(curV, -1, 0)) { // up
+                break;
             }
-        } 
-        
-        if (add == true) {
-            jumped[currentV.getRow()][currentV.getColumn()] = true;
-            heap.add(currentV);
+            if (move(curV, 1, 0)) { // down
+                break;
+            }
+            if(move(curV, 0, -1)) { // left
+                break;
+            }
+            
+            jumpDiagonally(curV);
+            roundMade = true;
         }
-        return add;
     }
     
-    public boolean checkForcedNeighboursFromTheRightAndLeft(Vertex currentV, int upOrDown) {
-        int currentRow = currentV.getRow();
-        int currentColumn = currentV.getColumn();
-        float distance = currentV.getDistance() + diagonalMovement;
-        boolean add = false; //if up or down is obstacle
-        
-        //left
-        if (currentRow <= rowLength && currentRow >= 0 && currentColumn-1 >= 0 &&  
-                currentColumn-1 <= columnLength) { // check if we are still inside the boundraries
-            if (map[currentRow][currentColumn-1] == 0) { // if there is an obstacle right
-                add = true;
-                if (checkLimits(map, upOrDown, currentColumn-1, rowLength, columnLength)) {
-                    if (map[upOrDown][currentColumn-1] == 1 && visited[upOrDown][currentColumn-1] == false) { // if right-up is land
-                        Vertex leftNeighbour = new Vertex(upOrDown, currentColumn-1, distance, currentV); 
-                        leftNeighbour.setHeuristic(distance + heuristics(endR, endC, upOrDown, currentColumn-1));
-                        jumped[leftNeighbour.getRow()][leftNeighbour.getColumn()] = true;
-                        heap.add(leftNeighbour);
-                    }
-                }
+    private void jumpDiagonally(Vertex curV) {
+        boolean roundMade = false;
+        while (!roundMade) {
+            if (moveDiagonalGrids(curV, -1, 1)) { // right-up
+                break;
+            } else if (moveDiagonalGrids(curV, -1, -1)) { // left-up
+                break;
+            } else if (moveDiagonalGrids(curV, 1, 1)) { // right-down
+                break;
+            } else if(moveDiagonalGrids(curV, 1, -1)) { // left-down
+                break;
             }
+            roundMade = true;
         }
-        // right
-        if (currentRow < rowLength && currentRow >= 0 && currentColumn+1 >= 0 &&  
-                currentColumn+1 < columnLength) { // check if we are still inside the boundraries
-            if (map[currentRow][currentColumn+1] == 0) { // if there is an obstacle down
-                add = true;
-                
-                if (checkLimits(map, upOrDown, currentColumn+1, rowLength, columnLength)) {
-                    if (map[upOrDown][currentColumn+1] == 1 && visited[upOrDown][currentColumn+1]) { // if right-down is land
-                        Vertex rightNeighbour = new Vertex(upOrDown, currentColumn+1, distance, currentV); 
-                        rightNeighbour.setHeuristic(distance + heuristics(endR, endC, upOrDown, currentColumn+1));
-                        jumped[rightNeighbour.getRow()][rightNeighbour.getColumn()] = true;
-                        heap.add(rightNeighbour);
-                    }
-                }   
-            }
-        } 
-        
-        if (add == true) {
-            jumped[currentV.getRow()][currentV.getColumn()] = true;
-            heap.add(currentV);
-        }
-        return add;
     }
-
-   
     
-    private boolean move(Vertex currentV, int movementRow, int movementCol) {
-        int nextRow = currentV.getRow() + movementRow;
-        int nextColumn = currentV.getColumn() + movementCol;
-        float newDistance = currentV.getDistance() + 1;
+    private boolean move(Vertex curV, int movementRow, int movementCol) {
+        int nextRow = curV.getRow() + movementRow;
+        int nextColumn = curV.getColumn() + movementCol;
+        float newDist = curV.getDistance() + 1;
         
         //System.out.println("Move vertically and hor Current vertex row: " + nextRow + " column: "  + nextColumn);
             
-        if (!checkLimits(map, nextRow, nextColumn, rowLength, columnLength) || map[nextRow][nextColumn] == 0) {
+        if (!checkLimits(map, nextRow, nextColumn, rowLen, colLen) || map[nextRow][nextColumn] == 0) {
             return false;
         }
         
         //if we already checked this vertex
-        if (visited[nextRow][nextColumn]) {
+        if (jumped[nextRow][nextColumn]) {
             return false;
         }
         
-        Vertex nextStep = new Vertex(nextRow, nextColumn, newDistance, currentV);
-        nextStep.setHeuristic(newDistance + heuristics(endR, endC, nextRow, nextColumn));
+        Vertex nextStep = new Vertex(nextRow, nextColumn, newDist, curV);
+        nextStep.setHeuristic(newDist + heuristics(endR, endC, nextRow, nextColumn));
         
-        visited[nextRow][nextColumn] = true;
-        
-        if(checkForcedNeighboursFromTheTopAndBelow(nextStep, movementCol)) {
-            return false; // stop
-        }
-        
-        if(checkForcedNeighboursFromTheRightAndLeft(nextStep, movementRow)) {
-            return false; // stop
-        }
+        jumped[nextRow][nextColumn] = true;
         
         if (foundTheEnd(nextStep)) {
             return true; // stop
         }
-
+        
+        // make these to one
+        // moving right or left, check up or down neighbours
+        if ((movementRow == 0 && movementCol == 1) || movementRow == 0 ||
+                movementCol == -1) {
+            if(checkForcedNeighboursFromTheTopAndBelow(nextStep, movementCol)) {
+                return false; // stop
+            }
+        }
+        // moving up or down, check left and right neighbours
+        if ((movementRow == 1 && movementCol == 0) || movementRow == -1 && movementCol == 0) {
+            if(checkForcedNeighboursFromTheRightAndLeft(nextStep, movementRow)) {
+                return false; // stop
+            }
+        }
+ 
         return move(nextStep, movementRow, movementCol);
     }
     
@@ -236,21 +188,41 @@ public class JPS implements SearchInterface {
     private boolean moveDiagonalGrids(Vertex currentV, int movementRow, int movementCol) {
         int nextRow = currentV.getRow() + movementRow;
         int nextColumn = currentV.getColumn() + movementCol;
-        float newDistance = currentV.getDistance() + diagonalMovement;
+        float newDist = currentV.getDistance() + diagonalMovement;
         
         //System.out.println("Move diagonally after first Current vertex row: " + nextRow + " column: "  + nextColumn);
             
-        if (!checkLimits(map, nextRow, nextColumn, rowLength, columnLength) || map[nextRow][nextColumn] == 0) {
+        if (!checkLimits(map, nextRow, nextColumn, rowLen, colLen) || map[nextRow][nextColumn] == 0) {
             return false;
         }
         //if we already checked this vertex
-        if (visited[nextRow][nextColumn]) {
+        if (jumped[nextRow][nextColumn]) {
             return false;
         }
         
              
-        Vertex nextStep = new Vertex(nextRow, nextColumn, newDistance, currentV);
-        visited[nextRow][nextColumn] = true;
+        Vertex nextStep = new Vertex(nextRow, nextColumn, newDist, currentV);
+        nextStep.setHeuristic(newDist + heuristics(endR, endC, nextRow, nextColumn));
+        jumped[nextRow][nextColumn] = true;
+        
+        
+           // moving diagonal up , check right or left and down
+        if ((movementRow == -1 && movementCol != 0)) {
+            if(forcedNeighboursDiagonalUpRightOrLeftAndDown(nextStep, movementCol)) {
+                return false; // stop
+            }
+        }
+        
+         // moving diagonal down , check right or left and up
+        if ((movementRow == 1 && movementCol != 0)) {
+            if(forcedNeighboursDiagonalDownRightOrLeftAndUp(nextStep, movementCol)) {
+                return false; // stop
+            }
+        }
+        
+        
+        
+        
         if (foundTheEnd(nextStep)) {
             return true;
         } else {
@@ -273,44 +245,171 @@ public class JPS implements SearchInterface {
        
         return moveDiagonalGrids(nextStep, movementRow, movementCol);
     }
+    
+    
+    //moving right or left, checking forced neighbours
+    //Logic is that when we are moving right or left, we have row = 0, but column +1 or -1
+    // When we made the check from top and below we change this so that
+    // row = +-1 and column = 0
+    // If we are moving down or up this is contrary:
+    // row = +1 and column = 0 – is the way we are moving
+    
+    //moving right or left, checking forced neighbours
+    public boolean checkForcedNeighboursFromTheTopAndBelow(Vertex curV, int lOrRCol) {
+        int curRow = curV.getRow();
+        int curCol = curV.getColumn();
+        float dist = curV.getDistance() + diagonalMovement;
+        boolean isObstacle = false; //if up or down is obstacle
+        
+        if (curRow-1 <= rowLen && curRow-1 >= 0 && curCol >= 0 &&  
+                curCol <= colLen) { // check if we are still inside the boundraries
+            if (map[curRow-1][curCol] == 0) { // if there is an obstacle up
+                curCol += lOrRCol;
+                if (checkLimits(map, curRow-1, curCol, rowLen, colLen)) {
+                    if (map[curRow-1][curCol] == 1 && !jumped[curRow-1][curCol]) { // if right-up is land
+                        isObstacle = true;
+                        curCol = curV.getColumn();
+                        curV.setHeuristic(dist + heuristics(endR, endC, curRow, curCol));
+                        heap.add(curV);
+                    }
+                }
+            }
+        }
+        curCol = curV.getColumn();
+     
+        if (curRow+1 < rowLen && curRow+1 >= 0 && curCol >= 0 &&  
+                curCol < colLen && !isObstacle) { // check if we are still inside the boundraries
+            if (map[curRow+1][curCol] == 0) { // if there is an obstacle down
+                curCol += lOrRCol;
+                if (checkLimits(map, curRow+1, curCol, rowLen, colLen)) {
+                    if (map[curRow+1][curCol] == 1 && !jumped[curRow+1][curCol]) { // if right-down is land
+                        isObstacle = true;
+                        curCol = curV.getColumn();
+                        curV.setHeuristic(dist + heuristics(endR, endC, curRow, curCol));
+                        heap.add(curV);
+                    }
+                }   
+            }
+        }  
+        return isObstacle;
+    }
+    
+    public boolean forcedNeighboursDiagonalUpRightOrLeftAndDown(Vertex curV, int lOrRCol) {
+        int curRow = curV.getRow();
+        int curCol = curV.getColumn();
+        float dist = curV.getDistance() + diagonalMovement;
+        boolean isObstacle = false; //if left/right or down is obstacle
+        
+        
+        // we don't have to check limits here, because we came from this direction.
+        if (map[curRow+1][curCol] == 0) { // if there is an obstacle down
+                curCol += lOrRCol; //+-1
+                if (checkLimits(map, curRow+1, curCol, rowLen, colLen)) {
+                    if (map[curRow+1][curCol] == 1) {
+                        isObstacle = true;
+                        curCol = curV.getColumn();
+                        curV.setHeuristic(dist + heuristics(endR, endC, curRow, curCol));
+                        heap.add(curV);
+                    }
+                }
+        }
+        curCol = curV.getColumn();
+        
+        // we don't have to check limits here, because we came from this direction.
+        if (map[curRow][curCol-lOrRCol] == 0 && !isObstacle) { // if there is an obstacle left or right
+                curCol -= lOrRCol;  //+-1
+                if (checkLimits(map, curRow-1, curCol, rowLen, colLen)) {
+                    if (map[curRow-1][curCol] == 1) { // if right-down is land
+                        isObstacle = true;
+                        curCol = curV.getColumn();
+                        curV.setHeuristic(dist + heuristics(endR, endC, curRow, curCol));
+                        heap.add(curV);
+                    }
+                }   
+           
+        } 
+        return isObstacle;
+    }
+    
+    public boolean forcedNeighboursDiagonalDownRightOrLeftAndUp(Vertex curV, int colRightOrLeft) {
+        int curRow = curV.getRow();
+        int curCol = curV.getColumn();
+        float dist = curV.getDistance() + diagonalMovement;
+        boolean isObstacle = false; //if left/right or down is obstacle
+        
+        
+        // we don't have to check limits here, because we came from this direction.
+        if (map[curRow-1][curCol] == 0) { // if there is an obstacle up
+                curCol += colRightOrLeft; //+-1
+                if (checkLimits(map, curRow-1, curCol, rowLen, colLen)) {
+                    if (map[curRow-1][curCol] == 1) {
+                        isObstacle = true;
+                        curCol = curV.getColumn();
+                        curV.setHeuristic(dist + heuristics(endR, endC, curRow, curCol));
+                        heap.add(curV);
+                    }
+                }
+        }
+        curCol = curV.getColumn();
+        
+        // we don't have to check limits here, because we came from this direction.
+        if (map[curRow][curCol-colRightOrLeft] == 0 && !isObstacle) { // if there is an obstacle left or right
+                curCol -= colRightOrLeft;  //+-1
+                if (checkLimits(map, curRow+1, curCol, rowLen, colLen)) {
+                    if (map[curRow+1][curCol] == 1) { // if right-down is land
+                        isObstacle = true;
+                        curCol = curV.getColumn();
+                        curV.setHeuristic(dist + heuristics(endR, endC, curRow, curCol));
+                        heap.add(curV);
+                    }
+                }      
+        }  
+        return isObstacle;
+    }
+    
+    public boolean checkForcedNeighboursFromTheRightAndLeft(Vertex curV, int upOrDown) {
+        int curRow = curV.getRow();
+        int curCol = curV.getColumn();
+        float dist = curV.getDistance() + diagonalMovement;
+        boolean isObstacle = false; //if up or down is obstacle
+        
+        //left
+        if (curRow <= rowLen && curRow >= 0 && curCol-1 >= 0 &&  
+                curCol-1 <= colLen) { // check if we are still inside the boundraries
+            if (map[curRow][curCol-1] == 0) { // if there is an obstacle right
+                curRow += upOrDown;
+                if (checkLimits(map, curRow, curCol-1, rowLen, colLen)) {
+                    if (map[curRow][curCol-1] == 1 && !jumped[curRow][curCol-1]) { // if right-up is land
+                        isObstacle = true;
+                        curRow = curV.getRow();
+                        curV.setHeuristic(dist + heuristics(endR, endC, curRow, curCol));
+                        heap.add(curV);
+                    }
+                }
+            }
+        }
+        
+        curRow = curV.getRow();
+        
+        // right
+        if (curRow < rowLen && curRow >= 0 && curCol+1 >= 0 &&  
+                curCol+1 < colLen && !isObstacle) { // check if we are still inside the boundraries
+            if (map[curRow][curCol+1] == 0) { // if there is an obstacle down
+                curRow += upOrDown;
+                
+                if (checkLimits(map, curRow, curCol+1, rowLen, colLen)) {
+                    if (map[curRow][curCol+1] == 1 && !jumped[curRow][curCol+1]) { // if right-down is land
+                        isObstacle = true;
+                        curRow = curV.getRow();
+                        curV.setHeuristic(dist + heuristics(endR, endC, curRow, curCol));
+                        heap.add(curV);
+                    }
+                }   
+            }
+        } 
+        return isObstacle;
+    }
 
-    private void jumpDiagonally(Vertex currentV) {
-        boolean roundMade = false;
-        while (!roundMade) {
-            if (moveDiagonalGrids(currentV, -1, 1)) { // right-up
-                break;
-            } else if (moveDiagonalGrids(currentV, -1, -1)) { // left-up
-                break;
-            } else if (moveDiagonalGrids(currentV, 1, 1)) { // right-down
-                break;
-            } else if(moveDiagonalGrids(currentV, 1, -1)) { // left-down
-                break;
-            }
-            roundMade = true;
-        }
-    }
-    
-    private void jumpStraight(Vertex currentV) {
-        boolean roundMade = false;
-        while (!roundMade) {
-            if (move(currentV, 0, 1)) { // right
-                break;
-            }
-            if (move(currentV, -1, 0)) { // up
-                break;
-            }
-            if (move(currentV, 1, 0)) { // down
-                break;
-            }
-            if(move(currentV, 0, -1)) { // left
-                break;
-            }
-            
-            jumpDiagonally(currentV);
-            roundMade = true;
-        }
-    }
-    
     
     /**
     * Method for JPS to estimate Euclidean distance.
@@ -387,7 +486,7 @@ public class JPS implements SearchInterface {
     */
     
     public boolean[][] getVisited() {
-        return this.jumped;
+        return this.visited;
     }
     
         

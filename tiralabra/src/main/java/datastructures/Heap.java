@@ -34,7 +34,7 @@ public class Heap {
         this.heap[size] = v;
         size++;
         int k = size-1;
-        while ((k > 1) && heap[k].compareTo(heap[getParent(k)]) < 0) {
+        while ((k >= 1) && heap[k].compareTo(heap[getParent(k)]) < 0) {
             swap(k, getParent(k));
             k = getParent(k);
         }

@@ -105,7 +105,7 @@ public class ImageHandler {
                 
                 int currentRowJPS = jps.getRow() - drawRow;
                 int currentColJPS = jps.getColumn()- drawCol;
-                
+                /*
                 if (currentRowD == currentRowA && currentColD == currentColA) {
                     if (img.getRGB(currentRowD, currentColD) != Color.BLACK.getRGB()) {
                     img.setRGB(d.getRow() - drawRow, d.getColumn() - drawCol, samePathColor.getRGB());
@@ -116,8 +116,10 @@ public class ImageHandler {
                     }
                     if (img.getRGB(currentRowA, currentColA) != Color.BLACK.getRGB()) {
                         img.setRGB(currentRowA, currentColA, astarPath.getRGB());
-                    }
-                   
+                    }*/
+                    if (img.getRGB(currentRowJPS, currentColJPS) != Color.BLACK.getRGB()) {
+                        img.setRGB(currentRowJPS, currentColJPS, jpsPath.getRGB());
+                    
                 }
             }
         }
@@ -140,7 +142,8 @@ public class ImageHandler {
                     continue;
                 }
                 
-                if (img.getRGB(row, col) == samePathColor.getRGB() || img.getRGB(row, col) == dijkstraPath.getRGB() || img.getRGB(row, col) == astarPath.getRGB()) {
+                if (img.getRGB(row, col) == samePathColor.getRGB() || img.getRGB(row, col) == dijkstraPath.getRGB() || img.getRGB(row, col) == astarPath.getRGB()
+                        || img.getRGB(row, col) == jpsPath.getRGB()) {
                     continue;
                 }
              

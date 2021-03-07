@@ -77,7 +77,6 @@ public class Vertex {
         float distance = this.distance - v2.getDistance();
         
         if (difference + distance < 0){
-            //System.out.println("V2");
             return -1;
         } else if (difference + distance > 0) {
             return 1;
@@ -92,7 +91,7 @@ public class Vertex {
 
     @Override
     public String toString() {
-        return "Vertice: row " + this.row + " column " + this.column + " distance " + this.distance;
+        return "Vertex: row " + this.row + " column " + this.column + " distance " + this.distance;
     }
 
     public void setPrevious(Vertex previousV) {
