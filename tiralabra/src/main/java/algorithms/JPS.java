@@ -72,13 +72,14 @@ public class JPS implements SearchInterface {
         heap.add(startPoint);
         
         while(heap.getVertexFromIndex(0) != null && l.isEmpty()) {
+            /*
             System.out.println("Heap:");
             for (int i = 0; i < heap.getSize(); i++) {
                 System.out.println(heap.getVertexFromIndex(i) + "distance estimation:" + 
                        (heap.getVertexFromIndex(i).getHeuristic()));
             }
             System.out.println("");
-            
+            */
             Vertex currentV = heap.poll();
             
             if (foundTheEnd(currentV)) {
@@ -86,9 +87,9 @@ public class JPS implements SearchInterface {
             }
             
             jumped[startR][startC] = true;
-            
+            /*
             System.out.println("POLLED VERTICE: " +currentV + "heuristics" + 
-                       currentV.getHeuristic());
+                       currentV.getHeuristic());*/
             jumpStraight(currentV);
         }
         return l;
@@ -220,9 +221,6 @@ public class JPS implements SearchInterface {
             }
         }
         
-        
-        
-        
         if (foundTheEnd(nextStep)) {
             return true;
         } else {
@@ -270,6 +268,7 @@ public class JPS implements SearchInterface {
                         isObstacle = true;
                         curCol = curV.getColumn();
                         curV.setHeuristic(dist + heuristics(endR, endC, curRow, curCol));
+                        visited[curRow][curCol] = true;
                         heap.add(curV);
                     }
                 }
@@ -286,6 +285,7 @@ public class JPS implements SearchInterface {
                         isObstacle = true;
                         curCol = curV.getColumn();
                         curV.setHeuristic(dist + heuristics(endR, endC, curRow, curCol));
+                        visited[curRow][curCol] = true;
                         heap.add(curV);
                     }
                 }   
@@ -309,6 +309,7 @@ public class JPS implements SearchInterface {
                         isObstacle = true;
                         curCol = curV.getColumn();
                         curV.setHeuristic(dist + heuristics(endR, endC, curRow, curCol));
+                        visited[curRow][curCol] = true;
                         heap.add(curV);
                     }
                 }
@@ -323,6 +324,7 @@ public class JPS implements SearchInterface {
                         isObstacle = true;
                         curCol = curV.getColumn();
                         curV.setHeuristic(dist + heuristics(endR, endC, curRow, curCol));
+                        visited[curRow][curCol] = true;
                         heap.add(curV);
                     }
                 }   
@@ -346,6 +348,7 @@ public class JPS implements SearchInterface {
                         isObstacle = true;
                         curCol = curV.getColumn();
                         curV.setHeuristic(dist + heuristics(endR, endC, curRow, curCol));
+                        visited[curRow][curCol] = true;
                         heap.add(curV);
                     }
                 }
@@ -360,6 +363,7 @@ public class JPS implements SearchInterface {
                         isObstacle = true;
                         curCol = curV.getColumn();
                         curV.setHeuristic(dist + heuristics(endR, endC, curRow, curCol));
+                        visited[curRow][curCol] = true;
                         heap.add(curV);
                     }
                 }      
@@ -383,6 +387,7 @@ public class JPS implements SearchInterface {
                         isObstacle = true;
                         curRow = curV.getRow();
                         curV.setHeuristic(dist + heuristics(endR, endC, curRow, curCol));
+                        visited[curRow][curCol] = true;
                         heap.add(curV);
                     }
                 }
@@ -402,6 +407,7 @@ public class JPS implements SearchInterface {
                         isObstacle = true;
                         curRow = curV.getRow();
                         curV.setHeuristic(dist + heuristics(endR, endC, curRow, curCol));
+                        visited[curRow][curCol] = true;
                         heap.add(curV);
                     }
                 }   

@@ -74,8 +74,8 @@ public class Main extends Application {
             ImageHandler imgHand = new ImageHandler();
             BufferedImage img = io.readImage(url);
 
-            int height = 1024;
-            int width = 1024;
+            int height = 1000;
+            int width = 1000;
 
             img = imgHand.makeNewFrame(img, height, width);
             Map map = new Map(img, height, width);
@@ -148,7 +148,7 @@ public class Main extends Application {
                         }
                         System.out.println("Number of vertices in A*: " + shortestPathAStar.size());
                         System.out.println("Distance from the start: " + shortestPathAStar.getFromIndex(0).getHeuristic());
-                        
+                        System.out.println("");
                         if (shortestPathAStar == null) {
                             showMessageDialog(null, "There is no path between the starting and ending point you chose.");
                             clicked = 0;
@@ -159,10 +159,43 @@ public class Main extends Application {
               
                         System.out.println("Number of vertices in Dijkstra: " + shortestPathDijkstra.size());
                         System.out.println("Distance from the start: " + shortestPathDijkstra.getFromIndex(0).getDistance());
-                        
+                        System.out.println("");
                         System.out.println("Number of vertices in Jump Point Search: " + shortestPathJPS.size());
                         System.out.println("Distance from the start: " + shortestPathJPS.getFromIndex(0).getDistance());
                         System.out.println("");
+                        
+                        Performance p = new Performance();
+                        int n = 10;
+                        p.ProcessingTimes(pixelmap, startRow, startRow, x, y, n);
+                        boolean daRatio = p.getDa(n);
+                        boolean dajpsRatio = p.getDaJps(n);
+                        boolean integerAccDa = p.sameIntADacc;
+                        boolean integerAccDaJPS = p.sameIntADJPSacc;
+                        long[] times = p.getTimes();
+                        
+                        System.out.println("Average running times in nanoseconds with input " + n + ":");
+                        System.out.println("");
+                        System.out.println("Average for 10 Dijkstra runs: " + times[0] + " nanoseconds");
+                        System.out.println("Average for 10 A* runs: " + times[1] + " nanoseconds");
+                        System.out.println("Average 10 JPS runs: " + times[2] + " nanoseconds");
+                        System.out.println("");
+                        
+                        System.out.println("Average running times in seconds with input " + n + ":");
+                        System.out.println("Average for 10 Dijkstra runs: " + times[0]/1e9 + " seconds");
+                        System.out.println("Average for 10 A* runs: " + times[1]/1e9 + " seconds");
+                        System.out.println("Average 10 JPS runs: " + times[2]/1e9 + " seconds");
+                        System.out.println("");
+                        
+                        System.out.println("Finding equally shortest paths:");
+                        System.out.println("Dijkstra and A* found equally long paths with integer accuracy : " + integerAccDa);
+                        System.out.println("Dijkstra, A* and JPS found exactly equally long paths with integer accuracy : " + integerAccDaJPS);
+                        System.out.println("");
+                        System.out.println("Dijkstra and A* found exactly equal long paths: " + daRatio + ". Input: " + n);
+                        System.out.println("Dijkstra, A* and JPS found exactly equal long paths: " + dajpsRatio + ". Input: " + n);
+                        
+                        System.out.println(searchNumber + ". search ended. Click twice for the next search.");
+                        System.out.println("");
+                        
                         BufferedImage img = io.readImage(url);
                         img = imgFrameHandler.makeNewFrame(img, height, width);
                         
