@@ -48,9 +48,7 @@ public class JPSTest {
         //assertEquals(2, vertices.size());
    
         assertEquals(2, vertices.size());
-        assertEquals(1, jps.getHeap().getSize());
-        assertEquals(0, jps.getHeap().getVertexFromIndex(0).getRow());
-        assertEquals(0, jps.getHeap().getVertexFromIndex(0).getColumn());
+        assertEquals(0, jps.getHeap().getSize());
         
         // from right bottom to left up
         this.heap = new Heap();
@@ -58,9 +56,7 @@ public class JPSTest {
         
       
         assertEquals(2, vertices.size());
-        assertEquals(1, jps.getHeap().getSize());
-        assertEquals(0, jps.getHeap().getVertexFromIndex(0).getRow());
-        assertEquals(2, jps.getHeap().getVertexFromIndex(0).getColumn());
+        assertEquals(0, jps.getHeap().getSize());
        
         // from left up to right bottom
         this.heap = new Heap();
@@ -68,18 +64,14 @@ public class JPSTest {
         
  
         assertEquals(2, vertices.size());
-        assertEquals(1, jps.getHeap().getSize());
-        assertEquals(2, jps.getHeap().getVertexFromIndex(0).getRow());
-        assertEquals(0, jps.getHeap().getVertexFromIndex(0).getColumn());
+        assertEquals(0, jps.getHeap().getSize());
+
         // from right up to left bottom
         this.heap = new Heap();
         vertices = jps.findPath(testmap, 0, 2, 2, 0);
        
         assertEquals(2, vertices.size());
-        assertEquals(1, jps.getHeap().getSize());
-        assertEquals(2, jps.getHeap().getVertexFromIndex(0).getRow());
-        assertEquals(2, jps.getHeap().getVertexFromIndex(0).getColumn());
-        
+        assertEquals(0, jps.getHeap().getSize());    
     }
     
     
@@ -101,43 +93,35 @@ public class JPSTest {
             System.out.println("Heuristics" + jps.getHeap().getVertexFromIndex(i).getHeuristic());
         }
         assertEquals(2, vertices.size());
-        assertEquals(1, jps.getHeap().getSize());
-        assertEquals(2, jps.getHeap().getVertexFromIndex(0).getRow());
-        assertEquals(2, jps.getHeap().getVertexFromIndex(0).getColumn());
+        assertEquals(0, jps.getHeap().getSize());
         
         this.heap = new Heap();
         vertices = jps.findPath(testmap, 2, 2, 0, 0);
         
  
         assertEquals(2, vertices.size());
-        assertEquals(1, jps.getHeap().getSize());
-        assertEquals(2, jps.getHeap().getVertexFromIndex(0).getRow());
-        assertEquals(0, jps.getHeap().getVertexFromIndex(0).getColumn());
+        assertEquals(0, jps.getHeap().getSize());
+  
         
         this.heap = new Heap();
         vertices = jps.findPath(testmap, 0, 2, 2, 0);
         
  
         assertEquals(2, vertices.size());
-        assertEquals(1, jps.getHeap().getSize());
-        assertEquals(0, jps.getHeap().getVertexFromIndex(0).getRow());
-        assertEquals(0, jps.getHeap().getVertexFromIndex(0).getColumn());
+        assertEquals(0, jps.getHeap().getSize());
         
         this.heap = new Heap();
         vertices = jps.findPath(testmap, 0, 2, 2, 0);
        
         assertEquals(2, vertices.size());
-        assertEquals(1, jps.getHeap().getSize());
-        assertEquals(0, jps.getHeap().getVertexFromIndex(0).getRow());
-        assertEquals(0, jps.getHeap().getVertexFromIndex(0).getColumn());
+        assertEquals(0, jps.getHeap().getSize());
         
         this.heap = new Heap();
         vertices = jps.findPath(testmap, 0, 0, 2, 2);
        
         assertEquals(2, vertices.size());
-        assertEquals(1, jps.getHeap().getSize());
-        assertEquals(0, jps.getHeap().getVertexFromIndex(0).getRow());
-        assertEquals(2, jps.getHeap().getVertexFromIndex(0).getColumn());
+        assertEquals(0, jps.getHeap().getSize());
+
      
         //assertEquals(2, vertices.size());
         /*
@@ -173,7 +157,7 @@ public class JPSTest {
             System.out.println("Heuristics" + jps.getHeap().getVertexFromIndex(i).getHeuristic());
         }*/
         assertEquals(5, vertices.size());
-        assertEquals(2, jps.getHeap().getSize());
+        assertEquals(0, jps.getHeap().getSize());
     }
     
     @Test
@@ -209,7 +193,7 @@ public class JPSTest {
         vertices = jps.findPath(testmap, 7, 1, 0, 6);
        
         assertEquals(8, vertices.size());
-        assertEquals(6, jps.getHeap().getSize());
+        assertEquals(2  , jps.getHeap().getSize());
 
 
     }
@@ -288,7 +272,7 @@ public class JPSTest {
         };
       
         vertices = jps.findPath(testmap, 11, 0, 0, 11); 
-        assertEquals(12, vertices.size());   
+        assertEquals(13, vertices.size());   
     }
      
     /*

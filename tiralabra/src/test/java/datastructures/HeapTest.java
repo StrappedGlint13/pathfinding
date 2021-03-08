@@ -98,7 +98,7 @@ public class HeapTest {
     @Test
     public void printRootWorks() {
         Vertex v = testHeap.poll();
-        String s = "Vertice: row " + 2 + " column " + 2 + " distance " + 0.0;
+        String s = "Vertex: row " + 2 + " column " + 2 + " distance " + 0.0;
         assertEquals(v.toString(), s);
     }
 }

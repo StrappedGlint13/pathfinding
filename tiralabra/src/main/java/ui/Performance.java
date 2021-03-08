@@ -30,11 +30,14 @@ public class Performance {
     boolean sameIntADacc;
     boolean sameIntADJPSacc;
     int sameDecimal;
+    long performance;
+
     
     public Performance () {
     }
     
     public void ProcessingTimes(int[][]map, int startR, int startC, int endR, int endC, int n) {
+        long performanceStart = System.nanoTime();
         Dijkstra dijkstra = new Dijkstra();
         List shortestPathDijkstra = new List();
                         
@@ -147,6 +150,7 @@ public class Performance {
                 sameDecimal++;
             }
         }
+        performance = System.nanoTime() - performanceStart;
     }
 
     public int getSameDecimal() {
@@ -167,6 +171,11 @@ public class Performance {
             return true;
         }
         return true;
+    }
+    
+    
+    public long getPerformance() {
+        return performance;
     }
 
     public boolean getDaJps(int n) {

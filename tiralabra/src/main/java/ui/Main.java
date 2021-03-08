@@ -25,7 +25,10 @@ import javax.swing.JLabel;
 import static javax.swing.JOptionPane.showMessageDialog;
 import javax.swing.JTextField;
 import java.awt.event.MouseAdapter;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.layout.VBox;
+import javafx.stage.WindowEvent;
 
 
 /**
@@ -60,19 +63,47 @@ public class Main extends Application {
                 + "about the algorithms \n"
                 + "at the command line!");
         GridPane instrSetup = new GridPane();
+        Button returnbutton = new Button("Return to the start window");
         
         instrSetup.setStyle("-fx-background-color:POWDERBLUE");
         instrSetup.add(header, 0, 1);
         instrSetup.add(instructions, 0, 2);
+        instrSetup.add(returnbutton, 0, 3);
         instrSetup.setPrefSize(300, 300);
         instrSetup.setAlignment(Pos.BASELINE_RIGHT);
         instrSetup.setVgap(10);
         instrSetup.setHgap(10);
         instrSetup.setPadding(new Insets(20, 20, 0, 20));
-        Scene instrPanel = new Scene(instrSetup);   
+        Scene instrPanel = new Scene(instrSetup);
         
         
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent t) {
+                Platform.exit();
+                System.exit(0);
+            }
+        });
+
+        // Search panel
+        HBox searchComponents = new HBox(50);
+        VBox textFields = new VBox(10);
+        VBox labels = new VBox(10);
+        searchComponents.setStyle("-fx-background-color:POWDERBLUE");
+        Label searchLabel = new Label("URL of the map (PNG)");
+        Label inputLabel = new Label("Input for the performance tests \n"
+                + "(voluntary)");
+        searchLabel.setFont(Font.font("Arial", FontWeight.BOLD, 15));
+        inputLabel.setFont(Font.font("Arial", FontWeight.BOLD, 15));
         
+        labels.getChildren().addAll(searchLabel, inputLabel);
+        textFields.getChildren().addAll(textfield, inputField);
+        searchComponents.getChildren().addAll(labels, textFields, revealTheMapButton);
+        
+        Scene searchPanel = new Scene(searchComponents);
+        stage.setScene(searchPanel);
+        stage.show();
+
         revealTheMapButton.setOnAction(e -> {
             String input = inputField.getText();
             try {
@@ -95,7 +126,7 @@ public class Main extends Application {
             int[][] pixelmap = map.generateMaps();
               
             JFrame frame = new JFrame("Pathing");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            
             frame.setSize(height, width);
             JLabel label = new JLabel(new ImageIcon(img));
             frame.add(label);
@@ -103,6 +134,10 @@ public class Main extends Application {
             JTextField coordinates = new JTextField();;
             coordinates.setText("Start point: not set"); 
             frame.add(coordinates,BorderLayout.SOUTH);
+            returnbutton.setOnAction(o -> {
+                frame.setVisible(false);
+                stage.setScene(searchPanel);
+            });
             
             frame.addMouseListener(new MouseAdapter() {
                 int clicked = 0;
@@ -151,9 +186,6 @@ public class Main extends Application {
                         System.out.println("");
                         
                         if (shortestPathAStar.isEmpty()) {
-                            for (int i = 0; i < shortestPathAStar.size(); i++) {
-                                System.out.println(shortestPathAStar.getFromIndex(i));
-                            }
                             showMessageDialog(null, "You did not clicked the land!");
                             clicked = 0;
                             x = -1;
@@ -180,7 +212,7 @@ public class Main extends Application {
                         System.out.println(searchNumber + ". search ended.");
                         System.out.println("");
                         
-                        if (inPut > 0) {
+                        if (inPut > 0 && inPut != 1 && inPut != 2) {
                             runPerformance(pixelmap, startRow, startColumn, x, y, inPut);
                         }             
                         BufferedImage img = io.readImage(url);
@@ -192,7 +224,7 @@ public class Main extends Application {
                         img = imgFrameHandler.drawShortestPath(img, shortestPathAStar, shortestPathDijkstra, shortestPathJPS, visitedD, visitedA, visitedJPS);
                         
                         JFrame shortestPathFrame = new JFrame("Search nro. "+ searchNumber);
-                        shortestPathFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                        
                         shortestPathFrame.setSize(height, width);
                         JLabel label = new JLabel(new ImageIcon(img));
                        
@@ -219,25 +251,7 @@ public class Main extends Application {
             frame.setVisible(true);
             stage.setScene(instrPanel);
         });
-
-        // Search panel
-        HBox searchComponents = new HBox(50);
-        VBox textFields = new VBox(10);
-        VBox labels = new VBox(10);
-        searchComponents.setStyle("-fx-background-color:POWDERBLUE");
-        Label searchLabel = new Label("URL of the map (PNG)");
-        Label inputLabel = new Label("Input for the performance tests \n"
-                + "(voluntary)");
-        searchLabel.setFont(Font.font("Arial", FontWeight.BOLD, 15));
-        inputLabel.setFont(Font.font("Arial", FontWeight.BOLD, 15));
-        
-        labels.getChildren().addAll(searchLabel, inputLabel);
-        textFields.getChildren().addAll(textfield, inputField);
-        searchComponents.getChildren().addAll(labels, textFields, revealTheMapButton);
-        
-        Scene searchPanel = new Scene(searchComponents);
-        stage.setScene(searchPanel);
-        stage.show(); 
+ 
     }
     
     public static void main(String[] args) {
@@ -284,6 +298,7 @@ public class Main extends Application {
                 System.out.println("All the algorithms found the shortest path to the accuracy of " + p.getSameDecimal() + ". decimals");
             }
         System.out.println("");
+        System.out.println("Performance time for input " + n + " runs took" + p.getPerformance()/1e9 + " seconds");
         System.out.println("Performance tests ended. Click once for setup, then click twice for new searches.");
     }
 }

@@ -28,6 +28,7 @@ public class ImageHandler {
     Color visitedDijkstra;
     Color visitedAstar;
     Color startingAndEndingPoints;
+    Color visitedJps;
     int a = 0;
     public ImageHandler() { 
         dijkstraPath = new Color(0,0,204);
@@ -36,6 +37,7 @@ public class ImageHandler {
         samePathColor = new Color(255,0,255);
         visitedAstar = new Color(255,175,175);
         visitedDijkstra = new Color(51,153,255);
+        visitedJps = new Color(255,255,255);
         startingAndEndingPoints = new Color(0,0,204);
     }
    
@@ -105,7 +107,7 @@ public class ImageHandler {
                 
                 int currentRowJPS = jps.getRow() - drawRow;
                 int currentColJPS = jps.getColumn()- drawCol;
-                /*
+              
                 if (currentRowD == currentRowA && currentColD == currentColA) {
                     if (img.getRGB(currentRowD, currentColD) != Color.BLACK.getRGB()) {
                     img.setRGB(d.getRow() - drawRow, d.getColumn() - drawCol, samePathColor.getRGB());
@@ -116,10 +118,12 @@ public class ImageHandler {
                     }
                     if (img.getRGB(currentRowA, currentColA) != Color.BLACK.getRGB()) {
                         img.setRGB(currentRowA, currentColA, astarPath.getRGB());
-                    }*/
-                    if (img.getRGB(currentRowJPS, currentColJPS) != Color.BLACK.getRGB()) {
+                    }
+                    if (img.getRGB(currentRowJPS, currentColJPS) != Color.BLACK.getRGB() &&
+                            img.getRGB(currentRowJPS, currentColJPS) != dijkstraPath.getRGB() &&
+                            img.getRGB(currentRowJPS, currentColJPS) != astarPath.getRGB()) {
                         img.setRGB(currentRowJPS, currentColJPS, jpsPath.getRGB());
-                    
+                    }
                 }
             }
         }
@@ -133,7 +137,7 @@ public class ImageHandler {
         } else if (color == 1){
             visitedColor = visitedAstar;
         } else {
-            visitedColor = jpsPath;
+            visitedColor = visitedJps;
         }
         
         for (int row = 0; row < visited.length; row++) {
