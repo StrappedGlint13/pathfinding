@@ -27,9 +27,6 @@ public class Performance {
     int daJpsPointer;
     int jpsSame;
     int daSame;
-    int dSteps;
-    int aSteps;
-    int jpsSteps;
     boolean sameIntADacc;
     boolean sameIntADJPSacc;
     int sameDecimal;
@@ -102,8 +99,8 @@ public class Performance {
         }
         
         String integerAccDijkstra = Float.toString(distances[0]); 
-        String integerAccAstar = Float.toString(distances[10]);
-        String integerAccJPS = Float.toString(distances[20]);
+        String integerAccAstar = Float.toString(distances[daPointer-1]);
+        String integerAccJPS = Float.toString(distances[daJpsPointer-1]);
         
         int indexOfDecimalD = integerAccDijkstra.indexOf(".");
         int indexOfDecimalA = integerAccAstar.indexOf(".");
@@ -123,8 +120,6 @@ public class Performance {
         
         String decimalD = integerAccDijkstra.substring(indexOfDecimalD);
         String decimalJPS = integerAccJPS.substring(indexOfDecimalJPS);
-        System.out.println("DecimalD " + decimalD);
-        System.out.println("DecimalJPS " + decimalJPS);
         char[]arrDecD = new char[decimalD.length()-1];
         char[]arrDecJPS = new char[decimalJPS.length()-1];
         
@@ -144,15 +139,14 @@ public class Performance {
             } else {
                 smallestDecimal = arrDecJPS.length;
             }
-            int sameDecimal = 0;
-            while (smallestDecimal < sameDecimal) {
+            sameDecimal = 0;
+            while (smallestDecimal > sameDecimal) {
                 if (arrDecD[sameDecimal] != arrDecJPS[sameDecimal]) {
                     break;
                 }
                 sameDecimal++;
             }
         }
-        System.out.println(sameDecimal);
     }
 
     public int getSameDecimal() {
@@ -165,18 +159,6 @@ public class Performance {
 
     public boolean isSameIntADJPSacc() {
         return sameIntADJPSacc;
-    }
-
-    public int getdSteps() {
-        return dSteps;
-    }
-
-    public int getaSteps() {
-        return aSteps;
-    }
-
-    public int getJpsSteps() {
-        return jpsSteps;
     }
 
     public boolean getDa(int n) {

@@ -25,6 +25,7 @@ import javax.swing.JLabel;
 import static javax.swing.JOptionPane.showMessageDialog;
 import javax.swing.JTextField;
 import java.awt.event.MouseAdapter;
+import javafx.scene.layout.VBox;
 
 
 /**
@@ -40,6 +41,8 @@ public class Main extends Application {
         Button revealTheMapButton = new Button("Reveal the map");
         TextField textfield = new TextField("https://movingai.com/benchmarks/maze/maze512-16-5.png");
         textfield.setPrefWidth(450);
+        TextField inputField = new TextField("0");
+       
         // https://movingai.com/benchmarks/street/Boston_0_512.png boston
         // https://movingai.com/benchmarks/maze/maze512-16-5.png laby
         // https://movingai.com/benchmarks/dao/brc204d.png 
@@ -68,14 +71,24 @@ public class Main extends Application {
         instrSetup.setPadding(new Insets(20, 20, 0, 20));
         Scene instrPanel = new Scene(instrSetup);   
         
+        
+        
         revealTheMapButton.setOnAction(e -> {
+            String input = inputField.getText();
+            try {
+                int inPut = Integer.parseInt(input);
+            }catch (NumberFormatException ex) {
+                showMessageDialog(null, "Enter positive integer");
+            }
+            
             String url = textfield.getText();
+            int inPut = Integer.parseInt(input);
             IOimage io = new IOimage();
             ImageHandler imgHand = new ImageHandler();
             BufferedImage img = io.readImage(url);
 
-            int height = 1000;
-            int width = 1000;
+            int height = 800;
+            int width = 800;
 
             img = imgHand.makeNewFrame(img, height, width);
             Map map = new Map(img, height, width);
@@ -118,6 +131,7 @@ public class Main extends Application {
                         List shortestPathJPS = new List();
 
                         System.out.println(searchNumber + ". Search:");
+                        System.out.println("");
                         
                         long startA = System.nanoTime();
                         shortestPathAStar = aStar.findPath(pixelmap, startRow, startColumn, x, y);
@@ -163,39 +177,12 @@ public class Main extends Application {
                         System.out.println("Number of vertices in Jump Point Search: " + shortestPathJPS.size());
                         System.out.println("Distance from the start: " + shortestPathJPS.getFromIndex(0).getDistance());
                         System.out.println("");
-                        
-                        Performance p = new Performance();
-                        int n = 10;
-                        p.ProcessingTimes(pixelmap, startRow, startRow, x, y, n);
-                        boolean daRatio = p.getDa(n);
-                        boolean dajpsRatio = p.getDaJps(n);
-                        boolean integerAccDa = p.sameIntADacc;
-                        boolean integerAccDaJPS = p.sameIntADJPSacc;
-                        long[] times = p.getTimes();
-                        
-                        System.out.println("Average running times in nanoseconds with input " + n + ":");
-                        System.out.println("");
-                        System.out.println("Average for 10 Dijkstra runs: " + times[0] + " nanoseconds");
-                        System.out.println("Average for 10 A* runs: " + times[1] + " nanoseconds");
-                        System.out.println("Average 10 JPS runs: " + times[2] + " nanoseconds");
+                        System.out.println(searchNumber + ". search ended.");
                         System.out.println("");
                         
-                        System.out.println("Average running times in seconds with input " + n + ":");
-                        System.out.println("Average for 10 Dijkstra runs: " + times[0]/1e9 + " seconds");
-                        System.out.println("Average for 10 A* runs: " + times[1]/1e9 + " seconds");
-                        System.out.println("Average 10 JPS runs: " + times[2]/1e9 + " seconds");
-                        System.out.println("");
-                        
-                        System.out.println("Finding equally shortest paths:");
-                        System.out.println("Dijkstra and A* found equally long paths with integer accuracy : " + integerAccDa);
-                        System.out.println("Dijkstra, A* and JPS found exactly equally long paths with integer accuracy : " + integerAccDaJPS);
-                        System.out.println("");
-                        System.out.println("Dijkstra and A* found exactly equal long paths: " + daRatio + ". Input: " + n);
-                        System.out.println("Dijkstra, A* and JPS found exactly equal long paths: " + dajpsRatio + ". Input: " + n);
-                        
-                        System.out.println(searchNumber + ". search ended. Click twice for the next search.");
-                        System.out.println("");
-                        
+                        if (inPut > 0) {
+                            runPerformance(pixelmap, startRow, startColumn, x, y, inPut);
+                        }             
                         BufferedImage img = io.readImage(url);
                         img = imgFrameHandler.makeNewFrame(img, height, width);
                         
@@ -235,10 +222,19 @@ public class Main extends Application {
 
         // Search panel
         HBox searchComponents = new HBox(50);
+        VBox textFields = new VBox(10);
+        VBox labels = new VBox(10);
         searchComponents.setStyle("-fx-background-color:POWDERBLUE");
-        Label searchInstructions = new Label("URL of the map (PNG)");
-        searchInstructions.setFont(Font.font("Arial", FontWeight.BOLD, 15));
-        searchComponents.getChildren().addAll(searchInstructions, textfield, revealTheMapButton);
+        Label searchLabel = new Label("URL of the map (PNG)");
+        Label inputLabel = new Label("Input for the performance tests \n"
+                + "(voluntary)");
+        searchLabel.setFont(Font.font("Arial", FontWeight.BOLD, 15));
+        inputLabel.setFont(Font.font("Arial", FontWeight.BOLD, 15));
+        
+        labels.getChildren().addAll(searchLabel, inputLabel);
+        textFields.getChildren().addAll(textfield, inputField);
+        searchComponents.getChildren().addAll(labels, textFields, revealTheMapButton);
+        
         Scene searchPanel = new Scene(searchComponents);
         stage.setScene(searchPanel);
         stage.show(); 
@@ -251,5 +247,43 @@ public class Main extends Application {
     @Override
     public void stop() {
 
+    }
+    
+    public void runPerformance(int[][]map, int startR, int startC, int endR, int endC, int n) {
+        Performance p = new Performance();
+        p.ProcessingTimes(map, startR, startC, endR, endC, n);
+        boolean daRatio = p.getDa(n);
+        boolean dajpsRatio = p.getDaJps(n);
+        boolean integerAccDa = p.sameIntADacc;
+        boolean integerAccDaJPS = p.sameIntADJPSacc;
+        long[] times = p.getTimes();
+                        
+        System.out.println("PERFORMANCE RESULTS. With input of: " + n);
+        System.out.println("");
+                        
+        System.out.println("Average running times in nanoseconds: ");
+        System.out.println("Dijkstra runs: " + times[0] + " nanoseconds");
+        System.out.println("A* runs: " + times[1] + " nanoseconds");
+        System.out.println("JPS runs: " + times[2] + " nanoseconds");
+        System.out.println("");
+                        
+        System.out.println("Average running times in seconds:");
+        System.out.println("Dijkstra runs: " + times[0]/1e9 + " seconds");
+        System.out.println("A* runs: " + times[1]/1e9 + " seconds");
+        System.out.println("JPS runs: " + times[2]/1e9 + " seconds");
+        System.out.println("");
+                        
+        System.out.println("Finding equally shortest paths:");
+        System.out.println("");
+        System.out.println("Dijkstra and A* found equally long paths to the accuracy of integers: " + integerAccDa);
+        System.out.println("All the algorithms found equally long paths to the accuracy of integers: : " + integerAccDaJPS);
+        System.out.println("");
+        System.out.println("Dijkstra and A* found exactly equal long paths: " + daRatio);
+        System.out.println("All the algorithms found exactly equal long paths: " + dajpsRatio);
+            if (!dajpsRatio && p.isSameIntADJPSacc()) {
+                System.out.println("All the algorithms found the shortest path to the accuracy of " + p.getSameDecimal() + ". decimals");
+            }
+        System.out.println("");
+        System.out.println("Performance tests ended. Click once for setup, then click twice for new searches.");
     }
 }

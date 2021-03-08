@@ -97,7 +97,7 @@ public class JPS implements SearchInterface {
     
     private boolean foundTheEnd(Vertex v) {
         if (v.getRow() == endR && v.getColumn() == endC) {
-            System.out.println("Found it!");
+            //System.out.println("Found it!");
             List l = createShortestPath(v);
             this.l = l;
             return true;
