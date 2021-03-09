@@ -31,7 +31,6 @@ public class JPS implements SearchInterface {
     
     public JPS () {
         this.diagonalMovement = (float) Math.sqrt(2);
-        this.visited = new boolean [1][1];
     }
 
     

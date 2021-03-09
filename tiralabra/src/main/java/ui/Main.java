@@ -182,7 +182,7 @@ public class Main extends Application {
                         
                         System.out.println("A* runs " +((endA-startA)/1e9)+ " seconds");
                         System.out.println("Dijkstra runs " +((endD - startD)/1e9) + " seconds");
-                        System.out.println("JPS runs " +((endJPS - startJPS)/1e9) + " seconds");
+                        System.out.println("Jump Point Search path (JPS) runs " +((endJPS - startJPS)/1e9) + " seconds");
                         System.out.println("");
                         
                         if (shortestPathAStar.isEmpty()) {
@@ -192,7 +192,7 @@ public class Main extends Application {
                             y = -1;
                             return;
                         }
-                        System.out.println("Number of vertices in A*: " + shortestPathAStar.size());
+                        System.out.println("Number of vertices in A* path: " + shortestPathAStar.size());
                         System.out.println("Distance from the start: " + shortestPathAStar.getFromIndex(0).getHeuristic());
                         System.out.println("");
                         if (shortestPathAStar == null) {
@@ -203,10 +203,10 @@ public class Main extends Application {
                             return;
                         }
               
-                        System.out.println("Number of vertices in Dijkstra: " + shortestPathDijkstra.size());
+                        System.out.println("Number of vertices in Dijkstra path: " + shortestPathDijkstra.size());
                         System.out.println("Distance from the start: " + shortestPathDijkstra.getFromIndex(0).getDistance());
                         System.out.println("");
-                        System.out.println("Number of vertices in Jump Point Search: " + shortestPathJPS.size());
+                        System.out.println("Number of vertices in JPS: " + shortestPathJPS.size());
                         System.out.println("Distance from the start: " + shortestPathJPS.getFromIndex(0).getDistance());
                         System.out.println("");
                         System.out.println(searchNumber + ". search ended.");
@@ -218,10 +218,17 @@ public class Main extends Application {
                         BufferedImage img = io.readImage(url);
                         img = imgFrameHandler.makeNewFrame(img, height, width);
                         
+                        
+                        
                         boolean[][]visitedD = dijkstra.getVisited();
                         boolean[][]visitedA = aStar.getVisited();
                         boolean[][]visitedJPS = jps.getVisited();
                         img = imgFrameHandler.drawShortestPath(img, shortestPathAStar, shortestPathDijkstra, shortestPathJPS, visitedD, visitedA, visitedJPS);
+                        /*
+                        System.out.println("Visited vertices with Dijkstra: " + imgFrameHandler.getVisitedD() + shortestPathDijkstra.size());
+                        System.out.println("Visited vertices with A*: " + imgFrameHandler.getVisitedA() + shortestPathAStar.size());
+                        System.out.println("Visited vertices with JPS: " + imgFrameHandler.getVisitedJPS() + shortestPathJPS.size());
+                        */
                         
                         JFrame shortestPathFrame = new JFrame("Search nro. "+ searchNumber);
                         
@@ -232,7 +239,7 @@ public class Main extends Application {
                         shortestPathFrame.add(coordinates,BorderLayout.SOUTH);                 
                         shortestPathFrame.setVisible(true); 
                         frame.setVisible(false);
-                        
+       
                         shortestPathFrame.addMouseListener(new MouseAdapter() {
                             public void mouseClicked(MouseEvent e) {
                                 frame.setVisible(true);

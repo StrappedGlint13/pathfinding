@@ -29,7 +29,10 @@ public class ImageHandler {
     Color visitedAstar;
     Color startingAndEndingPoints;
     Color visitedJps;
-    int a = 0;
+    int colorIndex = 0;
+    int visitedD;
+    int visitedA;
+    int visitedJPS;
     public ImageHandler() { 
         dijkstraPath = new Color(0,0,204);
         astarPath = new Color(255,0,0);
@@ -37,8 +40,12 @@ public class ImageHandler {
         samePathColor = new Color(255,0,255);
         visitedAstar = new Color(255,175,175);
         visitedDijkstra = new Color(51,153,255);
-        visitedJps = new Color(255,255,255);
+        visitedJps = new Color(255,102,255);
         startingAndEndingPoints = new Color(0,0,204);
+        visitedA = 0;
+        visitedJPS = 0;
+        visitedD = 0;
+        
     }
    
     /**
@@ -60,7 +67,7 @@ public class ImageHandler {
     }
 
     /**
-    * Method draws a shortest path. 
+    * Method draws colorIndex shortest path. 
     *
     * @param img given BufferedImage.
     * @param shortestPathAStar list of vertex from the A* algorithm.
@@ -71,23 +78,25 @@ public class ImageHandler {
     
     public BufferedImage drawShortestPath(BufferedImage img, List shortestPathAStar, List shortestPathDijkstra, 
                 List shortestPathJPS, boolean[][] visitedDijkstra, boolean[][] visitedAstar, boolean[][] visitedJPS) {   
+        img = drawVisited(img, visitedDijkstra, colorIndex);
+        this.colorIndex = 1; // next A star
+        img = drawVisited(img, visitedAstar, colorIndex);
+        this.colorIndex = 2; // next JPS
+        img = drawVisited(img, visitedJPS, colorIndex);
+        
         for (int i = 0; i < shortestPathDijkstra.size() - 1; i++) {
             Vertex d = shortestPathDijkstra.getFromIndex(i);
             Vertex as = shortestPathAStar.getFromIndex(i);
             Vertex jps = shortestPathJPS.getFromIndex(i);
             img = drawGrid(img, d, as, jps);   
         }
-        img = drawVisited(img, visitedDijkstra, a);
-        this.a = 1; // next A star
-        img = drawVisited(img, visitedAstar, a);
-        this.a = 2;
-        img = drawVisited(img, visitedJPS, a);
+        
         return img;
     }
    
    
     /**
-    * Method draws a shortest path with 3x3 pixel-maze. 
+    * Method draws colorIndex shortest path with 3x3 pixel-maze. 
     *
     * @param img given BufferedImage.
     * @param d pixel-vertex that is being manipulated.
@@ -119,9 +128,7 @@ public class ImageHandler {
                     if (img.getRGB(currentRowA, currentColA) != Color.BLACK.getRGB()) {
                         img.setRGB(currentRowA, currentColA, astarPath.getRGB());
                     }
-                    if (img.getRGB(currentRowJPS, currentColJPS) != Color.BLACK.getRGB() &&
-                            img.getRGB(currentRowJPS, currentColJPS) != dijkstraPath.getRGB() &&
-                            img.getRGB(currentRowJPS, currentColJPS) != astarPath.getRGB()) {
+                    if (img.getRGB(currentRowJPS, currentColJPS) != Color.BLACK.getRGB()) {
                         img.setRGB(currentRowJPS, currentColJPS, jpsPath.getRGB());
                     }
                 }
@@ -152,10 +159,22 @@ public class ImageHandler {
                 }
              
                 img.setRGB(row, col, visitedColor.getRGB());
-            
+              
             }
         }
         return img;
+    }
+
+    public int getVisitedD() {
+        return visitedD;
+    }
+
+    public int getVisitedA() {
+        return visitedA;
+    }
+
+    public int getVisitedJPS() {
+        return visitedJPS;
     }
     
     public BufferedImage makeNewFrame(BufferedImage img, int height, int width) {

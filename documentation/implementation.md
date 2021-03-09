@@ -12,7 +12,7 @@ Program starts from the Main-method, that opens a box for url-input and informs 
 
 User clicks twice. Algorithms make their magic and giving vertex-list to the ui. Program draws the 3x3 pixel-mazes to the map and shows the shortest paths these algorithms found.
 
-## Complexity and performance 
+## Complexity and performance of Algorithms
 
 ### Dijkstra and A*
 
@@ -28,7 +28,23 @@ Dijkstra has following structure:
 * Return to 2. part. 
 8. Return _null_ that means there are no path from the starting point to the ending point. 
 
-Dijkstras time complexity is O((|n|+|m|)log(|n|)), where n is number of vertices and m is the number of edges. Nets are quite sparse, thus binary heap reduces time complexity.  
+Dijkstras time complexity is O((|n|+|m|)log(|n|)), where n is number of vertices and m is the number of edges. Nets are quite sparse, thus binary heap reduces time complexity. 
+
+A* is following the same principles as Dijkstra, but it also has heuristics in use. When adding new vertices to the heap, it also add information using heuristic function – _euclidean distance_ as known as _bee line_. We can use this, because we know what are the the starting and ending vertices. We use heuristic variable to store euclidean distance and we use this additionally to neighbour straight and diagonal distances in the heap when comparing the vertices in adding opreation of the heap.  
+
+## Jump Point Search
+
+Jump Point Search was the trickiest of 'em all. Jump Point Search is using same heuristics and binary heap as A*, but it is memory constrait as it does not keep distance information in the 2D-table as Dijkstra and A*. Instead, JPS takes these "leaps" with a couple of neighbour pruning rules:
+
+1.  We will start moving vertically and horizontally. Horizontally, we will make a check to the up and down, if there is an obstacle. If there are, we will add this vertice to the heap, as this is best way to go diagonally up/down past the obstacle. Then we recursively go back to the vertice, from which we start moving. If there are obstacle or map boundraries come from left or right, we will recursively go back, thus there are nowhere to go. We will use the same logic vertically, as we make the checks from left and right.  
+
+2.  When we have jumped vertically and horizontally, we start moving diagonally. Here we use following rules:
+-   If we are moving diagonally right up, we will check neighbours from down and left. If there are one, we will add this vertex to the heap, and go back recursively to the node we started.
+-   We go all the diagonal ways like this. 
+
+After these vertical, horizontal and diagonal jumping, we will take the root (best vertex according same heuristics used as A* and distance). And we will do these steps again, but if the heap 
+
+## Complexity and performance of Data structures
 
 ### Binary heap
 
