@@ -255,8 +255,6 @@ public class JPS implements SearchInterface {
     public boolean checkForcedNeighboursFromTheTopAndBelow(Vertex curV, int lOrRCol) {
         int curRow = curV.getRow();
         int curCol = curV.getColumn();
-        float dist = curV.getDistance() + diagonalMovement;
-        boolean isObstacle = false; //if up or down is obstacle
         
         if (curRow-1 <= rowLen && curRow-1 >= 0 && curCol >= 0 &&  
                 curCol <= colLen) { // check if we are still inside the boundraries
@@ -264,11 +262,10 @@ public class JPS implements SearchInterface {
                 curCol += lOrRCol;
                 if (checkLimits(map, curRow-1, curCol, rowLen, colLen)) {
                     if (map[curRow-1][curCol] == 1 && !jumped[curRow-1][curCol]) { // if right-up is land
-                        isObstacle = true;
                         curCol = curV.getColumn();
-                        curV.setHeuristic(dist + heuristics(endR, endC, curRow, curCol));
                         visited[curRow][curCol] = true;
                         heap.add(curV);
+                        return true;
                     }
                 }
             }
@@ -276,67 +273,59 @@ public class JPS implements SearchInterface {
         curCol = curV.getColumn();
      
         if (curRow+1 < rowLen && curRow+1 >= 0 && curCol >= 0 &&  
-                curCol < colLen && !isObstacle) { // check if we are still inside the boundraries
+                curCol < colLen) { // check if we are still inside the boundraries
             if (map[curRow+1][curCol] == 0) { // if there is an obstacle down
                 curCol += lOrRCol;
                 if (checkLimits(map, curRow+1, curCol, rowLen, colLen)) {
                     if (map[curRow+1][curCol] == 1 && !jumped[curRow+1][curCol]) { // if right-down is land
-                        isObstacle = true;
                         curCol = curV.getColumn();
-                        curV.setHeuristic(dist + heuristics(endR, endC, curRow, curCol));
                         visited[curRow][curCol] = true;
                         heap.add(curV);
+                        return true;
                     }
                 }   
             }
         }  
-        return isObstacle;
+        return false;
     }
     
     public boolean forcedNeighboursDiagonalUpRightOrLeftAndDown(Vertex curV, int lOrRCol) {
         int curRow = curV.getRow();
         int curCol = curV.getColumn();
-        float dist = curV.getDistance() + diagonalMovement;
-        boolean isObstacle = false; //if left/right or down is obstacle
-        
-        
+
         // we don't have to check limits here, because we came from this direction.
         if (map[curRow+1][curCol] == 0) { // if there is an obstacle down
                 curCol += lOrRCol; //+-1
                 if (checkLimits(map, curRow+1, curCol, rowLen, colLen)) {
                     if (map[curRow+1][curCol] == 1) {
-                        isObstacle = true;
                         curCol = curV.getColumn();
-                        curV.setHeuristic(dist + heuristics(endR, endC, curRow, curCol));
                         visited[curRow][curCol] = true;
                         heap.add(curV);
+                        return true;
                     }
                 }
         }
         curCol = curV.getColumn();
         
         // we don't have to check limits here, because we came from this direction.
-        if (map[curRow][curCol-lOrRCol] == 0 && !isObstacle) { // if there is an obstacle left or right
+        if (map[curRow][curCol-lOrRCol] == 0) { // if there is an obstacle left or right
                 curCol -= lOrRCol;  //+-1
                 if (checkLimits(map, curRow-1, curCol, rowLen, colLen)) {
                     if (map[curRow-1][curCol] == 1) { // if right-down is land
-                        isObstacle = true;
                         curCol = curV.getColumn();
-                        curV.setHeuristic(dist + heuristics(endR, endC, curRow, curCol));
                         visited[curRow][curCol] = true;
                         heap.add(curV);
+                        return true;
                     }
                 }   
            
         } 
-        return isObstacle;
+        return false;
     }
     
     public boolean forcedNeighboursDiagonalDownRightOrLeftAndUp(Vertex curV, int colRightOrLeft) {
         int curRow = curV.getRow();
         int curCol = curV.getColumn();
-        float dist = curV.getDistance() + diagonalMovement;
-        boolean isObstacle = false; //if left/right or down is obstacle
         
         
         // we don't have to check limits here, because we came from this direction.
@@ -344,38 +333,34 @@ public class JPS implements SearchInterface {
                 curCol += colRightOrLeft; //+-1
                 if (checkLimits(map, curRow-1, curCol, rowLen, colLen)) {
                     if (map[curRow-1][curCol] == 1) {
-                        isObstacle = true;
                         curCol = curV.getColumn();
-                        curV.setHeuristic(dist + heuristics(endR, endC, curRow, curCol));
                         visited[curRow][curCol] = true;
                         heap.add(curV);
+                        return true;
                     }
                 }
         }
         curCol = curV.getColumn();
         
         // we don't have to check limits here, because we came from this direction.
-        if (map[curRow][curCol-colRightOrLeft] == 0 && !isObstacle) { // if there is an obstacle left or right
+        if (map[curRow][curCol-colRightOrLeft] == 0) { // if there is an obstacle left or right
                 curCol -= colRightOrLeft;  //+-1
                 if (checkLimits(map, curRow+1, curCol, rowLen, colLen)) {
                     if (map[curRow+1][curCol] == 1) { // if right-down is land
-                        isObstacle = true;
                         curCol = curV.getColumn();
-                        curV.setHeuristic(dist + heuristics(endR, endC, curRow, curCol));
                         visited[curRow][curCol] = true;
                         heap.add(curV);
+                        return true;
                     }
                 }      
         }  
-        return isObstacle;
+        return false;
     }
     
     public boolean checkForcedNeighboursFromTheRightAndLeft(Vertex curV, int upOrDown) {
         int curRow = curV.getRow();
         int curCol = curV.getColumn();
-        float dist = curV.getDistance() + diagonalMovement;
-        boolean isObstacle = false; //if up or down is obstacle
-        
+
         //left
         if (curRow <= rowLen && curRow >= 0 && curCol-1 >= 0 &&  
                 curCol-1 <= colLen) { // check if we are still inside the boundraries
@@ -383,11 +368,10 @@ public class JPS implements SearchInterface {
                 curRow += upOrDown;
                 if (checkLimits(map, curRow, curCol-1, rowLen, colLen)) {
                     if (map[curRow][curCol-1] == 1 && !jumped[curRow][curCol-1]) { // if right-up is land
-                        isObstacle = true;
                         curRow = curV.getRow();
-                        curV.setHeuristic(dist + heuristics(endR, endC, curRow, curCol));
                         visited[curRow][curCol] = true;
                         heap.add(curV);
+                        return true;
                     }
                 }
             }
@@ -397,22 +381,21 @@ public class JPS implements SearchInterface {
         
         // right
         if (curRow < rowLen && curRow >= 0 && curCol+1 >= 0 &&  
-                curCol+1 < colLen && !isObstacle) { // check if we are still inside the boundraries
+                curCol+1 < colLen) { // check if we are still inside the boundraries
             if (map[curRow][curCol+1] == 0) { // if there is an obstacle down
                 curRow += upOrDown;
                 
                 if (checkLimits(map, curRow, curCol+1, rowLen, colLen)) {
                     if (map[curRow][curCol+1] == 1 && !jumped[curRow][curCol+1]) { // if right-down is land
-                        isObstacle = true;
                         curRow = curV.getRow();
-                        curV.setHeuristic(dist + heuristics(endR, endC, curRow, curCol));
                         visited[curRow][curCol] = true;
                         heap.add(curV);
+                        return true;
                     }
                 }   
             }
         } 
-        return isObstacle;
+        return false;
     }
 
     

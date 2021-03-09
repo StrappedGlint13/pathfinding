@@ -248,7 +248,7 @@ public class JPSTest {
         assertEquals(16, vertices.size()); 
         
         vertices = jps.findPath(testmap, 11, 7, 11, 0); 
-        assertEquals(16, vertices.size()); 
+        assertEquals(15, vertices.size()); 
         
         vertices = jps.findPath(testmap, 11, 4, 0, 0); 
         assertEquals(11, vertices.size());  
