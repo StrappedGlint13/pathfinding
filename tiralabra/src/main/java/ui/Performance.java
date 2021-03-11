@@ -22,7 +22,7 @@ public class Performance {
     AStar aStar = new AStar();
     JPS jps = new JPS();
     long[] times;
-    float[] distances;
+    double[] distances;
     int daPointer;
     int daJpsPointer;
     int jpsSame;
@@ -48,7 +48,7 @@ public class Performance {
         List shortestPathJPS = new List();        
         
         this.times = new long[n];
-        this.distances = new float[n*3];
+        this.distances = new double[n*3];
         daJpsPointer = n*2;
         daPointer = n;
         long tAcc = 0;
@@ -101,9 +101,9 @@ public class Performance {
             daJpsPointer++; 
         }
         
-        String integerAccDijkstra = Float.toString(distances[0]); 
-        String integerAccAstar = Float.toString(distances[daPointer-1]);
-        String integerAccJPS = Float.toString(distances[daJpsPointer-1]);
+        String integerAccDijkstra = Double.toString(distances[0]); 
+        String integerAccAstar = Double.toString(distances[daPointer-1]);
+        String integerAccJPS = Double.toString(distances[daJpsPointer-1]);
         
         int indexOfDecimalD = integerAccDijkstra.indexOf(".");
         int indexOfDecimalA = integerAccAstar.indexOf(".");

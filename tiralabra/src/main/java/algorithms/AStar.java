@@ -12,11 +12,11 @@ import datastructures.Vertex;
  */
 
 public class AStar implements SearchInterface {
-    final float diagonalMovement;
+    final double diagonalMovement;
     boolean[][] visited;
     
     public AStar() {
-        this.diagonalMovement = (float) Math.sqrt(2);
+        this.diagonalMovement = Math.sqrt(2);
         this.visited = new boolean [1][1];
     }
     /**
@@ -36,7 +36,7 @@ public class AStar implements SearchInterface {
         int rowLength = map.length;  
         int columnLength = map[0].length;
     
-        float[][] distance = new float[rowLength][columnLength];
+        double[][] distance = new double[rowLength][columnLength];
         visited = new boolean[rowLength][columnLength];
         Heap heap = new Heap();
         
@@ -92,17 +92,18 @@ public class AStar implements SearchInterface {
                         continue;
                     }
                     
-                    float nextDistance = (float) (currentV.getDistance() + diagonalMovement);
+                    double nextDistance = currentV.getDistance() + diagonalMovement;
                     
                     //if moving straight
                     if (rowStep == 0 || columnStep == 0) {
-                        nextDistance = (float) (currentV.getDistance() + 1);
+                        nextDistance =  currentV.getDistance() + 1;
                     }
                     
                     if(nextDistance < distance[moveOneRow][moveOneColumn]) {
                         distance[moveOneRow][moveOneColumn] = nextDistance;
                         Vertex next = new Vertex(moveOneRow, moveOneColumn, nextDistance, currentV);
-                        next.setHeuristic(nextDistance + heuristics(endR, endC, moveOneRow, moveOneColumn));
+                        next.setDistance(nextDistance);
+                        next.setHeuristic(heuristics(endR, endC, moveOneRow, moveOneColumn));
                         heap.add(next);
                     }
                 }
@@ -124,9 +125,9 @@ public class AStar implements SearchInterface {
     * @return Euclidean distance.
     */
     
-    private float heuristics(int endX, int endY, int currentX, int currentY) {
+    private double heuristics(int endX, int endY, int currentX, int currentY) {
         // Euclidean distance for A*
-        return (float) (Math.sqrt(((currentX-endX)*(currentX-endX)) + (currentY-endY)*(currentY-endY)));
+        return Math.sqrt(((currentX-endX)*(currentX-endX)) + (currentY-endY)*(currentY-endY));
     }
     
     /**
@@ -160,10 +161,12 @@ public class AStar implements SearchInterface {
     * 
     */
     
-    //@Override
+    @Override
     public List createShortestPath(Vertex vertice) {
         List shortestPath = new List();
         while (vertice.getPrevious() != null) {
+            System.out.println("Shortest path A*");
+            System.out.println(vertice);
             shortestPath.add(vertice);
             vertice = vertice.getPrevious();
         }

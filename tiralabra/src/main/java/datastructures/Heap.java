@@ -12,7 +12,7 @@ public class Heap {
     private int size;
     
     public Heap() {
-        this.heap = new Vertex[1000];
+        this.heap = new Vertex[100000];
         this.size = 0;
     }
     
@@ -28,9 +28,6 @@ public class Heap {
     */
 
     public void add(Vertex v) {
-        if (size + 1 > heap.length) {
-            expandHeap();
-        }
         this.heap[size] = v;
         size++;
         int k = size-1;
@@ -96,7 +93,7 @@ public class Heap {
     * Method for expanding the heap, if necessary.
     *
     */
-
+    /*
     public void expandHeap() {
         Vertex[] newHeap = new Vertex[size*2];
         for (int i = 0; i < heap.length; i++) {
@@ -104,7 +101,7 @@ public class Heap {
         }
         this.heap = newHeap;
     }
-
+*/
     public Vertex getRoot() {
         return this.heap[0];
     }

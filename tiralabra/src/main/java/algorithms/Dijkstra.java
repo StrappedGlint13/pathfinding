@@ -12,11 +12,11 @@ import datastructures.List;
  */
 
 public class Dijkstra implements SearchInterface {
-    final float diagonalMovement;
+    final double diagonalMovement;
     public boolean visited[][];
     
     public Dijkstra() {
-        this.diagonalMovement = (float) Math.sqrt(2);
+        this.diagonalMovement = Math.sqrt(2);
         this.visited = new boolean [1][1];
     }
     
@@ -37,7 +37,7 @@ public class Dijkstra implements SearchInterface {
         int rowLength = map.length;  
         int columnLength = map[0].length;
 
-        float[][] distance = new float[rowLength][columnLength];
+        double[][] distance = new double[rowLength][columnLength];
         visited = new boolean[rowLength][columnLength];
         Heap heap = new Heap();
         
@@ -88,10 +88,10 @@ public class Dijkstra implements SearchInterface {
                         continue;
                     }
                     
-                    float nextDistance = (float) (currentV.getDistance() + diagonalMovement);
+                    double nextDistance = currentV.getDistance() + diagonalMovement;
                     //if we are moving straight
                     if (rowStep == 0 || columnStep == 0) {
-                        nextDistance = (float) (currentV.getDistance() + 1);
+                        nextDistance = currentV.getDistance() + 1;
                     }
                                 
                     if(nextDistance < distance[moveOneRow][moveOneColumn]) {
@@ -140,6 +140,8 @@ public class Dijkstra implements SearchInterface {
     public List createShortestPath(Vertex vertice) {
         List shortestPath = new List();
         while (vertice.getPrevious() != null) {
+            System.out.println("Shortest path Dijkstra");
+            System.out.println(vertice);
             shortestPath.add(vertice);
             vertice = vertice.getPrevious();
         }

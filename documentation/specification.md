@@ -20,7 +20,7 @@ A* is an algorithm that exploits Dijkstra's and also greedy Best-First-Search al
 
 Lets consider vertices as _n_ and edges as _m_. *Dijkstra's algorithm* uses the min-priority queue with three operations: INSERT (O(1)), EXTRACT MIN (O(n) and DECREASE-KEY (O(1)). We use arrays for maintaining the vertices numbered 1 to |n|. Total algorithm time complexity is O(n²). If the net is sparse, we could improve the algorithm with binary min-heap with time complexity of O((n+m)log(n)) or even better – Fibonacci heap O(nlog(n) + m).
 
-A* uses the same data structure as Dijkstra, but it also use some time estimation (heuristic) that defines the time complexity. Jump point search would be more faster as it is optimazed version of A*. 
+A* uses the same data structure as Dijkstra, but it also use some time estimation (heuristic) that defines the time complexity. Jump point search would be more faster as it is optimazed version of A*.
 
 # Sources
 

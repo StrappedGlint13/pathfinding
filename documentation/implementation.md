@@ -14,6 +14,8 @@ User clicks twice. Algorithms make their magic and giving vertex-list to the ui.
 
 ## Complexity and performance of Algorithms
 
+Distances and heuristics preferred to be double- instead of float -data types. I tried both in the program, but the doubles gave much more accurate distances than doubles (talking about the decimals). This became clear to me at the end of the project, as I was comparing distances between the scenarios of the benchmark maps site and my own runs. When I used doubles, I had the same distance as on the scenarios. After that, I had a little better or worse shortest paths – I assume that this was because of the inaccuracy. Doubles has slower operations and require more memory space as their decimals are much longer than floats, but in this project, I preferred floats. 
+
 ### Dijkstra and A*
 
 Dijkstra has following structure: 
@@ -55,7 +57,7 @@ Heap has been implemented as _minimum binary heap_. All the algorithms are using
 
 # Possible flaws and improvements
 
-Binary heap is quite good, but With Fibonacci heap, we could improve time complexity to O(nlog(|n| + |m|)) even better. This could make these algorithms very efficient, as all the algorithms are using the heap for comparsion operations.   
+Binary heap is quite good, but With Fibonacci heap, we could improve time complexity to O(nlog(|n| + |m|)) even better. This could make these algorithms very efficient, as all the algorithms are using the heap for comparsion operations. 
 
 # Sources
 

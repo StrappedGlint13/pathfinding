@@ -18,7 +18,7 @@ import datastructures.Vertex;
  */
 
 public class JPS implements SearchInterface {
-    private final float diagonalMovement;
+    private final double diagonalMovement;
     private boolean[][] visited;
     private int[][] map; 
     private int endR;
@@ -30,7 +30,7 @@ public class JPS implements SearchInterface {
     private boolean[][] jumped;
     
     public JPS () {
-        this.diagonalMovement = (float) Math.sqrt(2);
+        this.diagonalMovement = Math.sqrt(2);
     }
 
     
@@ -70,15 +70,13 @@ public class JPS implements SearchInterface {
        
         heap.add(startPoint);
         
-        while(heap.getVertexFromIndex(0) != null && l.isEmpty()) {
-            /*
+        while(heap.getVertexFromIndex(0) != null && l.isEmpty()) {  
             System.out.println("Heap:");
             for (int i = 0; i < heap.getSize(); i++) {
                 System.out.println(heap.getVertexFromIndex(i) + "distance estimation:" + 
                        (heap.getVertexFromIndex(i).getHeuristic()));
             }
-            System.out.println("");
-            */
+            System.out.println("");    
             Vertex currentV = heap.poll();
             
             if (foundTheEnd(currentV)) {
@@ -144,7 +142,7 @@ public class JPS implements SearchInterface {
     private boolean move(Vertex curV, int movementRow, int movementCol) {
         int nextRow = curV.getRow() + movementRow;
         int nextColumn = curV.getColumn() + movementCol;
-        float newDist = curV.getDistance() + 1;
+        double newDist = curV.getDistance() + 1.0;
         
         //System.out.println("Move vertically and hor Current vertex row: " + nextRow + " column: "  + nextColumn);
             
@@ -158,7 +156,8 @@ public class JPS implements SearchInterface {
         }
         
         Vertex nextStep = new Vertex(nextRow, nextColumn, newDist, curV);
-        nextStep.setHeuristic(newDist + heuristics(endR, endC, nextRow, nextColumn));
+        nextStep.setDistance(newDist);
+        nextStep.setHeuristic(heuristics(endR, endC, nextRow, nextColumn));
         
         jumped[nextRow][nextColumn] = true;
         
@@ -188,7 +187,7 @@ public class JPS implements SearchInterface {
     private boolean moveDiagonalGrids(Vertex currentV, int movementRow, int movementCol) {
         int nextRow = currentV.getRow() + movementRow;
         int nextColumn = currentV.getColumn() + movementCol;
-        float newDist = currentV.getDistance() + diagonalMovement;
+        double newDist = currentV.getDistance() + diagonalMovement;
         
         //System.out.println("Move diagonally after first Current vertex row: " + nextRow + " column: "  + nextColumn);
             
@@ -202,7 +201,8 @@ public class JPS implements SearchInterface {
         
              
         Vertex nextStep = new Vertex(nextRow, nextColumn, newDist, currentV);
-        nextStep.setHeuristic(newDist + heuristics(endR, endC, nextRow, nextColumn));
+        nextStep.setDistance(newDist);
+        nextStep.setHeuristic(heuristics(endR, endC, nextRow, nextColumn));
         jumped[nextRow][nextColumn] = true;
         
         
@@ -410,9 +410,9 @@ public class JPS implements SearchInterface {
     * @return Euclidean distance.
     */
     
-    private float heuristics(int endX, int endY, int currentX, int currentY) {
+    private double heuristics(int endX, int endY, int currentX, int currentY) {
         // Euclidean distance for A*
-        return (float) (Math.sqrt(((currentX-endX)*(currentX-endX)) + (currentY-endY)*(currentY-endY)));
+        return Math.sqrt(((currentX-endX)*(currentX-endX)) + (currentY-endY)*(currentY-endY));
     }
     
     /**
@@ -455,8 +455,8 @@ public class JPS implements SearchInterface {
     public List createShortestPath(Vertex vertice) {
         List shortestPath = new List();
         while (vertice.getPrevious() != null) {
-            /*System.out.println("Shortest path");
-            System.out.println(vertice);*/
+            System.out.println("Shortest path JPS");
+            System.out.println(vertice);
             shortestPath.add(vertice);
             vertice = vertice.getPrevious();
         }

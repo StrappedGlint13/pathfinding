@@ -42,7 +42,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         Button revealTheMapButton = new Button("Reveal the map");
-        TextField textfield = new TextField("https://movingai.com/benchmarks/maze/maze512-16-5.png");
+        TextField textfield = new TextField("https://www.movingai.com/benchmarks/street/Berlin_0_1024.png");
         textfield.setPrefWidth(450);
         TextField inputField = new TextField("0");
        
@@ -118,8 +118,8 @@ public class Main extends Application {
             ImageHandler imgHand = new ImageHandler();
             BufferedImage img = io.readImage(url);
 
-            int height = 800;
-            int width = 800;
+            int height = 1024;
+            int width = 1024;
 
             img = imgHand.makeNewFrame(img, height, width);
             Map map = new Map(img, height, width);
@@ -141,13 +141,13 @@ public class Main extends Application {
             
             frame.addMouseListener(new MouseAdapter() {
                 int clicked = 0;
-                int startRow = -1;
-                int startColumn = -1;
+                int startRow = 180;
+                int startColumn = 176;
                 int searchNumber = 1;
                 @Override
                 public void mouseClicked(MouseEvent e) { 
-                    int x = e.getX();
-                    int y = e.getY();
+                    int x = 977; //e.getX();
+                    int y = 21;   //e.getY();
                     ImageHandler imgFrameHandler = new ImageHandler();
                     
                     if (clicked == 1) {
@@ -193,7 +193,7 @@ public class Main extends Application {
                             return;
                         }
                         System.out.println("Number of vertices in A* path: " + shortestPathAStar.size());
-                        System.out.println("Distance from the start: " + shortestPathAStar.getFromIndex(0).getHeuristic());
+                        System.out.println("Distance from the start: " + shortestPathAStar.getFromIndex(0).getDistance());
                         System.out.println("");
                         if (shortestPathAStar == null) {
                             showMessageDialog(null, "There is no path between the starting and ending point you chose.");
@@ -247,8 +247,8 @@ public class Main extends Application {
                                 searchNumber++;
                             }});
                     } else if (e.getClickCount() == 1) {
-                        startRow = x;
-                        startColumn = y;  
+                        startRow = 287;
+                        startColumn = 974;  
                         coordinates.setText("Start point: " + startRow + " , " + startColumn);
                         clicked++;
                     }
