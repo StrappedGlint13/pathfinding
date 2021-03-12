@@ -12,6 +12,9 @@ public class List {
     int i;
     int size;
     
+    /**
+     *
+     */
     public List() {
         this.list = new Vertex[1000];
         this.i = -1;
@@ -48,10 +51,19 @@ public class List {
         this.list = newList;
     }
 
+    /**
+     *
+     * @param i
+     * @return
+     */
     public Vertex getFromIndex(int i) {
         return list[i];
     }
     
+    /**
+     *
+     * @return
+     */
     public int size() {
         return this.size;
     }

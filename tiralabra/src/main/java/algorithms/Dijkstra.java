@@ -140,8 +140,6 @@ public class Dijkstra implements SearchInterface {
     public List createShortestPath(Vertex vertice) {
         List shortestPath = new List();
         while (vertice.getPrevious() != null) {
-            System.out.println("Shortest path Dijkstra");
-            System.out.println(vertice);
             shortestPath.add(vertice);
             vertice = vertice.getPrevious();
         }

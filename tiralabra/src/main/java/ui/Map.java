@@ -17,6 +17,12 @@ public class Map {
     private int height;
     private int width;
     
+    /**
+     *
+     * @param img
+     * @param height
+     * @param width
+     */
     public Map (BufferedImage img, int height, int width) {
         this.img = img;
         this.height = height;

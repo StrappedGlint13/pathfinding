@@ -16,6 +16,7 @@ public class Performance {
     Dijkstra dijkstra = new Dijkstra();
     AStar aStar = new AStar();
     JPS jps = new JPS();
+    long[] averages;
     long[] times;
     double[] distances;
     int daPointer;
@@ -27,9 +28,21 @@ public class Performance {
     int sameDecimal;
     long performance;
 
-    
+    /**
+     *
+     */
     public Performance () {
     }
+    
+    /**
+     *
+     * @param map
+     * @param startR
+     * @param startC
+     * @param endR
+     * @param endC
+     * @param n
+     */
     
     public void processingTimes(int[][]map, int startR, int startC, int endR, int endC, int n) {
         long performanceStart = System.nanoTime();
@@ -42,7 +55,8 @@ public class Performance {
         JPS jps = new JPS();
         List shortestPathJPS = new List();        
         
-        this.times = new long[n];
+        this.averages = new long[n];
+        this.times = new long[n*3];
         this.distances = new double[n*3];
         daJpsPointer = n*2;
         daPointer = n;
@@ -50,7 +64,7 @@ public class Performance {
                 
         long startD = System.nanoTime();
         long startA = System.nanoTime();
-        long startJPS = System.nanoTime();;
+        long startJPS = System.nanoTime();
 
         for (int i = 0; i < n; i++) {
             startD = System.nanoTime();
@@ -59,7 +73,7 @@ public class Performance {
             
             distances[i] = shortestPathDijkstra.getFromIndex(0).getDistance();
         }
-        times[0] = tAcc / n;
+        averages[0] = tAcc / n;
         tAcc = 0;
         
         for (int i = n; i < n*2; i++) {
@@ -69,7 +83,7 @@ public class Performance {
             
             distances[i] = shortestPathAStar.getFromIndex(0).getDistance();
         }
-        times[1] = tAcc / n;
+        averages[1] = tAcc / n;
         tAcc = 0;
         
         for (int i = n*2; i < n*3; i++) {
@@ -79,7 +93,7 @@ public class Performance {
             
             distances[i] = shortestPathJPS.getFromIndex(0).getDistance();
         }
-        times[2] = tAcc / n;
+        averages[2] = tAcc / n;
         
         daJpsPointer = n*2;
         daPointer = n;
@@ -148,7 +162,15 @@ public class Performance {
         performance = System.nanoTime() - performanceStart;
     }
     
-    
+    /**
+     *
+     * @param map
+     * @param startR
+     * @param startC
+     * @param endR
+     * @param endC
+     * @param n
+     */
     public void runPerformance(int[][]map, int startR, int startC, int endR, int endC, int n) {
         Performance p = new Performance();
         p.processingTimes(map, startR, startC, endR, endC, n);
@@ -156,7 +178,7 @@ public class Performance {
         boolean dajpsRatio = p.getDaJps(n);
         boolean integerAccDa = p.sameIntADacc;
         boolean integerAccDaJPS = p.sameIntADJPSacc;
-        long[] times = p.getTimes();
+        long[] times = p.getAverages();
                         
         System.out.println("PERFORMANCE RESULTS. With input of: " + n);
         System.out.println("");
@@ -188,18 +210,35 @@ public class Performance {
         System.out.println("Performance tests ended. Click once for setup, then click twice for new searches.");
     }
 
+    /**
+     *
+     * @return
+     */
     public int getSameDecimal() {
         return sameDecimal;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isSameIntADacc() {
         return sameIntADacc;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isSameIntADJPSacc() {
         return sameIntADJPSacc;
     }
 
+    /**
+     *
+     * @param n
+     * @return
+     */
     public boolean getDa(int n) {
         double ratio = (daSame*100)/n;
         if (ratio == 100.0) {
@@ -208,11 +247,19 @@ public class Performance {
         return true;
     }
     
-    
+    /**
+     *
+     * @return
+     */
     public long getPerformance() {
         return performance;
     }
 
+    /**
+     *
+     * @param n
+     * @return
+     */
     public boolean getDaJps(int n) {
         double ratio = (jpsSame*100)/n;
         if (ratio == 100.0) {
@@ -221,7 +268,11 @@ public class Performance {
         return false;
     }
     
-    public long[] getTimes() {
-        return this.times;
+    /**
+     *
+     * @return
+     */
+    public long[] getAverages() {
+        return this.averages;
     }
 }

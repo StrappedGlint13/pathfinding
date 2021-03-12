@@ -9,6 +9,7 @@ import datastructures.Vertex;
  * Algorithm that searches the shortest path. 
  * 
  * @author matibrax
+ * 
  */
 
 public class AStar implements SearchInterface {
@@ -56,16 +57,6 @@ public class AStar implements SearchInterface {
         
         heap.add(startPoint);
         while(heap.getVertexFromIndex(0) != null) {
-            /*System.out.println("Heap:");
-            for (int i = 0; i < heap.getSize(); i++) {
-                System.out.println(heap.getVertexFromIndex(i) + "heuristics" + 
-                       heap.getVertexFromIndex(i).getHeuristic());
-            }
-            
-           
-            System.out.println("POLLED VERTICE: " +currentV + "heuristics" + 
-                       currentV.getHeuristic());
-            */
             Vertex currentV = heap.poll();
             int currentRow = currentV.getRow();
             int currentColumn = currentV.getColumn();
@@ -94,7 +85,6 @@ public class AStar implements SearchInterface {
                     
                     double nextDistance = currentV.getDistance() + diagonalMovement;
                     
-                    //if moving straight
                     if (rowStep == 0 || columnStep == 0) {
                         nextDistance =  currentV.getDistance() + 1;
                     }
@@ -165,8 +155,6 @@ public class AStar implements SearchInterface {
     public List createShortestPath(Vertex vertice) {
         List shortestPath = new List();
         while (vertice.getPrevious() != null) {
-            System.out.println("Shortest path A*");
-            System.out.println(vertice);
             shortestPath.add(vertice);
             vertice = vertice.getPrevious();
         }

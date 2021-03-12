@@ -58,9 +58,7 @@ public class JPS implements SearchInterface {
         
         visitedForPainting = new boolean[rowLen][colLen];
         forcedneigh = new boolean[rowLen][colLen];
-        
-        
-        //check if the user clicked obstacle
+
         if (map[startR][startC] == 0 || map[endR][endC] == 0) {
             return null;
         }
@@ -137,10 +135,20 @@ public class JPS implements SearchInterface {
         }
     }
     
-    private boolean move(Vertex curV, int movementRow, int movementCol) {
-        int nextRow = curV.getRow() + movementRow;
-        int nextColumn = curV.getColumn() + movementCol;
-        double newDist = curV.getDistance() + 1.0;
+    /**
+    * Method for checking the forced neighbours from top and below.
+    * 
+    * @param currentV current Vertex.
+    * @param movementRow movement row, diagonal
+    * @param movementCol movement column, diagonal
+    * 
+    * @return true, if we found the end Vertex. False, if not.
+    */
+    
+    private boolean move(Vertex currentV, int movementRow, int movementCol) {
+        int nextRow = currentV.getRow() + movementRow;
+        int nextColumn = currentV.getColumn() + movementCol;
+        double newDist = currentV.getDistance() + 1.0;
         
         if (!checkLimits(map, nextRow, nextColumn, rowLen, colLen) || map[nextRow][nextColumn] == 0) {
             return false;
@@ -151,33 +159,41 @@ public class JPS implements SearchInterface {
             return false;
         }
         
-        Vertex nextStep = new Vertex(nextRow, nextColumn, newDist, curV);
+        Vertex nextStep = new Vertex(nextRow, nextColumn, newDist, currentV);
         nextStep.setDistance(newDist);
         nextStep.setHeuristic(heuristics(endR, endC, nextRow, nextColumn));
         
         forcedneigh[nextRow][nextColumn] = true;
         
         if (foundTheEnd(nextStep)) {
-            return true; // stop
+            return true;
         }
-        
-        // make these to one
-        // moving right or left, check up or down neighbours
+ 
         if ((movementRow == 0 && movementCol == 1) || movementRow == 0 ||
                 movementCol == -1) {
-            if(checkForcedNeighboursFromTheTopAndBelow(nextStep, movementCol)) {
-                return false; // stop
+            if(checkForcedNeighboursTopAndBelow(nextStep, movementCol)) {
+                return false;
             }
         }
-        // moving up or down, check left and right neighbours
+        
         if ((movementRow == 1 && movementCol == 0) || movementRow == -1 && movementCol == 0) {
-            if(checkForcedNeighboursFromTheRightAndLeft(nextStep, movementRow)) {
-                return false; // stop
+            if(checkForcedNeighboursRightAndLeft(nextStep, movementRow)) {
+                return false;
             }
         }
  
         return move(nextStep, movementRow, movementCol);
     }
+    
+    /**
+    * Method for checking the forced neighbours from top and below.
+    * 
+    * @param currentV current Vertex.
+    * @param movementRow movement row, diagonal
+    * @param movementCol movement column, diagonal
+    * 
+    * @return true, if we found the end Vertex. False, if not.
+    */
     
         
     private boolean moveDiagonalGrids(Vertex currentV, int movementRow, int movementCol) {
@@ -188,7 +204,7 @@ public class JPS implements SearchInterface {
         if (!checkLimits(map, nextRow, nextColumn, rowLen, colLen)) {
             return false;
         }
-        //if we already checked this vertex
+
         if (forcedneigh[nextRow][nextColumn]) {
             return false;
         }
@@ -212,146 +228,36 @@ public class JPS implements SearchInterface {
         if (foundTheEnd(nextStep)) {
             return true;
         }
-        /*
-        if (nextRow == endR && nextColumn == endC) {
-            heap.add(nextStep);
-            jumped[currentV.getRow()][currentV.getColumn()] = true;
-            return false;
-        }*/
-        
-           // moving diagonal up , check right or left and down
+ 
         if ((movementRow == -1 && movementCol != 0)) {
-            if(forcedNeighboursDiagonalUpRightOrLeftAndDown(nextStep, movementCol)) {
+            if(goDiagonalUpCheckRightOrLeftAndDown(nextStep, movementCol)) {
                 return false; // stop
             }
         }
         
-         // moving diagonal down , check right or left and up
         if ((movementRow == 1 && movementCol != 0)) {
-            if(forcedNeighboursDiagonalDownRightOrLeftAndUp(nextStep, movementCol)) {
+            if(goDiagDownCheckRightOrLeftAndUp(nextStep, movementCol)) {
                 return false; // stop
             }
         }
-
-        if (move(nextStep, 0, 1) || move(nextStep, -1, 0)) { // right and up
+        
+        if (move(nextStep, 1, 0) || move(nextStep, -1, 0) || move(nextStep, 0, 1) || move(nextStep, 0, -1)) { 
             return true;
         }
-
-        if (move(nextStep, 0, -1) || move(nextStep, -1, 0)) { // left and up
-            return true;
-        }
-
-        if (move(nextStep, 0, -1) || move(nextStep, 1, 0)) { // left and down
-            return true;
-        }
-
-        if (move(nextStep, 0, 1) || move(nextStep, 1, 0)) { // right and down
-            return true;
-        }
-
-       
+        
         return moveDiagonalGrids(nextStep, movementRow, movementCol);
     }
- 
-    public boolean checkForcedNeighboursFromTheTopAndBelow(Vertex curV, int lOrRCol) {
-        int curRow = curV.getRow();
-        int curCol = curV.getColumn();
-        
-        if (checkLimits(map, curRow-1, curCol, rowLen, colLen)) {
-            if (map[curRow-1][curCol] == 0) {
-                curCol += lOrRCol;
-                if (checkLimits(map, curRow-1, curCol, rowLen, colLen)) {
-                    if (map[curRow-1][curCol] == 1 && !forcedneigh[curRow-1][curCol]) {
-                        curCol = curV.getColumn();
-                        visitedForPainting[curRow][curCol] = true;
-                        heap.add(curV);
-                        return true;
-                    }
-                }
-            }
-        }
-        curCol = curV.getColumn();
-     
-        if (checkLimits(map, curRow+1, curCol, rowLen, colLen)) {
-            if (map[curRow+1][curCol] == 0) {
-                curCol += lOrRCol;
-                if (checkLimits(map, curRow+1, curCol, rowLen, colLen)) {
-                    if (map[curRow+1][curCol] == 1 && !forcedneigh[curRow+1][curCol]) {
-                        curCol = curV.getColumn();
-                        visitedForPainting[curRow][curCol] = true;
-                        heap.add(curV);
-                        return true;
-                    }
-                }   
-            }
-        }  
-        return false;
-    }
     
-    public boolean forcedNeighboursDiagonalUpRightOrLeftAndDown(Vertex curV, int lOrRCol) {
-        int curRow = curV.getRow();
-        int curCol = curV.getColumn();
-
-        if (map[curRow+1][curCol] == 0) { 
-            curCol += lOrRCol;
-            if (checkLimits(map, curRow+1, curCol, rowLen, colLen)) {
-                if (map[curRow+1][curCol] == 1) {
-                    curCol = curV.getColumn();
-                    visitedForPainting[curRow][curCol] = true;
-                    heap.add(curV);
-                    return true;
-                }
-            }
-        }
-        curCol = curV.getColumn();
-        
-        if (map[curRow][curCol-lOrRCol] == 0) {
-            curCol -= lOrRCol;
-            if (checkLimits(map, curRow-1, curCol, rowLen, colLen)) {
-                if (map[curRow-1][curCol] == 1) {
-                    curCol = curV.getColumn();
-                    visitedForPainting[curRow][curCol] = true;
-                    heap.add(curV);
-                    return true;
-                }
-            }   
-        } 
-        return false;
-    }
+    /**
+    * Method for checking the forced neighbours from top and below.
+    * 
+    * @param curV current Vertex.
+    * @param upOrDown integer value that tells are we coming from up or down
+    * 
+    * @return true, if we found forced neighbour from either locations. False, if forced neighbour is obstacle or out of boundaries.
+    */
     
-    public boolean forcedNeighboursDiagonalDownRightOrLeftAndUp(Vertex curV, int colRightOrLeft) {
-        int curRow = curV.getRow();
-        int curCol = curV.getColumn();
-        
-        if (map[curRow-1][curCol] == 0) { 
-            curCol += colRightOrLeft;
-            if (checkLimits(map, curRow-1, curCol, rowLen, colLen)) {
-                if (map[curRow-1][curCol] == 1) {
-                    curCol = curV.getColumn();
-                    visitedForPainting[curRow][curCol] = true;
-                    heap.add(curV);
-                    return true;
-                }
-            }
-        }
-        curCol = curV.getColumn();
-        
-        
-        if (map[curRow][curCol-colRightOrLeft] == 0) {
-            curCol -= colRightOrLeft;
-            if (checkLimits(map, curRow+1, curCol, rowLen, colLen)) {
-                if (map[curRow+1][curCol] == 1) {
-                    curCol = curV.getColumn();
-                    visitedForPainting[curRow][curCol] = true;
-                    heap.add(curV);
-                    return true;
-                }
-            }      
-        }  
-        return false;
-    }
-    
-    public boolean checkForcedNeighboursFromTheRightAndLeft(Vertex curV, int upOrDown) {
+    public boolean checkForcedNeighboursRightAndLeft(Vertex curV, int upOrDown) {
         int curRow = curV.getRow();
         int curCol = curV.getColumn();
 
@@ -386,6 +292,132 @@ public class JPS implements SearchInterface {
         } 
         return false;
     }
+    
+    /**
+    * Method for checking the forced neighbours from top and below.
+    * 
+    * @param curV current Vertex.
+    * @param colRorL integer value that tells are we coming from left or right straight.
+    * 
+    * @return true, if we found forced neighbour from either locations. False, if forced neighbour is obstacle or out of boundaries.
+    */
+ 
+    public boolean checkForcedNeighboursTopAndBelow(Vertex curV, int colRorL) {
+        int curRow = curV.getRow();
+        int curCol = curV.getColumn();
+        
+        if (checkLimits(map, curRow-1, curCol, rowLen, colLen)) {
+            if (map[curRow-1][curCol] == 0) {
+                curCol += colRorL;
+                if (checkLimits(map, curRow-1, curCol, rowLen, colLen)) {
+                    if (map[curRow-1][curCol] == 1 && !forcedneigh[curRow-1][curCol]) {
+                        curCol = curV.getColumn();
+                        visitedForPainting[curRow][curCol] = true;
+                        heap.add(curV);
+                        return true;
+                    }
+                }
+            }
+        }
+        curCol = curV.getColumn();
+     
+        if (checkLimits(map, curRow+1, curCol, rowLen, colLen)) {
+            if (map[curRow+1][curCol] == 0) {
+                curCol += colRorL;
+                if (checkLimits(map, curRow+1, curCol, rowLen, colLen)) {
+                    if (map[curRow+1][curCol] == 1 && !forcedneigh[curRow+1][curCol]) {
+                        curCol = curV.getColumn();
+                        visitedForPainting[curRow][curCol] = true;
+                        heap.add(curV);
+                        return true;
+                    }
+                }   
+            }
+        }  
+        return false;
+    }
+    
+    /**
+    * Method for checking the forced neighbours from right/left and down.
+    * 
+    * @param curV current Vertex.
+    * @param colRorL integer value that tells are we coming from diagonal left or right.
+    * 
+    * @return true, if we found forced neighbour from either locations. False, if forced neighbour is obstacle or out of boundaries.
+    */
+    
+    public boolean goDiagonalUpCheckRightOrLeftAndDown(Vertex curV, int colRorL) {
+        int curRow = curV.getRow();
+        int curCol = curV.getColumn();
+
+        if (map[curRow+1][curCol] == 0) { 
+            curCol += colRorL;
+            if (checkLimits(map, curRow+1, curCol, rowLen, colLen)) {
+                if (map[curRow+1][curCol] == 1) {
+                    curCol = curV.getColumn();
+                    visitedForPainting[curRow][curCol] = true;
+                    heap.add(curV);
+                    return true;
+                }
+            }
+        }
+        curCol = curV.getColumn();
+        
+        if (map[curRow][curCol-colRorL] == 0) {
+            curCol -= colRorL;
+            if (checkLimits(map, curRow-1, curCol, rowLen, colLen)) {
+                if (map[curRow-1][curCol] == 1) {
+                    curCol = curV.getColumn();
+                    visitedForPainting[curRow][curCol] = true;
+                    heap.add(curV);
+                    return true;
+                }
+            }   
+        } 
+        return false;
+    }
+    
+    /**
+    * Method for checking the forced neighbours from right/left and up.
+    *
+    * @param curV current Vertex.
+    * @param colRorL integer value that tells are we coming from diagonal left or right.
+    * 
+    * @return true, if we found forced neighbour. False, if forced neighbour is obstacle or out of boundaries.
+    */
+    
+    public boolean goDiagDownCheckRightOrLeftAndUp(Vertex curV, int colRorL) {
+        int curRow = curV.getRow();
+        int curCol = curV.getColumn();
+        
+        if (map[curRow-1][curCol] == 0) { 
+            curCol += colRorL;
+            if (checkLimits(map, curRow-1, curCol, rowLen, colLen)) {
+                if (map[curRow-1][curCol] == 1) {
+                    curCol = curV.getColumn();
+                    visitedForPainting[curRow][curCol] = true;
+                    heap.add(curV);
+                    return true;
+                }
+            }
+        }
+        curCol = curV.getColumn();
+        
+        
+        if (map[curRow][curCol-colRorL] == 0) {
+            curCol -= colRorL;
+            if (checkLimits(map, curRow+1, curCol, rowLen, colLen)) {
+                if (map[curRow+1][curCol] == 1) {
+                    curCol = curV.getColumn();
+                    visitedForPainting[curRow][curCol] = true;
+                    heap.add(curV);
+                    return true;
+                }
+            }      
+        }  
+        return false;
+    }
+    
     
     /**
     * Method for JPS to estimate Euclidean distance.

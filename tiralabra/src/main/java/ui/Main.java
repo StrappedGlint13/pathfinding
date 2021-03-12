@@ -37,8 +37,14 @@ import static javax.swing.JOptionPane.showMessageDialog;
  * 
  * @author matibrax
  */
+
 public class Main extends Application {
 
+    /**
+     *
+     * @param stage
+     * @throws Exception
+     */
     @Override
     public void start(Stage stage) throws Exception {
         Button revealTheMapButton = new Button("Reveal the map");
@@ -46,7 +52,6 @@ public class Main extends Application {
         textfield.setPrefWidth(450);
         TextField inputField = new TextField("0");
        
-        // Search panel
         HBox searchComponents = new HBox(50);
         VBox textFields = new VBox(10);
         VBox labels = new VBox(10);
@@ -56,7 +61,6 @@ public class Main extends Application {
                 + "(optional)");
         searchLabel.setFont(Font.font("Arial", FontWeight.BOLD, 15));
         inputLabel.setFont(Font.font("Arial", FontWeight.BOLD, 15));
-        
         labels.getChildren().addAll(searchLabel, inputLabel);
         textFields.getChildren().addAll(textfield, inputField);
         searchComponents.getChildren().addAll(labels, textFields, revealTheMapButton);
@@ -64,11 +68,7 @@ public class Main extends Application {
         Scene searchPanel = new Scene(searchComponents);
         stage.setScene(searchPanel);
         stage.show();
-        
-        // https://movingai.com/benchmarks/street/Boston_0_512.png boston
-        // https://movingai.com/benchmarks/maze/maze512-16-5.png laby
-        // https://movingai.com/benchmarks/dao/brc204d.png 
-        // Coordinates Scene and instructions
+     
         Label header = new Label("Instructions");
         header.setFont(Font.font("Arial", FontWeight.BOLD,  20)); 
         Label instructions = new Label("1. click is the start.\n"
@@ -166,6 +166,11 @@ public class Main extends Application {
             int endX = Integer.parseInt(xEnd.getText().toString());
             int endY = Integer.parseInt(yEnd.getText().toString());
             
+            if (pixelmap[startX][startY] == 0 || pixelmap[endX][endY] == 0) {
+                showMessageDialog(null, "This is obstacle!");
+                return;
+            }
+            
             JTextField manualCoordinates = new JTextField();
             manualCoordinates.setText("Shortest path from coordinates " 
                 + startX + " , " + startY + " to " + endX + " , " + endY);
@@ -181,7 +186,7 @@ public class Main extends Application {
             JPS jps = new JPS();
             List shortestPathJPS = new List();
 
-            System.out.println("Manual search:");
+            System.out.println("Manual search");
             System.out.println("");
 
             long startA = System.nanoTime();
@@ -201,17 +206,19 @@ public class Main extends Application {
             System.out.println("Jump Point Search path (JPS) runs " +((endJPS - startJPS)/1e9) + " seconds");
             System.out.println("");
 
-            if (shortestPathAStar.isEmpty()) {
-                showMessageDialog(null, "You did not clicked the land!");
+            System.out.println("Number of vertices in A* path: " + shortestPathAStar.size());
+            System.out.println("Distance from the start: " + shortestPathAStar.getFromIndex(0).getDistance());
+            System.out.println("");
+            
+            if (shortestPathAStar == null) {
+                showMessageDialog(null, "There is no path between the starting and ending point you chose.");  
                 startX = -1;
                 startY = -1;
                 return;
             }
-            System.out.println("Number of vertices in A* path: " + shortestPathAStar.size());
-            System.out.println("Distance from the start: " + shortestPathAStar.getFromIndex(0).getDistance());
-            System.out.println("");
-            if (shortestPathAStar == null) {
-                showMessageDialog(null, "There is no path between the starting and ending point you chose.");  
+            
+            if (shortestPathJPS == null) {
+                showMessageDialog(null, "JPS did not found the way."); // this will be never used, just in case.  
                 startX = -1;
                 startY = -1;
                 return;
@@ -228,14 +235,8 @@ public class Main extends Application {
 
             if (inPut > 0 && inPut != 1 && inPut != 2) {
                 p.runPerformance(pixelmap, startX, startY, endX, endY, inPut);
-            }   
-
-            /*
-            BufferedImage img = io.readImage(url);
-            img = imgFrameHandler.makeNewFrame(img, height, width);
-            */
-
-
+            }  
+            
             boolean[][]visitedD = dijkstra.getVisited();
             boolean[][]visitedA = aStar.getVisited();
             boolean[][]visitedJPS = jps.getVisitedForPainting();
@@ -264,8 +265,8 @@ public class Main extends Application {
             ImageHandler imgHand = new ImageHandler();
             BufferedImage img = io.readImage(url);
 
-            int height = 1024;
-            int width = 1024;
+            int height = 600;
+            int width = 600;
 
             img = imgHand.makeNewFrame(img, height, width);
             Map map = new Map(img, height, width);
@@ -294,6 +295,15 @@ public class Main extends Application {
                 public void mouseClicked(MouseEvent e) { 
                     int x = e.getX();
                     int y = e.getY();
+                    
+                    if (pixelmap[x][y] == 0) {
+                        showMessageDialog(null, "You did not clicked the land!");
+                            clicked = 0;
+                            x = -1;
+                            y = -1;
+                            return;
+                    }
+ 
                     ImageHandler imgFrameHandler = new ImageHandler();
                     
                     if (clicked == 1) {
@@ -302,7 +312,6 @@ public class Main extends Application {
                             + startRow + " , " + startColumn + " to " + x + " , " + y);
                         
                         Performance p = new Performance();
-                        //Algorithms
                         Dijkstra dijkstra = new Dijkstra();
                         List shortestPathDijkstra = new List();
                         
@@ -332,16 +341,6 @@ public class Main extends Application {
                         System.out.println("Jump Point Search path (JPS) runs " +((endJPS - startJPS)/1e9) + " seconds");
                         System.out.println("");
                         
-                        if (shortestPathAStar.isEmpty()) {
-                            showMessageDialog(null, "You did not clicked the land!");
-                            clicked = 0;
-                            x = -1;
-                            y = -1;
-                            return;
-                        }
-                        System.out.println("Number of vertices in A* path: " + shortestPathAStar.size());
-                        System.out.println("Distance from the start: " + shortestPathAStar.getFromIndex(0).getDistance());
-                        System.out.println("");
                         if (shortestPathAStar == null) {
                             showMessageDialog(null, "There is no path between the starting and ending point you chose.");
                             clicked = 0;
@@ -349,7 +348,17 @@ public class Main extends Application {
                             y = -1;
                             return;
                         }
-              
+                        
+                        if (shortestPathJPS == null) {
+                            showMessageDialog(null, "JPS did not found the way."); // this will be never used, just in case.  
+                            x = -1;
+                            y = -1;
+                            return;
+                        }
+                        
+                        System.out.println("Number of vertices in A* path: " + shortestPathAStar.size());
+                        System.out.println("Distance from the start: " + shortestPathAStar.getFromIndex(0).getDistance());
+                        System.out.println("");
                         System.out.println("Number of vertices in Dijkstra path: " + shortestPathDijkstra.size());
                         System.out.println("Distance from the start: " + shortestPathDijkstra.getFromIndex(0).getDistance());
                         System.out.println("");
@@ -365,23 +374,15 @@ public class Main extends Application {
                         BufferedImage img = io.readImage(url);
                         img = imgFrameHandler.makeNewFrame(img, height, width);
                         
-                        
-                        
                         boolean[][]visitedD = dijkstra.getVisited();
                         boolean[][]visitedA = aStar.getVisited();
                         boolean[][]visitedJPS = jps.getVisitedForPainting();
-                        img = imgFrameHandler.drawShortestPath(img, shortestPathAStar, shortestPathDijkstra, shortestPathJPS, visitedD, visitedA, visitedJPS);
-                        /*
-                        System.out.println("Visited vertices with Dijkstra: " + imgFrameHandler.getVisitedD() + shortestPathDijkstra.size());
-                        System.out.println("Visited vertices with A*: " + imgFrameHandler.getVisitedA() + shortestPathAStar.size());
-                        System.out.println("Visited vertices with JPS: " + imgFrameHandler.getVisitedJPS() + shortestPathJPS.size());
-                        */
+                        img = imgFrameHandler.drawShortestPath(img, shortestPathAStar, shortestPathDijkstra, shortestPathJPS, visitedD, visitedA, visitedJPS);  
                         img = imgHand.makeNewFrame(img, height, width);
                         JFrame shortestPathFrame = new JFrame("Search nro. "+ searchNumber);
                         
                         shortestPathFrame.setSize(height, width);
                         JLabel label = new JLabel(new ImageIcon(img));
-                       
                         shortestPathFrame.add(label);
                         shortestPathFrame.add(coordinates,BorderLayout.SOUTH);                 
                         shortestPathFrame.setVisible(true); 
@@ -395,23 +396,36 @@ public class Main extends Application {
                             }});
                     } else if (e.getClickCount() == 1) {
                         startRow = e.getX(); //START
-                        startColumn = e.getY(); 
+                        startColumn = e.getY();
+                        if (pixelmap[startRow][startColumn] == 0) {
+                            showMessageDialog(null, "You did not clicked the land!");
+                            clicked = 0;
+                            x = -1;
+                            y = -1;
+                            return;
+                        }
                         coordinates.setText("Start point: " + startRow + " , " + startColumn);
                         clicked++;
                     }
                 }
                 });
-            
             frame.setVisible(true);
             stage.setScene(instrPanel);
         });
  
     }
-    
+
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         launch(args);
     }
-    
+
+    /**
+     *
+     */
     @Override
     public void stop() {
 

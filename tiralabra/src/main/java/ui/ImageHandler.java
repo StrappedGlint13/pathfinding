@@ -28,6 +28,10 @@ public class ImageHandler {
     int visitedD;
     int visitedA;
     int visitedJPS;
+
+    /**
+     *
+     */
     public ImageHandler() { 
         dijkstraPath = new Color(0,0,204);
         astarPath = new Color(255,0,0);
@@ -51,6 +55,7 @@ public class ImageHandler {
     * @param heigth target height.
     * 
     * @return resized BufferedImage.
+     * @throws java.lang.Exception
     */
     
     public BufferedImage resizeImage(BufferedImage img, int width, int heigth) throws Exception {
@@ -67,6 +72,10 @@ public class ImageHandler {
     * @param img given BufferedImage.
     * @param shortestPathAStar list of vertex from the A* algorithm.
     * @param shortestPathDijkstra  list of vertex from the Dijkstra algorithm.
+     * @param shortestPathJPS
+     * @param visitedAstar
+     * @param visitedDijkstra
+     * @param visitedJPS
     * 
     * @return BufferedImage, where are shortest paths drawn.
     */
@@ -92,6 +101,12 @@ public class ImageHandler {
         return img;
     }
     
+    /**
+     *
+     * @param img
+     * @param jps
+     * @return
+     */
     public BufferedImage drawGridJPS(BufferedImage img, Vertex jps) {
         for (int drawRow = -1; drawRow < 2; drawRow++) {
             for (int drawCol = -1; drawCol < 2; drawCol++) {
@@ -112,7 +127,7 @@ public class ImageHandler {
     *
     * @param img given BufferedImage.
     * @param d pixel-vertex that is being manipulated.
-    * @param color colour that is set for specific algorithm.
+     * @param a
     * 
     * @return BufferedImage, with the grid line of shortest path. 
     */
@@ -143,6 +158,13 @@ public class ImageHandler {
         return img;
     }
     
+    /**
+     *
+     * @param img
+     * @param visited
+     * @param color
+     * @return
+     */
     public BufferedImage drawVisited(BufferedImage img, boolean[][] visited, int color) {
         Color visitedColor = new Color(0,0,0);
         switch (color) {
@@ -175,18 +197,37 @@ public class ImageHandler {
         return img;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getVisitedD() {
         return visitedD;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getVisitedA() {
         return visitedA;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getVisitedJPS() {
         return visitedJPS;
     }
     
+    /**
+     *
+     * @param img
+     * @param height
+     * @param width
+     * @return
+     */
     public BufferedImage makeNewFrame(BufferedImage img, int height, int width) {
         try {
             return img = resizeImage(img, height, width);

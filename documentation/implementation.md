@@ -52,13 +52,7 @@ After these vertical, horizontal and diagonal jumping, we will take the root (be
 
 Heap has been implemented as _minimum binary heap_. All the algorithms are using the heap, where the saved vertices are in the array of vertices. The heap has four two main operations:
 
-1.  Adding a node to the heap. This takes O(log |V|):
-
-    1.1  Adding starts with inserting the coming vertex to the last index of the binary-tree. That's why we have size-variable, so that we know where next vertex will be, and how large our heap is.
-    1.2  Then we will check, if we have parent with (k - 1) / 2 where k is binary-tree size - 1. In all operations, we will need k-1, because our root is at the index of 0. Sometimes, coders, are keeping the root at the index of 1 to simplify things (this could be the case also in my account).
-    1.3  If we have a parent, we will compare the child vertex to the parent vertex. If child vertex distance, or with A* and JPS distance + heuristics are better, we will swap the child and the parent. 
-    1.4  We keep doing 1.2. and 1.3. steps, until we reach the top, or our new vertex is not the best.
-
+1.  Adding a node to the heap. This takes O(log |V|).
 2.  Removing the root from the heap takes O(1) Because there are O(log n) layers, the total for the operation is O(log n).
 
 ### List 

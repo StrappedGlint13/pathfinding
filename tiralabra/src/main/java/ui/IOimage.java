@@ -17,6 +17,9 @@ import static javax.swing.JOptionPane.showMessageDialog;
 public class IOimage {
     private URL url;
     
+    /**
+     *
+     */
     public IOimage() {
         this.url = url;
     }

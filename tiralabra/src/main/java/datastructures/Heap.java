@@ -11,11 +11,18 @@ public class Heap {
     private Vertex[] heap;
     private int size;
     
+    /**
+     *
+     */
     public Heap() {
         this.heap = new Vertex[100000];
         this.size = 0;
     }
     
+    /**
+     *
+     * @return
+     */
     public Vertex[] getHeap() {
         return heap;
     }
@@ -96,25 +103,25 @@ public class Heap {
     *
      * @return root
     */
-    /*
-    public void expandHeap() {
-        Vertex[] newHeap = new Vertex[size*2];
-        for (int i = 0; i < heap.length; i++) {
-            newHeap[i] = heap[i];
-        }
-        this.heap = newHeap;
-    }
-*/
+
     public Vertex getRoot() {
         return this.heap[0];
     }
     
+    /**
+     *
+     * @return
+     */
     public Vertex getLast() {
         Vertex v = this.heap[size-1];
         this.heap[size-1] = null;
         return v;
     }
     
+    /**
+     *
+     * @return
+     */
     @Override
     public String toString() {
         return this.heap[0].toString();
@@ -204,10 +211,19 @@ public class Heap {
         return (2 * k) + 2;
     }
     
+    /**
+     *
+     * @return
+     */
     public int getSize() {
         return this.size;
     }
     
+    /**
+     *
+     * @param k
+     * @return
+     */
     public Vertex getVertexFromIndex(int k) {
         return this.heap[k];
     }
