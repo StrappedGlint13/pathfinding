@@ -36,24 +36,38 @@ A* is following the same principles as Dijkstra, but it also has heuristics in u
 
 ## Jump Point Search
 
-Jump Point Search was the trickiest of 'em all. Jump Point Search is using same heuristics and binary heap as A*, but it is memory constrait as it does not keep distance information in the 2D-table as Dijkstra and A*. Instead, JPS takes these "leaps" with a couple of neighbour pruning rules:
+Jump Point Search was the trickiest of 'em all. Jump Point Search is using same heuristics and binary heap as A*, but it is memory constrait as it does not keep distance information in the 2D-table as Dijkstra and A*. Instead, JPS takes these "leaps" with a couple of neighbour pruning rules. This makes it :
 
-1.  We will start moving vertically and horizontally. Horizontally, we will make a check to the up and down, if there is an obstacle. If there are, we will add this vertice to the heap, as this is best way to go diagonally up/down past the obstacle. Then we recursively go back to the vertice, from which we start moving. If there are obstacle or map boundraries come from left or right, we will recursively go back, thus there are nowhere to go. We will use the same logic vertically, as we make the checks from left and right.  
+1.  We will start moving vertically and horizontally. Horizontally, we will make a check to the up and down. These are "natural neighbours". If there is an obstacle up or down, we will add this vertex to the heap, as this is best way to go diagonally up/down past the obstacle. These are called "forced neighbours". Then we recursively go back to the vertex, from which we start moving. If there is obstacle or map boundraries come from straig, we will recursively go back, thus there are nowhere to go. We will use the same logic vertically, but we look forced neighbours from left and right.  
 
 2.  When we have jumped vertically and horizontally, we start moving diagonally. Here we use following rules:
--   If we are moving diagonally right up, we will check neighbours from down and left. If there are one, we will add this vertex to the heap, and go back recursively to the node we started.
--   We go all the diagonal ways like this. 
+-   First, we will go diagonally right up. We will check obstacles from down and left. If there are one, we will add this vertex to the heap, and go back recursively to the node we started. Because this is the best vertex to go past the obstacle that we discovered.
+-   We go all the diagonal ways like this, changing the checking rule depenging where we came from. 
 
-After these vertical, horizontal and diagonal jumping, we will take the root (best vertex according same heuristics used as A* and distance). And we will do these steps again, but if the heap 
+After these vertical, horizontal and diagonal jumping, we will take the root (best vertex according same heuristics used as A* and distance). And we will do these steps again. If the heap is empty, it means that there is no path to the goal. If we have found the best way and made the list of the vertices, we can return the best shortest path.
 
 ## Complexity and performance of Data structures
 
 ### Binary heap
 
-Heap has been implemented as _minimum binary heap_. All the algorithms are using the heap, where the saved vertices are in the array of vertices. The heap has four main operations:
+Heap has been implemented as _minimum binary heap_. All the algorithms are using the heap, where the saved vertices are in the array of vertices. The heap has four two main operations:
 
-1.  Adding a node to the heap. This takes O(log n).
+1.  Adding a node to the heap. This takes O(log |V|):
+
+    1.1  Adding starts with inserting the coming vertex to the last index of the binary-tree. That's why we have size-variable, so that we know where next vertex will be, and how large our heap is.
+    1.2  Then we will check, if we have parent with (k - 1) / 2 where k is binary-tree size - 1. In all operations, we will need k-1, because our root is at the index of 0. Sometimes, coders, are keeping the root at the index of 1 to simplify things (this could be the case also in my account).
+    1.3  If we have a parent, we will compare the child vertex to the parent vertex. If child vertex distance, or with A* and JPS distance + heuristics are better, we will swap the child and the parent. 
+    1.4  We keep doing 1.2. and 1.3. steps, until we reach the top, or our new vertex is not the best.
+
 2.  Removing the root from the heap takes O(1) Because there are O(log n) layers, the total for the operation is O(log n).
+
+### List 
+
+List class is here for replacing utils Arraylist. It contains a list of vertices, and a couple of pointers (size and index). It has a few operations:
+
+1.  Add: adding a vertex to the list will take O(1) time, because we are alway putting the new vertex to the last element. 
+2.  Get: getting vertex with given index. This takes also only O(1) time. 
+3.  IsEmpty: Checking if the first element of list is empty. O(1).
 
 # Possible flaws and improvements
 
@@ -62,12 +76,14 @@ Binary heap is quite good, but With Fibonacci heap, we could improve time comple
 # Sources
 
 Amit Patel: [Introduction to the A* Algorithm](https://www.redblobgames.com/pathfinding/a-star/introduction.html), last modified 2020.
-tirati
+
 Amit Patel: [Introduction to A*](http://theory.stanford.edu/~amitp/GameProgramming/AStarComparison.html), Last modified 2020. 
 
 Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C: [Introduction to algorithms](https://ebookcentral-proquest-com.libproxy.helsinki.fi), 2009. 
 
 Laaksonen Antti: [Tietorakenteet ja algoritmit](https://www.cs.helsinki.fi/u/ahslaaks/tirakirja/tirakirja-2020k.pdf), 2020.
+
+Nathan Witmer: [Jump point search](https://zerowidth.com/2013/a-visual-explanation-of-jump-point-search.html), read 2020. 
 
 Wikipedia: [A* search algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm), read 2020. 
 
