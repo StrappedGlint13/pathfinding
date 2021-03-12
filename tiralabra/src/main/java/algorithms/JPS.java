@@ -19,7 +19,7 @@ import datastructures.Vertex;
 
 public class JPS implements SearchInterface {
     private final double diagonalMovement;
-    private boolean[][] visited;
+    private boolean[][] visitedForPainting;
     private int[][] map; 
     private int endR;
     private int endC;
@@ -27,7 +27,7 @@ public class JPS implements SearchInterface {
     private int colLen;
     List l;
     public Heap heap;
-    private boolean[][] jumped;
+    private boolean[][] forcedneigh;
     
     public JPS () {
         this.diagonalMovement = Math.sqrt(2);
@@ -56,8 +56,8 @@ public class JPS implements SearchInterface {
         this.l = new List();
         this.heap = new Heap();
         
-        visited = new boolean[rowLen][colLen];
-        jumped = new boolean[rowLen][colLen];
+        visitedForPainting = new boolean[rowLen][colLen];
+        forcedneigh = new boolean[rowLen][colLen];
         
         
         //check if the user clicked obstacle
@@ -70,20 +70,22 @@ public class JPS implements SearchInterface {
        
         heap.add(startPoint);
         
+        
         while(heap.getVertexFromIndex(0) != null && l.isEmpty()) {  
+            /*
             System.out.println("Heap:");
             for (int i = 0; i < heap.getSize(); i++) {
                 System.out.println(heap.getVertexFromIndex(i) + "distance estimation:" + 
                        (heap.getVertexFromIndex(i).getHeuristic()));
             }
-            System.out.println("");    
+            System.out.println("");   */ 
             Vertex currentV = heap.poll();
             
             if (foundTheEnd(currentV)) {
                 break;
             }
             
-            jumped[startR][startC] = true;
+            forcedneigh[startR][startC] = true;
             jumpStraight(currentV);
         }
         return l;
@@ -145,7 +147,7 @@ public class JPS implements SearchInterface {
         }
         
         //if we already checked this vertex
-        if (jumped[nextRow][nextColumn]) {
+        if (forcedneigh[nextRow][nextColumn]) {
             return false;
         }
         
@@ -153,7 +155,7 @@ public class JPS implements SearchInterface {
         nextStep.setDistance(newDist);
         nextStep.setHeuristic(heuristics(endR, endC, nextRow, nextColumn));
         
-        jumped[nextRow][nextColumn] = true;
+        forcedneigh[nextRow][nextColumn] = true;
         
         if (foundTheEnd(nextStep)) {
             return true; // stop
@@ -187,15 +189,16 @@ public class JPS implements SearchInterface {
             return false;
         }
         //if we already checked this vertex
-        if (jumped[nextRow][nextColumn]) {
+        if (forcedneigh[nextRow][nextColumn]) {
             return false;
         }
-        
+       
         if(map[nextRow][nextColumn] == 0) {
-            if (!jumped[currentV.getRow()][currentV.getColumn()]) {
-               heap.add(currentV);
-               jumped[currentV.getRow()][currentV.getColumn()] = true;
-               return false; 
+            if (!forcedneigh[currentV.getRow()][currentV.getColumn()]) {
+                heap.add(currentV);
+                forcedneigh[currentV.getRow()][currentV.getColumn()] = true;
+                visitedForPainting[currentV.getRow()][currentV.getColumn()] = true;
+                return false; 
             }
             return false;     
         }
@@ -203,7 +206,18 @@ public class JPS implements SearchInterface {
         Vertex nextStep = new Vertex(nextRow, nextColumn, newDist, currentV);
         nextStep.setDistance(newDist);
         nextStep.setHeuristic(heuristics(endR, endC, nextRow, nextColumn));
-        jumped[nextRow][nextColumn] = true;
+        forcedneigh[nextRow][nextColumn] = true;
+        
+        
+        if (foundTheEnd(nextStep)) {
+            return true;
+        }
+        /*
+        if (nextRow == endR && nextColumn == endC) {
+            heap.add(nextStep);
+            jumped[currentV.getRow()][currentV.getColumn()] = true;
+            return false;
+        }*/
         
            // moving diagonal up , check right or left and down
         if ((movementRow == -1 && movementCol != 0)) {
@@ -244,14 +258,15 @@ public class JPS implements SearchInterface {
         int curRow = curV.getRow();
         int curCol = curV.getColumn();
         
+        
         if (curRow-1 <= rowLen && curRow-1 >= 0 && curCol >= 0 &&  
                 curCol <= colLen) { // check if we are still inside the boundraries
             if (map[curRow-1][curCol] == 0) { // if there is an obstacle up
                 curCol += lOrRCol;
                 if (checkLimits(map, curRow-1, curCol, rowLen, colLen)) {
-                    if (map[curRow-1][curCol] == 1 && !jumped[curRow-1][curCol]) { // if right-up is land
+                    if (map[curRow-1][curCol] == 1 && !forcedneigh[curRow-1][curCol]) { // if right-up is land
                         curCol = curV.getColumn();
-                        visited[curRow][curCol] = true;
+                        visitedForPainting[curRow][curCol] = true;
                         heap.add(curV);
                         return true;
                     }
@@ -260,14 +275,14 @@ public class JPS implements SearchInterface {
         }
         curCol = curV.getColumn();
      
-        if (curRow+1 < rowLen && curRow+1 >= 0 && curCol >= 0 &&  
+        if (curRow+1 <= rowLen && curRow+1 >= 0 && curCol >= 0 &&  
                 curCol < colLen) { // check if we are still inside the boundraries
             if (map[curRow+1][curCol] == 0) { // if there is an obstacle down
                 curCol += lOrRCol;
                 if (checkLimits(map, curRow+1, curCol, rowLen, colLen)) {
-                    if (map[curRow+1][curCol] == 1 && !jumped[curRow+1][curCol]) { // if right-down is land
+                    if (map[curRow+1][curCol] == 1 && !forcedneigh[curRow+1][curCol]) { // if right-down is land
                         curCol = curV.getColumn();
-                        visited[curRow][curCol] = true;
+                        visitedForPainting[curRow][curCol] = true;
                         heap.add(curV);
                         return true;
                     }
@@ -287,7 +302,7 @@ public class JPS implements SearchInterface {
                 if (checkLimits(map, curRow+1, curCol, rowLen, colLen)) {
                     if (map[curRow+1][curCol] == 1) {
                         curCol = curV.getColumn();
-                        visited[curRow][curCol] = true;
+                        visitedForPainting[curRow][curCol] = true;
                         heap.add(curV);
                         return true;
                     }
@@ -299,9 +314,9 @@ public class JPS implements SearchInterface {
         if (map[curRow][curCol-lOrRCol] == 0) { // if there is an obstacle left or right
                 curCol -= lOrRCol;  //+-1
                 if (checkLimits(map, curRow-1, curCol, rowLen, colLen)) {
-                    if (map[curRow-1][curCol] == 1) { // if right-down is land
+                    if (map[curRow-1][curCol] == 1) { // if right/left-up is land
                         curCol = curV.getColumn();
-                        visited[curRow][curCol] = true;
+                        visitedForPainting[curRow][curCol] = true;
                         heap.add(curV);
                         return true;
                     }
@@ -322,7 +337,7 @@ public class JPS implements SearchInterface {
                 if (checkLimits(map, curRow-1, curCol, rowLen, colLen)) {
                     if (map[curRow-1][curCol] == 1) {
                         curCol = curV.getColumn();
-                        visited[curRow][curCol] = true;
+                        visitedForPainting[curRow][curCol] = true;
                         heap.add(curV);
                         return true;
                     }
@@ -336,7 +351,7 @@ public class JPS implements SearchInterface {
                 if (checkLimits(map, curRow+1, curCol, rowLen, colLen)) {
                     if (map[curRow+1][curCol] == 1) { // if right-down is land
                         curCol = curV.getColumn();
-                        visited[curRow][curCol] = true;
+                        visitedForPainting[curRow][curCol] = true;
                         heap.add(curV);
                         return true;
                     }
@@ -355,9 +370,9 @@ public class JPS implements SearchInterface {
             if (map[curRow][curCol-1] == 0) { // if there is an obstacle right
                 curRow += upOrDown;
                 if (checkLimits(map, curRow, curCol-1, rowLen, colLen)) {
-                    if (map[curRow][curCol-1] == 1 && !jumped[curRow][curCol-1]) { // if right-up is land
+                    if (map[curRow][curCol-1] == 1 && !forcedneigh[curRow][curCol-1]) { // if right-up is land
                         curRow = curV.getRow();
-                        visited[curRow][curCol] = true;
+                        visitedForPainting[curRow][curCol] = true;
                         heap.add(curV);
                         return true;
                     }
@@ -368,15 +383,15 @@ public class JPS implements SearchInterface {
         curRow = curV.getRow();
         
         // right
-        if (curRow < rowLen && curRow >= 0 && curCol+1 >= 0 &&  
-                curCol+1 < colLen) { // check if we are still inside the boundraries
+        if (curRow <= rowLen && curRow >= 0 && curCol+1 >= 0 &&  
+                curCol+1 <= colLen) { // check if we are still inside the boundraries
             if (map[curRow][curCol+1] == 0) { // if there is an obstacle down
                 curRow += upOrDown;
                 
                 if (checkLimits(map, curRow, curCol+1, rowLen, colLen)) {
-                    if (map[curRow][curCol+1] == 1 && !jumped[curRow][curCol+1]) { // if right-down is land
+                    if (map[curRow][curCol+1] == 1 && !forcedneigh[curRow][curCol+1]) { // if right-down is land
                         curRow = curV.getRow();
-                        visited[curRow][curCol] = true;
+                        visitedForPainting[curRow][curCol] = true;
                         heap.add(curV);
                         return true;
                     }
@@ -420,11 +435,7 @@ public class JPS implements SearchInterface {
         if (r < 0 || c < 0 || r >= rowLength || c >= columnLength) {
             return false;
         }
-        // This is for walls, that are not interesting
-        if (map[r][c] == 0) {
-            return false;
-        }
-        
+
         return true;
     }
 
@@ -443,8 +454,6 @@ public class JPS implements SearchInterface {
     public List createShortestPath(Vertex vertice) {
         List shortestPath = new List();
         while (vertice.getPrevious() != null) {
-            System.out.println("Shortest path JPS");
-            System.out.println(vertice);
             shortestPath.add(vertice);
             vertice = vertice.getPrevious();
         }
@@ -453,7 +462,7 @@ public class JPS implements SearchInterface {
     }
     
     /**
-    * Method for returning all the visited notes.
+    * Method for returning all the visitedForPainting notes.
     * 
     * @return list of vertex for the shortest path, if there is previous vertex, 
     * call the method again, if null is found from the "previous",
@@ -461,8 +470,8 @@ public class JPS implements SearchInterface {
     * 
     */
     
-    public boolean[][] getVisited() {
-        return this.visited;
+    public boolean[][] getVisitedForPainting() {
+        return this.visitedForPainting;
     }
     
         

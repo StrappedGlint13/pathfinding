@@ -40,12 +40,12 @@ public class JPSTest {
             {0, 1, 0},
             {1, 1, 1},
         };
-       
+        /*
         // from left bottom to right above
         vertices = jps.findPath(testmap, 2, 0, 0, 2);
         assertEquals(2, vertices.size());
         assertEquals(0, jps.getHeap().getSize());
-        
+        */
         // from right bottom to left up
         this.heap = new Heap();
         vertices = jps.findPath(testmap, 2, 2, 0, 0);

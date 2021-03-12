@@ -238,7 +238,7 @@ public class Main extends Application {
 
             boolean[][]visitedD = dijkstra.getVisited();
             boolean[][]visitedA = aStar.getVisited();
-            boolean[][]visitedJPS = jps.getVisited();
+            boolean[][]visitedJPS = jps.getVisitedForPainting();
             img = imgHand.drawShortestPath(img, shortestPathAStar, shortestPathDijkstra, shortestPathJPS, visitedD, visitedA, visitedJPS);
             
             returnbutton.setOnAction(o -> {
@@ -369,7 +369,7 @@ public class Main extends Application {
                         
                         boolean[][]visitedD = dijkstra.getVisited();
                         boolean[][]visitedA = aStar.getVisited();
-                        boolean[][]visitedJPS = jps.getVisited();
+                        boolean[][]visitedJPS = jps.getVisitedForPainting();
                         img = imgFrameHandler.drawShortestPath(img, shortestPathAStar, shortestPathDijkstra, shortestPathJPS, visitedD, visitedA, visitedJPS);
                         /*
                         System.out.println("Visited vertices with Dijkstra: " + imgFrameHandler.getVisitedD() + shortestPathDijkstra.size());
