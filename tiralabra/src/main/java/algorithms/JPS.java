@@ -84,9 +84,6 @@ public class JPS implements SearchInterface {
             }
             
             jumped[startR][startC] = true;
-            /*
-            System.out.println("POLLED VERTICE: " +currentV + "heuristics" + 
-                       currentV.getHeuristic());*/
             jumpStraight(currentV);
         }
         return l;
@@ -94,7 +91,6 @@ public class JPS implements SearchInterface {
     
     private boolean foundTheEnd(Vertex v) {
         if (v.getRow() == endR && v.getColumn() == endC) {
-            //System.out.println("Found it!");
             List l = createShortestPath(v);
             this.l = l;
             return true;
@@ -144,8 +140,6 @@ public class JPS implements SearchInterface {
         int nextColumn = curV.getColumn() + movementCol;
         double newDist = curV.getDistance() + 1.0;
         
-        //System.out.println("Move vertically and hor Current vertex row: " + nextRow + " column: "  + nextColumn);
-            
         if (!checkLimits(map, nextRow, nextColumn, rowLen, colLen) || map[nextRow][nextColumn] == 0) {
             return false;
         }
@@ -188,10 +182,8 @@ public class JPS implements SearchInterface {
         int nextRow = currentV.getRow() + movementRow;
         int nextColumn = currentV.getColumn() + movementCol;
         double newDist = currentV.getDistance() + diagonalMovement;
-        
-        //System.out.println("Move diagonally after first Current vertex row: " + nextRow + " column: "  + nextColumn);
-            
-        if (!checkLimits(map, nextRow, nextColumn, rowLen, colLen) || map[nextRow][nextColumn] == 0) {
+          
+        if (!checkLimits(map, nextRow, nextColumn, rowLen, colLen)) {
             return false;
         }
         //if we already checked this vertex
@@ -199,12 +191,19 @@ public class JPS implements SearchInterface {
             return false;
         }
         
-             
+        if(map[nextRow][nextColumn] == 0) {
+            if (!jumped[currentV.getRow()][currentV.getColumn()]) {
+               heap.add(currentV);
+               jumped[currentV.getRow()][currentV.getColumn()] = true;
+               return false; 
+            }
+            return false;     
+        }
+    
         Vertex nextStep = new Vertex(nextRow, nextColumn, newDist, currentV);
         nextStep.setDistance(newDist);
         nextStep.setHeuristic(heuristics(endR, endC, nextRow, nextColumn));
         jumped[nextRow][nextColumn] = true;
-        
         
            // moving diagonal up , check right or left and down
         if ((movementRow == -1 && movementCol != 0)) {
@@ -219,38 +218,27 @@ public class JPS implements SearchInterface {
                 return false; // stop
             }
         }
-        
-        if (foundTheEnd(nextStep)) {
+
+        if (move(nextStep, 0, 1) || move(nextStep, -1, 0)) { // right and up
             return true;
-        } else {
-            if (move(nextStep, 0, 1) || move(nextStep, -1, 0)) { // right and up
-                return true;
-            }
-            
-            if (move(nextStep, 0, -1) || move(nextStep, -1, 0)) { // left and up
-                return true;
-            }
-            
-            if (move(nextStep, 0, -1) || move(nextStep, 1, 0)) { // left and down
-                return true;
-            }
-            
-            if (move(nextStep, 0, 1) || move(nextStep, 1, 0)) { // right and down
-                return true;
-            }
         }
+
+        if (move(nextStep, 0, -1) || move(nextStep, -1, 0)) { // left and up
+            return true;
+        }
+
+        if (move(nextStep, 0, -1) || move(nextStep, 1, 0)) { // left and down
+            return true;
+        }
+
+        if (move(nextStep, 0, 1) || move(nextStep, 1, 0)) { // right and down
+            return true;
+        }
+
        
         return moveDiagonalGrids(nextStep, movementRow, movementCol);
     }
-    
-    
-    //moving right or left, checking forced neighbours
-    //Logic is that when we are moving right or left, we have row = 0, but column +1 or -1
-    // When we made the check from top and below we change this so that
-    // row = +-1 and column = 0
-    // If we are moving down or up this is contrary:
-    // row = +1 and column = 0 – is the way we are moving
-    
+ 
     //moving right or left, checking forced neighbours
     public boolean checkForcedNeighboursFromTheTopAndBelow(Vertex curV, int lOrRCol) {
         int curRow = curV.getRow();

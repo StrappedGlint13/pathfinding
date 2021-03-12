@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ui;
 
 import algorithms.AStar;
@@ -151,6 +146,46 @@ public class Performance {
             }
         }
         performance = System.nanoTime() - performanceStart;
+    }
+    
+    
+    public void runPerformance(int[][]map, int startR, int startC, int endR, int endC, int n) {
+        Performance p = new Performance();
+        p.ProcessingTimes(map, startR, startC, endR, endC, n);
+        boolean daRatio = p.getDa(n);
+        boolean dajpsRatio = p.getDaJps(n);
+        boolean integerAccDa = p.sameIntADacc;
+        boolean integerAccDaJPS = p.sameIntADJPSacc;
+        long[] times = p.getTimes();
+                        
+        System.out.println("PERFORMANCE RESULTS. With input of: " + n);
+        System.out.println("");
+                        
+        System.out.println("Average running times in nanoseconds: ");
+        System.out.println("Dijkstra runs: " + times[0] + " nanoseconds");
+        System.out.println("A* runs: " + times[1] + " nanoseconds");
+        System.out.println("JPS runs: " + times[2] + " nanoseconds");
+        System.out.println("");
+                        
+        System.out.println("Average running times in seconds:");
+        System.out.println("Dijkstra runs: " + times[0]/1e9 + " seconds");
+        System.out.println("A* runs: " + times[1]/1e9 + " seconds");
+        System.out.println("JPS runs: " + times[2]/1e9 + " seconds");
+        System.out.println("");
+                        
+        System.out.println("Finding equally shortest paths:");
+        System.out.println("");
+        System.out.println("Dijkstra and A* found equally long paths to the accuracy of integers: " + integerAccDa);
+        System.out.println("All the algorithms found equally long paths to the accuracy of integers: : " + integerAccDaJPS);
+        System.out.println("");
+        System.out.println("Dijkstra and A* found exactly equal long paths: " + daRatio);
+        System.out.println("All the algorithms found exactly equal long paths: " + dajpsRatio);
+            if (!dajpsRatio && p.isSameIntADJPSacc()) {
+                System.out.println("All the algorithms found the shortest path to the accuracy of " + p.getSameDecimal() + ". decimals");
+            }
+        System.out.println("");
+        System.out.println("Performance time for input " + n + " runs took" + p.getPerformance()/1e9 + " seconds");
+        System.out.println("Performance tests ended. Click once for setup, then click twice for new searches.");
     }
 
     public int getSameDecimal() {

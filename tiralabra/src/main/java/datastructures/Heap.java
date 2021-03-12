@@ -37,6 +37,7 @@ public class Heap {
         }
     }
     
+    
     /**
     * Method swaps parent and child leaf.
     *
@@ -62,14 +63,14 @@ public class Heap {
         Vertex root = getRoot();
         Vertex lastElement = getLast();
         int k = 0;
-        this.heap[k] = lastElement;
+        heap[0] = lastElement;
         size--;
-        
+
         if (size == k) {
             this.heap[k] = null;
             return root;
         }
-
+        
         while(hasLeftChild(k)) {
             int rightChild = getRightChild(k);
             int betterChild = getLeftChild(k);
@@ -86,12 +87,14 @@ public class Heap {
             }
             k = betterChild;
         }
+        
         return root;
     } 
     
     /**
     * Method for expanding the heap, if necessary.
     *
+     * @return root
     */
     /*
     public void expandHeap() {
@@ -107,7 +110,9 @@ public class Heap {
     }
     
     public Vertex getLast() {
-        return this.heap[size-1];
+        Vertex v = this.heap[size-1];
+        this.heap[size-1] = null;
+        return v;
     }
     
     @Override

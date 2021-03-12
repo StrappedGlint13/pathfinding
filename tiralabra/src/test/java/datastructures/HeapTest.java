@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package datastructures;
 
 import org.junit.Before;
@@ -13,6 +8,7 @@ import static org.junit.Assert.*;
  *
  * @author matibrax
  */
+
 public class HeapTest {
     Heap testHeap = new Heap();
     Vertex testV1;
@@ -65,8 +61,8 @@ public class HeapTest {
     public void addingAndPollingWorks() {
         Heap testHeap = new Heap();
         Vertex testV5 = new Vertex(4, 5, 1, null);
-        Vertex testV6 = new Vertex(5, 6, (float) Math.sqrt(2), testV5);
-        Vertex testV7 = new Vertex(6, 7, (float) (Math.sqrt(2)+testV6.getDistance()), testV6);
+        Vertex testV6 = new Vertex(5, 6, Math.sqrt(2), testV5);
+        Vertex testV7 = new Vertex(6, 7, Math.sqrt(2)+testV6.getDistance(), testV6);
         Vertex testV8 = new Vertex(5, 6, 1, testV7);
         
         testHeap.add(testV6);
@@ -102,3 +98,4 @@ public class HeapTest {
         assertEquals(v.toString(), s);
     }
 }
+

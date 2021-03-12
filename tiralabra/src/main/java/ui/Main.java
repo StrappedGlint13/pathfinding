@@ -22,13 +22,13 @@ import javafx.stage.Stage;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import static javax.swing.JOptionPane.showMessageDialog;
 import javax.swing.JTextField;
 import java.awt.event.MouseAdapter;
+import static javafx.application.Application.launch;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.scene.layout.VBox;
 import javafx.stage.WindowEvent;
+import static javax.swing.JOptionPane.showMessageDialog;
 
 
 /**
@@ -46,6 +46,25 @@ public class Main extends Application {
         textfield.setPrefWidth(450);
         TextField inputField = new TextField("0");
        
+        // Search panel
+        HBox searchComponents = new HBox(50);
+        VBox textFields = new VBox(10);
+        VBox labels = new VBox(10);
+        searchComponents.setStyle("-fx-background-color:POWDERBLUE");
+        Label searchLabel = new Label("URL of the map (PNG)");
+        Label inputLabel = new Label("Input for the performance tests \n"
+                + "(optional)");
+        searchLabel.setFont(Font.font("Arial", FontWeight.BOLD, 15));
+        inputLabel.setFont(Font.font("Arial", FontWeight.BOLD, 15));
+        
+        labels.getChildren().addAll(searchLabel, inputLabel);
+        textFields.getChildren().addAll(textfield, inputField);
+        searchComponents.getChildren().addAll(labels, textFields, revealTheMapButton);
+        
+        Scene searchPanel = new Scene(searchComponents);
+        stage.setScene(searchPanel);
+        stage.show();
+        
         // https://movingai.com/benchmarks/street/Boston_0_512.png boston
         // https://movingai.com/benchmarks/maze/maze512-16-5.png laby
         // https://movingai.com/benchmarks/dao/brc204d.png 
@@ -69,41 +88,168 @@ public class Main extends Application {
         instrSetup.add(header, 0, 1);
         instrSetup.add(instructions, 0, 2);
         instrSetup.add(returnbutton, 0, 3);
-        instrSetup.setPrefSize(300, 300);
+        instrSetup.setPrefSize(300, 600);
         instrSetup.setAlignment(Pos.BASELINE_RIGHT);
         instrSetup.setVgap(10);
         instrSetup.setHgap(10);
         instrSetup.setPadding(new Insets(20, 20, 0, 20));
+        
+        GridPane manualSetup = new GridPane();
+        
+        Label header2 = new Label("Manual search");
+        header2.setFont(Font.font("Arial", FontWeight.BOLD,  20));
+        Label instructions2 = new Label("Here you are able to insert \n"
+                + "the parameters manually.\n");
+        
+        VBox manualParameters = new VBox();
+        
+        TextField xStart = new TextField("747");
+        Label xS = new Label("Start row");
+        TextField yStart = new TextField("237");
+        Label yS = new Label("Start column");   
+        TextField xEnd = new TextField("173");
+        Label xE = new Label("End row");
+        TextField yEnd = new TextField("867");
+        Label yE = new Label("Start column");
+        
+        Button manualButton = new Button("Start search");
+        manualParameters.getChildren().addAll(xS, xStart, yS, yStart, 
+                xE, xEnd, yE, yEnd);
+        manualSetup.add(header2, 0, 0);
+        manualSetup.add(instructions2, 0, 1);
+        manualSetup.add(manualParameters, 0, 2);
+        manualSetup.add(manualButton, 0, 3);
+        manualSetup.setVgap(10);
+        manualSetup.setHgap(10);
+        
+        instrSetup.add(manualSetup, 0, 4);
+        
         Scene instrPanel = new Scene(instrSetup);
         
-        
-        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent t) {
-                Platform.exit();
-                System.exit(0);
-            }
+        stage.setOnCloseRequest((WindowEvent e) -> {
+            Platform.exit();
+            System.exit(0);
         });
 
-        // Search panel
-        HBox searchComponents = new HBox(50);
-        VBox textFields = new VBox(10);
-        VBox labels = new VBox(10);
-        searchComponents.setStyle("-fx-background-color:POWDERBLUE");
-        Label searchLabel = new Label("URL of the map (PNG)");
-        Label inputLabel = new Label("Input for the performance tests \n"
-                + "(voluntary)");
-        searchLabel.setFont(Font.font("Arial", FontWeight.BOLD, 15));
-        inputLabel.setFont(Font.font("Arial", FontWeight.BOLD, 15));
-        
-        labels.getChildren().addAll(searchLabel, inputLabel);
-        textFields.getChildren().addAll(textfield, inputField);
-        searchComponents.getChildren().addAll(labels, textFields, revealTheMapButton);
-        
-        Scene searchPanel = new Scene(searchComponents);
-        stage.setScene(searchPanel);
-        stage.show();
+        manualButton.setOnAction(e -> {
+            String input = inputField.getText();
+            try {
+                int inPut = Integer.parseInt(input);
+            }catch (NumberFormatException ex) {
+                showMessageDialog(null, "Enter positive integer");
+            }
 
+            String url = textfield.getText();
+            int inPut = Integer.parseInt(input);
+            IOimage io = new IOimage();
+            ImageHandler imgHand = new ImageHandler();
+            BufferedImage img = io.readImage(url);
+
+            int height = 1024;
+            int width = 1024;
+
+            img = imgHand.makeNewFrame(img, height, width);
+            Map map = new Map(img, height, width);
+            int[][] pixelmap = map.generateMaps();
+              
+            JFrame manualFrame = new JFrame("Manual search:");
+
+            manualFrame.setSize(height, width);
+            JLabel label = new JLabel(new ImageIcon(img));
+            manualFrame.add(label);
+
+            JTextField coordinates = new JTextField();
+            coordinates.setText("Start point: not set"); 
+
+            int startX = Integer.parseInt(xStart.getText().toString());
+            int startY = Integer.parseInt(yStart.getText().toString());
+            int endX = Integer.parseInt(xEnd.getText().toString());
+            int endY = Integer.parseInt(yEnd.getText().toString());
+            
+            JTextField manualCoordinates = new JTextField();
+            manualCoordinates.setText("Shortest path from coordinates " 
+                + startX + " , " + startY + " to " + endX + " , " + endY);
+
+            Performance p = new Performance();
+            //Algorithms
+            Dijkstra dijkstra = new Dijkstra();
+            List shortestPathDijkstra = new List();
+
+            AStar aStar = new AStar();
+            List shortestPathAStar = new List();
+
+            JPS jps = new JPS();
+            List shortestPathJPS = new List();
+
+            System.out.println("Manual search:");
+            System.out.println("");
+
+            long startA = System.nanoTime();
+            shortestPathAStar = aStar.findPath(pixelmap, startX, startY, endX, endY);
+            long endA= System.nanoTime();
+
+            long startD = System.nanoTime();
+            shortestPathDijkstra = dijkstra.findPath(pixelmap, startX, startY, endX, endY);
+            long endD = System.nanoTime();
+
+            long startJPS = System.nanoTime();
+            shortestPathJPS = jps.findPath(pixelmap, startX, startY, endX, endY);
+            long endJPS = System.nanoTime();
+
+            System.out.println("A* runs " +((endA-startA)/1e9)+ " seconds");
+            System.out.println("Dijkstra runs " +((endD - startD)/1e9) + " seconds");
+            System.out.println("Jump Point Search path (JPS) runs " +((endJPS - startJPS)/1e9) + " seconds");
+            System.out.println("");
+
+            if (shortestPathAStar.isEmpty()) {
+                showMessageDialog(null, "You did not clicked the land!");
+                startX = -1;
+                startY = -1;
+                return;
+            }
+            System.out.println("Number of vertices in A* path: " + shortestPathAStar.size());
+            System.out.println("Distance from the start: " + shortestPathAStar.getFromIndex(0).getDistance());
+            System.out.println("");
+            if (shortestPathAStar == null) {
+                showMessageDialog(null, "There is no path between the starting and ending point you chose.");  
+                startX = -1;
+                startY = -1;
+                return;
+            }
+
+            System.out.println("Number of vertices in Dijkstra path: " + shortestPathDijkstra.size());
+            System.out.println("Distance from the start: " + shortestPathDijkstra.getFromIndex(0).getDistance());
+            System.out.println("");
+            System.out.println("Number of vertices in JPS: " + shortestPathJPS.size());
+            System.out.println("Distance from the start: " + shortestPathJPS.getFromIndex(0).getDistance());
+            System.out.println("");
+            System.out.println("Manual search ended.");
+            System.out.println("");
+
+            if (inPut > 0 && inPut != 1 && inPut != 2) {
+                p.runPerformance(pixelmap, startX, startY, endX, endY, inPut);
+            }   
+
+            /*
+            BufferedImage img = io.readImage(url);
+            img = imgFrameHandler.makeNewFrame(img, height, width);
+            */
+
+
+            boolean[][]visitedD = dijkstra.getVisited();
+            boolean[][]visitedA = aStar.getVisited();
+            boolean[][]visitedJPS = jps.getVisited();
+            img = imgHand.drawShortestPath(img, shortestPathAStar, shortestPathDijkstra, shortestPathJPS, visitedD, visitedA, visitedJPS);
+            
+            returnbutton.setOnAction(o -> {
+                manualFrame.setVisible(false);
+                stage.setScene(searchPanel);
+            });
+            
+            manualFrame.setVisible(true);
+            stage.setScene(instrPanel);
+        });
+        
         revealTheMapButton.setOnAction(e -> {
             String input = inputField.getText();
             try {
@@ -111,7 +257,7 @@ public class Main extends Application {
             }catch (NumberFormatException ex) {
                 showMessageDialog(null, "Enter positive integer");
             }
-            
+
             String url = textfield.getText();
             int inPut = Integer.parseInt(input);
             IOimage io = new IOimage();
@@ -131,9 +277,9 @@ public class Main extends Application {
             JLabel label = new JLabel(new ImageIcon(img));
             frame.add(label);
 
-            JTextField coordinates = new JTextField();;
+            JTextField coordinates = new JTextField();
             coordinates.setText("Start point: not set"); 
-            frame.add(coordinates,BorderLayout.SOUTH);
+              
             returnbutton.setOnAction(o -> {
                 frame.setVisible(false);
                 stage.setScene(searchPanel);
@@ -141,13 +287,13 @@ public class Main extends Application {
             
             frame.addMouseListener(new MouseAdapter() {
                 int clicked = 0;
-                int startRow = 180;
-                int startColumn = 176;
+                int startRow = 0;
+                int startColumn = 0;
                 int searchNumber = 1;
                 @Override
                 public void mouseClicked(MouseEvent e) { 
-                    int x = 977; //e.getX();
-                    int y = 21;   //e.getY();
+                    int x = e.getX();
+                    int y = e.getY();
                     ImageHandler imgFrameHandler = new ImageHandler();
                     
                     if (clicked == 1) {
@@ -155,6 +301,7 @@ public class Main extends Application {
                         coordinates.setText("Shortest path from coordinates " 
                             + startRow + " , " + startColumn + " to " + x + " , " + y);
                         
+                        Performance p = new Performance();
                         //Algorithms
                         Dijkstra dijkstra = new Dijkstra();
                         List shortestPathDijkstra = new List();
@@ -213,7 +360,7 @@ public class Main extends Application {
                         System.out.println("");
                         
                         if (inPut > 0 && inPut != 1 && inPut != 2) {
-                            runPerformance(pixelmap, startRow, startColumn, x, y, inPut);
+                            p.runPerformance(pixelmap, startRow, startColumn, x, y, inPut);
                         }             
                         BufferedImage img = io.readImage(url);
                         img = imgFrameHandler.makeNewFrame(img, height, width);
@@ -229,7 +376,7 @@ public class Main extends Application {
                         System.out.println("Visited vertices with A*: " + imgFrameHandler.getVisitedA() + shortestPathAStar.size());
                         System.out.println("Visited vertices with JPS: " + imgFrameHandler.getVisitedJPS() + shortestPathJPS.size());
                         */
-                        
+                        img = imgHand.makeNewFrame(img, height, width);
                         JFrame shortestPathFrame = new JFrame("Search nro. "+ searchNumber);
                         
                         shortestPathFrame.setSize(height, width);
@@ -247,8 +394,8 @@ public class Main extends Application {
                                 searchNumber++;
                             }});
                     } else if (e.getClickCount() == 1) {
-                        startRow = 287;
-                        startColumn = 974;  
+                        startRow = e.getX(); //START
+                        startColumn = e.getY(); 
                         coordinates.setText("Start point: " + startRow + " , " + startColumn);
                         clicked++;
                     }
@@ -270,42 +417,4 @@ public class Main extends Application {
 
     }
     
-    public void runPerformance(int[][]map, int startR, int startC, int endR, int endC, int n) {
-        Performance p = new Performance();
-        p.ProcessingTimes(map, startR, startC, endR, endC, n);
-        boolean daRatio = p.getDa(n);
-        boolean dajpsRatio = p.getDaJps(n);
-        boolean integerAccDa = p.sameIntADacc;
-        boolean integerAccDaJPS = p.sameIntADJPSacc;
-        long[] times = p.getTimes();
-                        
-        System.out.println("PERFORMANCE RESULTS. With input of: " + n);
-        System.out.println("");
-                        
-        System.out.println("Average running times in nanoseconds: ");
-        System.out.println("Dijkstra runs: " + times[0] + " nanoseconds");
-        System.out.println("A* runs: " + times[1] + " nanoseconds");
-        System.out.println("JPS runs: " + times[2] + " nanoseconds");
-        System.out.println("");
-                        
-        System.out.println("Average running times in seconds:");
-        System.out.println("Dijkstra runs: " + times[0]/1e9 + " seconds");
-        System.out.println("A* runs: " + times[1]/1e9 + " seconds");
-        System.out.println("JPS runs: " + times[2]/1e9 + " seconds");
-        System.out.println("");
-                        
-        System.out.println("Finding equally shortest paths:");
-        System.out.println("");
-        System.out.println("Dijkstra and A* found equally long paths to the accuracy of integers: " + integerAccDa);
-        System.out.println("All the algorithms found equally long paths to the accuracy of integers: : " + integerAccDaJPS);
-        System.out.println("");
-        System.out.println("Dijkstra and A* found exactly equal long paths: " + daRatio);
-        System.out.println("All the algorithms found exactly equal long paths: " + dajpsRatio);
-            if (!dajpsRatio && p.isSameIntADJPSacc()) {
-                System.out.println("All the algorithms found the shortest path to the accuracy of " + p.getSameDecimal() + ". decimals");
-            }
-        System.out.println("");
-        System.out.println("Performance time for input " + n + " runs took" + p.getPerformance()/1e9 + " seconds");
-        System.out.println("Performance tests ended. Click once for setup, then click twice for new searches.");
-    }
 }

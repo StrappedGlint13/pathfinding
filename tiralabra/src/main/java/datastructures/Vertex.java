@@ -58,14 +58,8 @@ public class Vertex {
     }
     
     public int compareTo(Vertex v2) {
-        //System.out.print("heuristic " + heuristic);
-        //System.out.println("vs V2: " + v2.getHeuristic());
         if (this.heuristic > 0 || v2.getHeuristic() > 0) {
             return compareWithHeuristics(v2);
-        }
-        
-        if ((this.heuristic > 0 && this.distance == 0) || (v2.getHeuristic() > 0 && this.distance == 0)) {
-            return compareToJPS(v2);
         }
         
         if (this.distance < v2.distance) {
@@ -76,17 +70,6 @@ public class Vertex {
             return 0;
         }
     }
-    
-    public int compareToJPS(Vertex v2) {
-        if (this.heuristic < v2.heuristic) {
-            return -1;
-        } else if (this.heuristic > v2.heuristic) {
-            return 1;
-        } else {
-            return 0;
-        }
-    }
-    
     public int compareWithHeuristics(Vertex v2) {
         double difference = this.heuristic - v2.getHeuristic();
         double distance = this.distance - v2.getDistance();

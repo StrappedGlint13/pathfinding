@@ -15,6 +15,7 @@ import static org.junit.Assert.*;
  *
  * @author matibrax
  */
+
 public class JPSTest {
     JPS jps;
     List vertices;
@@ -28,14 +29,11 @@ public class JPSTest {
     public void setUp() {
         this.heap = new Heap();
         jps = new JPS();
-        testmap = new int[][]{
-            {1, 1, 1, 1, 1, 1, 1, 1},
-        };
         vertices = new List();
     }
     
     @Test
-    public void algoFindsTheForcedNeigboursFromDiagonalRightAndLeft() {
+    public void algoFindsForcedNeigboursDiagonalRightAndLeft() {
         this.heap = new Heap();
         testmap = new int[][]{
             {1, 1, 1},
@@ -43,10 +41,8 @@ public class JPSTest {
             {1, 1, 1},
         };
        
-       // from left bottom to right above
+        // from left bottom to right above
         vertices = jps.findPath(testmap, 2, 0, 0, 2);
-        //assertEquals(2, vertices.size());
-   
         assertEquals(2, vertices.size());
         assertEquals(0, jps.getHeap().getSize());
         
@@ -71,7 +67,7 @@ public class JPSTest {
         vertices = jps.findPath(testmap, 0, 2, 2, 0);
        
         assertEquals(2, vertices.size());
-        assertEquals(0, jps.getHeap().getSize());    
+        assertEquals(0, jps.getHeap().getSize());   
     }
     
     
@@ -85,13 +81,6 @@ public class JPSTest {
         };
        
         vertices = jps.findPath(testmap, 2, 0, 0, 2);
-        //assertEquals(2, vertices.size());
-   
-        for (int i = 0; i < jps.getHeap().getSize(); i++) {
-           System.out.println("HEAP from index:"+ i + " " +jps.getHeap().getVertexFromIndex(i));
-            System.out.println("Previous" + jps.getHeap().getVertexFromIndex(i).getPrevious());
-            System.out.println("Heuristics" + jps.getHeap().getVertexFromIndex(i).getHeuristic());
-        }
         assertEquals(2, vertices.size());
         assertEquals(0, jps.getHeap().getSize());
         
@@ -121,22 +110,6 @@ public class JPSTest {
        
         assertEquals(2, vertices.size());
         assertEquals(0, jps.getHeap().getSize());
-
-     
-        //assertEquals(2, vertices.size());
-        /*
-        for (int i = 0; i < jps.getHeap().getSize(); i++) {
-           System.out.println("HEAP from index:"+ i + " " +jps.getHeap().getVertexFromIndex(i));
-            System.out.println("Previous" + jps.getHeap().getVertexFromIndex(i).getPrevious());
-            System.out.println("Heuristics" + jps.getHeap().getVertexFromIndex(i).getHeuristic());
-        }
-        vertices = jps.findPath(testmap, 0, 2, 0, 0);
-        this.heap = new Heap();
-        assertEquals(2, vertices.size());
-        assertEquals(1, jps.getHeap().getSize());
-        assertEquals(2, jps.getHeap().getVertexFromIndex(0).getRow());
-        assertEquals(0, jps.getHeap().getVertexFromIndex(0).getColumn());
-        */
     }
     
  
@@ -149,13 +122,6 @@ public class JPSTest {
             {1, 0, 1, 0, 1, 1},
         };
         vertices = jps.findPath(testmap, 1, 0, 1, 5);
-        //assertEquals(2, vertices.size());
-        /*
-        for (int i = 0; i < jps.getHeap().getSize(); i++) {
-           System.out.println("HEAP from index:"+ i + " " +jps.getHeap().getVertexFromIndex(i));
-            System.out.println("Previous" + jps.getHeap().getVertexFromIndex(i).getPrevious());
-            System.out.println("Heuristics" + jps.getHeap().getVertexFromIndex(i).getHeuristic());
-        }*/
         assertEquals(5, vertices.size());
         assertEquals(0, jps.getHeap().getSize());
     }
@@ -172,24 +138,7 @@ public class JPSTest {
             {0, 1, 0, 1, 1, 1, 1},
             {0, 1, 0, 1, 0, 1, 1},
             {0, 1, 0, 1, 1, 1, 1},
-        };
-        /*
-        vertices = jps.findPath(testmap, 3, 0, 3, 6);
-       
-        for (int i = 0; i < jps.getHeap().getSize(); i++) {
-           System.out.println("HEAP from index:"+ i + " " +jps.getHeap().getVertexFromIndex(i));
-           System.out.println("Previous" + jps.getHeap().getVertexFromIndex(i).getPrevious());
-           System.out.println("Heuristics" + jps.getHeap().getVertexFromIndex(i).getHeuristic());
-        }*/
-       /*
-        assertEquals(6, vertices.size());
-        assertEquals(2, jps.getHeap().getSize());
-        
-        vertices = jps.findPath(testmap, 7, 6, 0, 6);
-        
-        assertEquals(7, vertices.size());
-        assertEquals(0, jps.getHeap().getSize());
-         */
+        }; 
         vertices = jps.findPath(testmap, 7, 1, 0, 6);
        
         assertEquals(8, vertices.size());
@@ -208,13 +157,6 @@ public class JPSTest {
             { 0, 1, 1, 0, 1, 1}, //4
             //0//1 //2 //3//4//5
         };
-        /*
-        vertices = jps.findPath(testmap, 0, 0, 0, 11); 
-        assertEquals(11, vertices.size()); 
-        
-        vertices = jps.findPath(testmap, 0, 0, 0, 11); 
-        assertEquals(11, vertices.size()); 
-        */
         vertices = jps.findPath(testmap, 4, 5, 4, 1);
         assertEquals(4, vertices.size()); 
        
@@ -272,111 +214,49 @@ public class JPSTest {
         };
       
         vertices = jps.findPath(testmap, 11, 0, 0, 11); 
-        assertEquals(13, vertices.size());   
+        assertEquals(13, vertices.size());  
+        
+        vertices = jps.findPath(testmap, 0,11 , 11, 0); 
+        assertEquals(13, vertices.size());
     }
-     
-    /*
-    // Here are some passed test regarding to moving, these can be used maybe on later purposes.
+      
     @Test
-    public void testMovingRightAndLeft() {
+    public void testFindingNeighboursNearTheWall() {
         testmap = new int[][]{
             {1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 0, 1, 1},
+            {1, 1, 1, 1, 1, 0, 1, 1},
+            {1, 1, 1, 1, 1, 0, 1, 1},
+            {1, 1, 1, 1, 1, 0, 1, 1},
+            {1, 1, 1, 1, 1, 0, 1, 1},// 5
+            {1, 1, 1, 1, 1, 0, 1, 1},
+            {1, 1, 1, 1, 1, 0, 1, 1},
+            {1, 1, 1, 1, 1, 0, 1, 1},
             {1, 1, 1, 1, 1, 1, 1, 1},
-            {1, 1, 1, 1, 1, 1, 1, 1},
-            {1, 1, 1, 1, 1, 1, 1, 1},
-            {1, 1, 1, 1, 1, 1, 1, 1},
-            {1, 1, 1, 1, 1, 1, 1, 1},
-            {1, 1, 1, 1, 1, 1, 1, 1},
-            {1, 1, 0, 1, 1, 1, 1, 1},
         };
-        vertices = jps.findPath(testmap, 3, 0, 3, 7);
-        assertEquals(7, vertices.size()); 
-        
-        vertices = jps.findPath(testmap, 7, 7, 7, 3);
-        assertEquals(4, vertices.size());
-    }
-    
-    @Test
-    public void testMovingUpAndDown() {
+        vertices = jps.findPath(testmap, 5, 3, 5, 7);
+        assertEquals(8, vertices.size()); 
+        assertEquals(3, jps.getHeap().getSize());
+        /*
+        vertices = jps.findPath(testmap, 5, 7, 5, 3);
+        assertEquals(8, vertices.size()); 
+        assertEquals(2, jps.getHeap().getSize());
         testmap = new int[][]{
-            {1},
-            {1},
-            {1},
-            {1},
-            {1},
-            {1},
-            {1},
-            {1},
-            {1},
-            {1},
-            {1},
-            {1},
+            {1, 1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 0, 0, 0, 0, 0, 0, 0, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1, 1},// 6
+            {1, 1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 1, 1, 1},
         };
-        vertices = jps.findPath(testmap, 0, 0, 11, 0);
-        assertEquals(11, vertices.size()); 
         
-        vertices = jps.findPath(testmap, 11, 0, 0, 0);
-        assertEquals(11, vertices.size());
-    }
-    
-    @Test
-    public void testmovingtogether() {
-        testmap = new int[][]{
-            {1, 1, 1, 1, 1, 1, 1, 1},
-            {1, 1, 1, 1, 1, 1, 1, 1},
-            {1, 1, 1, 1, 1, 1, 1, 1},
-            {1, 1, 1, 1, 1, 1, 1, 1},
-            {0, 1, 1, 1, 1, 1, 1, 1},
-            {1, 1, 1, 1, 1, 1, 1, 1},
-            {1, 1, 1, 1, 1, 1, 1, 1},
-            {1, 1, 1, 0, 1, 1, 1, 1},
-        };
-        //right diagonally and up
-        vertices = jps.findPath(testmap, 7, 0, 1, 5);
-        assertEquals(6, vertices.size());
-        
-        //right diagonally and right
-        vertices = jps.findPath(testmap, 6, 1, 3, 7);
-        assertEquals(6, vertices.size());
-        
-        // left diagonally
-        vertices = jps.findPath(testmap, 5, 3, 0, 0);
-        assertEquals(5, vertices.size());
-        
-        System.out.println("test");
-        //left diagonally up, left and diagonally down
-        vertices = jps.findPath(testmap, 7, 7, 7, 2);
-        assertEquals(10, vertices.size());
-           
-    }
-    
-    
-    @Test
-    public void testMovingManhattanWay() {
-        testmap = new int[][]{
-            {1, 0, 0, 1, 0, 1, 1, 1},
-            {1, 0, 0, 1, 0, 1, 1, 1},
-            {1, 0, 0, 1, 0, 1, 1, 1},
-            {1, 0, 0, 1, 0, 0, 0, 0},
-            {1, 1, 1, 1, 1, 1, 1, 1},
-            {0, 0, 0, 1, 0, 0, 0, 0},
-            {0, 0, 0, 1, 0, 0, 0, 0},
-            {0, 0, 0, 1, 0, 0, 0, 0},
-        };
-        vertices = jps.findPath(testmap, 4, 3, 7, 3);
-        assertEquals(3, vertices.size()); 
-    }
-    
-
-    
-    
-    @Test
-    public void algoDontFindThePaht() {
-        testmap = new int[][]{
-            {1, 1, 1, 0, 1, 1, 1, 1},
-        };
-        vertices = jps.findPath(testmap, 0, 0, 0, 5);
-        assertEquals(0, vertices.size());
-    }
+        vertices = jps.findPath(testmap, 6, 4, 0, 4);
+        assertEquals(8, vertices.size()); 
+        assertEquals(2, jps.getHeap().getSize());
 */
+    }
 }
