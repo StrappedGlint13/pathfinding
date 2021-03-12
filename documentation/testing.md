@@ -28,7 +28,7 @@ That depends what version of gradle user has.
 
 Tests can be run via netbeans from navigation bar `Run` and then `Test project` or shortcut `Alt+F6`.
 
-## Test results
+## Unit Test results
 
 Test results can be generated from `pathing/tiralabra` subfolder:
 
@@ -36,14 +36,13 @@ Test results can be generated from `pathing/tiralabra` subfolder:
 
 These results can be viewed with chromium-browser (f.ex) from `build/reports/jacoco/test/html/`. 
 
-PIC here
+<img src="https://github.com/StrappedGlint13/pathfinding/blob/main/documentation/images/jacocoTestReport.png" width="300">
 
 # Performance testing
 
-Performance is tested with different sized maps from 216x216=46656 (n), 512x512=262144(n) and 1024x1024=1048576(n) pixelmaps. Measurement is taken from nodes that have been visited, running time and distance between the starting and ending point. Results are printed to the console. 
+Performance is tested with different sized maps from 216x216=46656 (|V|), 512x512=262144(|V|) and 1024x1024=1048576(|V|) pixelmaps. Measurement is taken from running times for the pathfindings. We will cover average times for different sizes of runs. Performance testing is possible also to to from the user interface, as user can set how many runs user wants. 
 
-We are comparing results between the algorithms and also between the data structures that has been made (f.ex. heap) and with Javas libraries.
+We are comparing results between the algorithms below.
 
-Here below is graphic of the performance results on the completed program:
 
 Results of the comparsion showed that..

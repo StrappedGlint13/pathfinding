@@ -26,6 +26,9 @@ import javax.swing.JTextField;
 import java.awt.event.MouseAdapter;
 import static javafx.application.Application.launch;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.layout.VBox;
 import javafx.stage.WindowEvent;
 import static javax.swing.JOptionPane.showMessageDialog;
@@ -47,6 +50,16 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage stage) throws Exception {
+        Label urlForBenchmark = new Label("https://movingai.com/benchmarks/grids.html");
+        Hyperlink link = new Hyperlink();
+        link.setText("http://example.com");
+        link.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                System.out.println("This link is clicked");
+            }
+        });
+
         Button revealTheMapButton = new Button("Reveal the map");
         TextField textfield = new TextField("https://www.movingai.com/benchmarks/street/Berlin_0_1024.png");
         textfield.setPrefWidth(450);
@@ -56,13 +69,15 @@ public class Main extends Application {
         VBox textFields = new VBox(10);
         VBox labels = new VBox(10);
         searchComponents.setStyle("-fx-background-color:POWDERBLUE");
+        Label urlLabel = new Label("Get the benchmark map here, choose PNG-ending image");
         Label searchLabel = new Label("URL of the map (PNG)");
         Label inputLabel = new Label("Input for the performance tests \n"
                 + "(optional)");
+        urlLabel.setFont(Font.font("Arial", FontWeight.BOLD, 15));
         searchLabel.setFont(Font.font("Arial", FontWeight.BOLD, 15));
         inputLabel.setFont(Font.font("Arial", FontWeight.BOLD, 15));
-        labels.getChildren().addAll(searchLabel, inputLabel);
-        textFields.getChildren().addAll(textfield, inputField);
+        labels.getChildren().addAll(urlLabel, searchLabel, inputLabel);
+        textFields.getChildren().addAll(urlForBenchmark, textfield, inputField);
         searchComponents.getChildren().addAll(labels, textFields, revealTheMapButton);
         
         Scene searchPanel = new Scene(searchComponents);
