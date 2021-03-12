@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package algorithms;
 
 import datastructures.Heap;
@@ -40,12 +35,12 @@ public class JPSTest {
             {0, 1, 0},
             {1, 1, 1},
         };
-        /*
+        
         // from left bottom to right above
         vertices = jps.findPath(testmap, 2, 0, 0, 2);
         assertEquals(2, vertices.size());
         assertEquals(0, jps.getHeap().getSize());
-        */
+        
         // from right bottom to left up
         this.heap = new Heap();
         vertices = jps.findPath(testmap, 2, 2, 0, 0);
@@ -190,7 +185,7 @@ public class JPSTest {
         assertEquals(16, vertices.size()); 
         
         vertices = jps.findPath(testmap, 11, 7, 11, 0); 
-        assertEquals(15, vertices.size()); 
+        assertEquals(16, vertices.size()); 
         
         vertices = jps.findPath(testmap, 11, 4, 0, 0); 
         assertEquals(11, vertices.size());  
@@ -236,8 +231,8 @@ public class JPSTest {
         };
         vertices = jps.findPath(testmap, 5, 3, 5, 7);
         assertEquals(8, vertices.size()); 
-        assertEquals(3, jps.getHeap().getSize());
-        /*
+        assertEquals(2, jps.getHeap().getSize());
+        
         vertices = jps.findPath(testmap, 5, 7, 5, 3);
         assertEquals(8, vertices.size()); 
         assertEquals(2, jps.getHeap().getSize());
@@ -256,7 +251,6 @@ public class JPSTest {
         
         vertices = jps.findPath(testmap, 6, 4, 0, 4);
         assertEquals(8, vertices.size()); 
-        assertEquals(2, jps.getHeap().getSize());
-*/
+        assertEquals(1, jps.getHeap().getSize());
     }
 }

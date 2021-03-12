@@ -31,7 +31,7 @@ public class Performance {
     public Performance () {
     }
     
-    public void ProcessingTimes(int[][]map, int startR, int startC, int endR, int endC, int n) {
+    public void processingTimes(int[][]map, int startR, int startC, int endR, int endC, int n) {
         long performanceStart = System.nanoTime();
         Dijkstra dijkstra = new Dijkstra();
         List shortestPathDijkstra = new List();
@@ -86,7 +86,7 @@ public class Performance {
 
         for (int i = 0; i < n; i++) {
             if (distances[i] == distances[daPointer+i]) {
-                 daSame++;
+                daSame++;
             }
             
             if (distances[i] == distances[daJpsPointer] && distances[daPointer+i] == distances[daJpsPointer]) {
@@ -151,7 +151,7 @@ public class Performance {
     
     public void runPerformance(int[][]map, int startR, int startC, int endR, int endC, int n) {
         Performance p = new Performance();
-        p.ProcessingTimes(map, startR, startC, endR, endC, n);
+        p.processingTimes(map, startR, startC, endR, endC, n);
         boolean daRatio = p.getDa(n);
         boolean dajpsRatio = p.getDaJps(n);
         boolean integerAccDa = p.sameIntADacc;
@@ -180,9 +180,9 @@ public class Performance {
         System.out.println("");
         System.out.println("Dijkstra and A* found exactly equal long paths: " + daRatio);
         System.out.println("All the algorithms found exactly equal long paths: " + dajpsRatio);
-            if (!dajpsRatio && p.isSameIntADJPSacc()) {
-                System.out.println("All the algorithms found the shortest path to the accuracy of " + p.getSameDecimal() + ". decimals");
-            }
+        if (!dajpsRatio && p.isSameIntADJPSacc()) {
+            System.out.println("All the algorithms found the shortest path to the accuracy of " + p.getSameDecimal() + ". decimals");
+        }
         System.out.println("");
         System.out.println("Performance time for input " + n + " runs took" + p.getPerformance()/1e9 + " seconds");
         System.out.println("Performance tests ended. Click once for setup, then click twice for new searches.");
