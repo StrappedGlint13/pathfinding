@@ -26,9 +26,6 @@ import javax.swing.JTextField;
 import java.awt.event.MouseAdapter;
 import static javafx.application.Application.launch;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.control.Hyperlink;
 import javafx.scene.layout.VBox;
 import javafx.stage.WindowEvent;
 import static javax.swing.JOptionPane.showMessageDialog;
@@ -86,6 +83,21 @@ public class Main extends Application {
                 + "see your searches with additional info\n"
                 + "about the algorithms \n"
                 + "at the command line!");
+        Label coloursHeader = new Label("Colours:");
+        coloursHeader.setFont(Font.font("Arial", FontWeight.BOLD,  20));
+        Label colourInstructions = new Label("Blue line is Dijkstra\n"
+                + "Red line is A* \n"
+                + "Yellow line is JPS \n\n"
+                + "If Dijkstra and A* are running \n"
+                + "the same path, line is Purple. \n"
+                + "If there are only JPS and Dijkstra,\n"
+                + "A* is running with JPS.\n\n"
+                + "The red large are is the locations\n"
+                + "Dijkstra and A* have visited and\n"
+                + "estimated.\n"
+                + "Dijkstra have only visited the blue area.\n"
+                + "JPS 'forced neighbours' can not be seen,\n"
+                + "as those are only 1 pixel big.");
         GridPane instrSetup = new GridPane();
         Button returnbutton = new Button("Return to the start window");
         
@@ -93,7 +105,7 @@ public class Main extends Application {
         instrSetup.add(header, 0, 1);
         instrSetup.add(instructions, 0, 2);
         instrSetup.add(returnbutton, 0, 3);
-        instrSetup.setPrefSize(300, 600);
+        instrSetup.setPrefSize(320, 900);
         instrSetup.setAlignment(Pos.BASELINE_RIGHT);
         instrSetup.setVgap(10);
         instrSetup.setHgap(10);
@@ -127,7 +139,9 @@ public class Main extends Application {
         manualSetup.setVgap(10);
         manualSetup.setHgap(10);
         
-        instrSetup.add(manualSetup, 0, 4);
+        instrSetup.add(coloursHeader, 0, 4);
+        instrSetup.add(colourInstructions, 0, 5);
+        instrSetup.add(manualSetup, 0, 6);
         
         Scene instrPanel = new Scene(instrSetup);
         
@@ -166,10 +180,10 @@ public class Main extends Application {
             JTextField coordinates = new JTextField();
             coordinates.setText("Start point: not set"); 
 
-            int startX = Integer.parseInt(xStart.getText().toString());
-            int startY = Integer.parseInt(yStart.getText().toString());
-            int endX = Integer.parseInt(xEnd.getText().toString());
-            int endY = Integer.parseInt(yEnd.getText().toString());
+            int startX = Integer.parseInt(xStart.getText());
+            int startY = Integer.parseInt(yStart.getText());
+            int endX = Integer.parseInt(xEnd.getText());
+            int endY = Integer.parseInt(yEnd.getText());
             
             if (pixelmap[startX][startY] == 0 || pixelmap[endX][endY] == 0) {
                 showMessageDialog(null, "This is obstacle!");

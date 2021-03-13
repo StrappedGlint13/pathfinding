@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package algorithms;
 
 import datastructures.Heap;
@@ -419,7 +414,7 @@ public class JPS implements SearchInterface {
     */
     
     private double heuristics(int endX, int endY, int currentX, int currentY) {
-        // Euclidean distance for A*
+        // Euclidean distance for JPS
         return Math.sqrt(((currentX-endX)*(currentX-endX)) + (currentY-endY)*(currentY-endY));
     }
     

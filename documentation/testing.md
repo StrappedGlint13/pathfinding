@@ -112,8 +112,14 @@ Berlin shortest path – 1539.8023074035596 & London shortest path – 1598.4276
 
 <img src="https://github.com/StrappedGlint13/pathfinding/blob/main/documentation/images/londonBerlin.png" width="800">
 
-Biggest differences were at the mazes, but there can be seen that the algorithms found the shortest paths with own eyes. In addition, the difference between the scenes and the projects algorithms are so big, that the resolution probelm is clear as it can't be that big difference.
+Biggest differences were at the mazes, but there can be seen that the algorithms found the shortest paths with own eyes. In addition, the difference between the scenes and the projects algorithms are so big, that the resolution probelm is clear as the difference can't be that big.
 
-## 
+## Conclusions
 
-At the implementation document, there is more about how to get the input for the project properly, if the main goal is to compare distance with the scenes distances.  
+According the performance results, the algorithms finds the shortest path in most cases. There are several issues with JPS in the more open fields and large obstacles containing maps, where it performs more greedily. At the mazes it's always finding the shortest path according tests. 
+
+Dijkstra is slowest among the algorithms in almost every maps. At the mazes A* seems to have more trouble, as the heuristic function becomes in useless due to large amount of walls, and especially large routes Dijkstra performns better. JPS is much more faster than these two. It can be seen from the diagrams produced at this document. 
+
+According these two diagrams, input 10 runs most slower, and for some reason 100 feed are the fastest, as 1000 feed runs slower than 100. The differences are quite small, but still.
+
+There are more conclusions regarding performance tests at the implementation document at the improvements and flaws.

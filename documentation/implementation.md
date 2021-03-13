@@ -63,9 +63,19 @@ List class is here for replacing utils Arraylist. It contains a list of vertices
 2.  Get: getting vertex with given index. This takes also only O(1) time. 
 3.  IsEmpty: Checking if the first element of list is empty. O(1).
 
-# Possible flaws and improvements
+# Possible flaws, improvements & final words
 
 Binary heap is quite good, but With Fibonacci heap, we could improve time complexity to O(nlog(|n| + |m|)) even better. This could make these algorithms very efficient, as all the algorithms are using the heap for comparsion operations. 
+
+JPS is working perfectly at the mazes, but it still have some issues with the more open spaces and obstacles as noted at the testing document. In a few cases it chooses more greedy option. It is more faster than A* and Dijkstra and with a little bit more work, it would be perfect in every maps, referring to the shortest path finding problem.
+
+Resolution problem occurred at the final day of the project and second day of the performance testing. Before the demo, I had not noticed the scen-files at the benchmark site. Because every maps are not more than 1024x1024, my program can not make excactly valid comparsions with the benchmark maps. These can be somehow made when resizing the png image from 1073x1073 => 1024x1024, and comparing with these. There are very small decimal differences but it can be said that these algorithms are finding the shortest ways (except JPS in a few cases). 
+
+Due to this problem, I will say that my approach was not the best way to do this project, file reader would have been better way. Program is well working and giving the shortest paths 2/3 and almost in every situation 3/3, but not exactly comparable to the scenes in benchmark maps. Additionally, JPS can be considered as a greedy algorithms in some maps that jumping will give some alternative path. 
+
+Thus there could be class of FileReader and this could be implemented in the GUI. Additionally, the GUI should be refactored, but that was not the focus on this course. 
+
+This was very great project and I learned a lot about pathfinding algorithms and also about the 2D-graphics and data structures especially heap, list and recursion. In addition the demo event was intriguing as there were many interesting algorithm solutions! 
 
 # Sources
 
