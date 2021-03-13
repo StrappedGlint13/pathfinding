@@ -1,14 +1,14 @@
 # Testing
 
-# Unit testing with JUnit
+## Unit tests with JUnit
 
 There are comprehensive automated JUnit tests that tests the program is working correctly all the time. This tests don't focus on testing user inteface and its classes as these are mainly built with variety of ready-made Java libraries. Unit test line-coverage can be found here below with JacocoTestReport, or from the repository. 
 
-## Algorithms
+### Algorithms
 
 Algorithms are tested with AStarTest, DijkstraTest  & JPSTest test-classes. 
 
-## Data Structures
+### Data Structures
 
 Heap is tested with HeapTest test class and List is tested with ListTest class. 
 
@@ -38,11 +38,13 @@ These results can be viewed with chromium-browser (f.ex) from `build/reports/jac
 
 <img src="https://github.com/StrappedGlint13/pathfinding/blob/main/documentation/images/jacocoTestReport.png" width="600">
 
-# Performance testing
+## Performance testing
 
-Performance is tested with different sized maps from 216x216=46656 (|V|), 512x512=262144(|V|) and 1024x1024=1048576(|V|) pixelmaps. Measurement is taken from running times for the pathfindings. We will cover average times for different sizes of runs. Performance testing is possible also to to from the user interface, as user can set how many runs user wants. 
+Performance is tested with different sized maps from 216x216=46656 (|V|), 512x512=262144(|V|) and 1024x1024=1048576(|V|) pixelmaps. Measurement is taken from running times for the pathfindings. We will cover average times for different sizes of runs. Performance testing is possible also to to from the user interface, as user can set how many runs user wants.
 
-Here are some results about the performance tests with several different maps with different sizes. All the runs has been made from the command prompt, and all the programs are closed, unless one mozzilla browser (for accounting):
+Here are some results about the performance tests with several different maps with different sizes. There are also some data: comparsion between the benchmark scenarios and total running times. 
+
+The highest input were 10 000 runs, that took nearly 45 minutes to run, and the computer were a bit exhausted after the run. Thats why the biggest inputs were 1000. All the runs has been made from the command prompt, and all the programs are closed, unless one mozzilla browser (for accounting):
 
 
 | Map                 | Size        | Feed  | Algorithm | Average time in sec. | Average time ns. | Start point | End point | 2D Benchmark maps | Our Distance | Total time in seconds |
@@ -85,7 +87,7 @@ Here below are some comparsion about the above runs with these algorithms:
 
 ## Issues raised due to resolution and made some limits for these experiments
 
-These runs raised an issue about the approach to make these performance tests. Due to getting the image from the website, brings it to the program as 1073 x 1073 pixels. This means that if we want to make reliable comparsions with the benchmark maps, we should resize them to the same size. Benchmark scenarios largest images are 1024 x 1024, so these results can not be compare _exactly_. However, resizing the image to the 1024 x 1024 and running the maximum length scenarios will give the most exact distances, and I compare two maps below with almost the same distance. 
+These runs raised an issue about the approach to make these performance tests. Due to getting the image from the website, brings it to the program as 1073 x 1073 pixels. This means that if we want to make reliable comparsions with the benchmark maps, we should resize them to the same size. Benchmark scenarios largest images are 1024 x 1024, so these results can not be compare _exactly_. However, resizing the image to the 1024 x 1024 and running the maximum length scenarios will give the most exact distances, and I compare two maps below with almost the same distance. These tests have been ran by netbeans, as it made a small difference between these two boards results.  
 
 Berlin shortest path – 1539.8023074035596 & London shortest path – 1598.427632:
  
@@ -114,7 +116,7 @@ Berlin shortest path – 1539.8023074035596 & London shortest path – 1598.4276
 
 Biggest differences were at the mazes, but there can be seen that the algorithms found the shortest paths with own eyes. In addition, the difference between the scenes and the projects algorithms are so big, that the resolution probelm is clear as the difference can't be that big.
 
-## Conclusions
+## Conclusion
 
 According the performance results, the algorithms finds the shortest path in most cases. There are several issues with JPS in the more open fields and large obstacles containing maps, where it performs more greedily. At the mazes it's always finding the shortest path according tests. 
 
@@ -123,3 +125,5 @@ Dijkstra is slowest among the algorithms in almost every maps. At the mazes A* s
 According these two diagrams, input 10 runs most slower, and for some reason 100 feed are the fastest, as 1000 feed runs slower than 100. The differences are quite small, but still.
 
 There are more conclusions regarding performance tests at the implementation document at the improvements and flaws.
+
+Ps. One funny little thing was, that using zoom will almost double the running times (these are not included in the performance tests).  
