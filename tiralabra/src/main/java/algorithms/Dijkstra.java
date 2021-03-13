@@ -17,7 +17,6 @@ public class Dijkstra implements SearchInterface {
     
     public Dijkstra() {
         this.diagonalMovement = Math.sqrt(2);
-        this.visited = new boolean [1][1];
     }
     
     /**
@@ -46,32 +45,24 @@ public class Dijkstra implements SearchInterface {
                 distance[r][c] = 10000000;
             }
         }
-        
-        if (map[startR][startC] == 0 || map[endR][endC] == 0) {
-            return null; 
-        }
        
         Vertex startPoint = new Vertex(startR, startC);
         distance[startR][startC] = 0;
         
-        //Start searching
         heap.add(startPoint);
         while(heap.getSize()!=0) {
             Vertex currentV = heap.poll();
             int currentRow = currentV.getRow();
             int currentColumn = currentV.getColumn();
             
-            //found the path!
             if (currentRow == endR && currentColumn == endC) {
                 return createShortestPath(currentV);
             }
            
             visited[currentRow][currentColumn] = true;
             
-            //start moving
             for (int rowStep = -1; rowStep < 2; rowStep++) {
                 for (int columnStep = -1; columnStep < 2; columnStep++) {
-                    //if we are at the starting point
                     if(rowStep == 0 && columnStep == 0) {
                         continue;
                     }
@@ -83,13 +74,12 @@ public class Dijkstra implements SearchInterface {
                         continue;
                     }
                                  
-                    //if there is an obstacle
                     if (map[moveOneRow][moveOneColumn] == 0) {
                         continue;
                     }
                     
                     double nextDistance = currentV.getDistance() + diagonalMovement;
-                    //if we are moving straight
+                    
                     if (rowStep == 0 || columnStep == 0) {
                         nextDistance = currentV.getDistance() + 1;
                     }

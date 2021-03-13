@@ -2,15 +2,15 @@
 
 # Unit testing with JUnit
 
-There are comprehensive automated JUnit tests that tests the program is working correctly all the time. This tests don't focus on testing user inteface and its classes as these are mainly built with variety of ready-made Java libraries. 
+There are comprehensive automated JUnit tests that tests the program is working correctly all the time. This tests don't focus on testing user inteface and its classes as these are mainly built with variety of ready-made Java libraries. Unit test line-coverage can be found here below with JacocoTestReport, or from the repository. 
 
 ## Algorithms
 
-Algorithms are tested with AStarTest and DijkstraTest test classes. 
+Algorithms are tested with AStarTest, DijkstraTest  & JPSTest test-classes. 
 
 ## Data Structures
 
-Heap is tested with HeapTest test class. 
+Heap is tested with HeapTest test class and List is tested with ListTest class. 
 
 ## How to test?
 
@@ -81,7 +81,7 @@ Here are some results about the performance tests with several different maps wi
 
 Here below are some comparsion about the above runs with these algorithms:
 
-<img src="https://github.com/StrappedGlint13/pathfinding/blob/main/documentation/images/calculationComparsion.png" width="1024">
+<img src="https://github.com/StrappedGlint13/pathfinding/blob/main/documentation/images/calculationComparsion.png" width="1084">
 
 ## Issues raised due to resolution and made some limits for these experiments
 

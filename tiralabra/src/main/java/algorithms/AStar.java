@@ -18,7 +18,6 @@ public class AStar implements SearchInterface {
     
     public AStar() {
         this.diagonalMovement = Math.sqrt(2);
-        this.visited = new boolean [1][1];
     }
     /**
     * Method creates a shortest path.
@@ -32,7 +31,7 @@ public class AStar implements SearchInterface {
     * @return shortest path as a list of Vertices.
     */
     
-    //@Override
+    @Override
     public List findPath(int[][]map, int startR, int startC, int endR, int endC) {
         int rowLength = map.length;  
         int columnLength = map[0].length;
@@ -45,10 +44,6 @@ public class AStar implements SearchInterface {
             for (int c = 0; c < columnLength; c++) {
                 distance[r][c] = 10000000;
             }
-        }
-        //check if the user clicked obstacle
-        if (map[startR][startC] == 0 || map[endR][endC] == 0) {
-            return null;
         }
 
         Vertex startPoint = new Vertex(startR, startC, 0, null);
@@ -102,8 +97,6 @@ public class AStar implements SearchInterface {
         return null;
     }
     
-    
-    
     /**
     * Method for A* to estimate Euclidean distance.
     *
@@ -132,7 +125,7 @@ public class AStar implements SearchInterface {
     * @return true or false, depends on if we are in the limits. 
     */
 
-    //@Override
+    @Override
     public boolean checkLimits(int[][]map, int r, int c, int rowLength, int columnLength) {
         if (r < 0 || c < 0 || r >= rowLength || c >= columnLength) {
             return false;

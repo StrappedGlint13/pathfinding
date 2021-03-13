@@ -15,7 +15,11 @@ Tiralabra
 [Testing](https://github.com/StrappedGlint13/pathfinding/blob/main/documentation/testing.md)
 
 
-[User Guide](https://github.com/StrappedGlint13/pathfinding/blob/main/documentation/user_guide.md)
+[Basic Steps](https://github.com/StrappedGlint13/pathfinding/blob/main/documentation/basic_steps.md)
+
+
+[Installation manual](https://github.com/StrappedGlint13/pathfinding/blob/main/documentation/installation_manual.md)
+
 
 ### Weekly reports
 

@@ -50,18 +50,8 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage stage) throws Exception {
-        Label urlForBenchmark = new Label("https://movingai.com/benchmarks/grids.html");
-        Hyperlink link = new Hyperlink();
-        link.setText("http://example.com");
-        link.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                System.out.println("This link is clicked");
-            }
-        });
-
         Button revealTheMapButton = new Button("Reveal the map");
-        TextField textfield = new TextField("https://www.movingai.com/benchmarks/street/Berlin_0_1024.png");
+        TextField textfield = new TextField("https://movingai.com/benchmarks/maze/maze512-16-0.png");
         textfield.setPrefWidth(450);
         TextField inputField = new TextField("0");
        
@@ -76,8 +66,8 @@ public class Main extends Application {
         urlLabel.setFont(Font.font("Arial", FontWeight.BOLD, 15));
         searchLabel.setFont(Font.font("Arial", FontWeight.BOLD, 15));
         inputLabel.setFont(Font.font("Arial", FontWeight.BOLD, 15));
-        labels.getChildren().addAll(urlLabel, searchLabel, inputLabel);
-        textFields.getChildren().addAll(urlForBenchmark, textfield, inputField);
+        labels.getChildren().addAll(searchLabel, inputLabel);
+        textFields.getChildren().addAll(textfield, inputField);
         searchComponents.getChildren().addAll(labels, textFields, revealTheMapButton);
         
         Scene searchPanel = new Scene(searchComponents);
@@ -191,7 +181,6 @@ public class Main extends Application {
                 + startX + " , " + startY + " to " + endX + " , " + endY);
 
             Performance p = new Performance();
-            //Algorithms
             Dijkstra dijkstra = new Dijkstra();
             List shortestPathDijkstra = new List();
 
@@ -249,6 +238,7 @@ public class Main extends Application {
             System.out.println("");
 
             if (inPut > 0 && inPut != 1 && inPut != 2) {
+                System.out.println("Performance tests running...");
                 p.runPerformance(pixelmap, startX, startY, endX, endY, inPut);
             }  
             
@@ -384,6 +374,7 @@ public class Main extends Application {
                         System.out.println("");
                         
                         if (inPut > 0 && inPut != 1 && inPut != 2) {
+                            System.out.println("Performance tests running...");
                             p.runPerformance(pixelmap, startRow, startColumn, x, y, inPut);
                         }             
                         BufferedImage img = io.readImage(url);

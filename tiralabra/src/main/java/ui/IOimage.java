@@ -6,7 +6,6 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 import static javax.swing.JOptionPane.showMessageDialog;
 
-
 /**
  *
  * Class that imports the image with given URL.

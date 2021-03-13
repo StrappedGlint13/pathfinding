@@ -70,13 +70,6 @@ public class JPS implements SearchInterface {
         
         
         while(heap.getVertexFromIndex(0) != null && l.isEmpty()) {  
-            /*
-            System.out.println("Heap:");
-            for (int i = 0; i < heap.getSize(); i++) {
-                System.out.println(heap.getVertexFromIndex(i) + "distance estimation:" + 
-                       (heap.getVertexFromIndex(i).getHeuristic()));
-            }
-            System.out.println("");   */ 
             Vertex currentV = heap.poll();
             
             if (foundTheEnd(currentV)) {
@@ -91,8 +84,7 @@ public class JPS implements SearchInterface {
     
     private boolean foundTheEnd(Vertex v) {
         if (v.getRow() == endR && v.getColumn() == endC) {
-            List l = createShortestPath(v);
-            this.l = l;
+            this.l = createShortestPath(v);;
             return true;
         }
         return false;
@@ -112,8 +104,7 @@ public class JPS implements SearchInterface {
             }
             if(move(curV, 0, -1)) { // left
                 break;
-            }
-            
+            } 
             jumpDiagonally(curV);
             roundMade = true;
         }
@@ -154,7 +145,6 @@ public class JPS implements SearchInterface {
             return false;
         }
         
-        //if we already checked this vertex
         if (forcedneigh[nextRow][nextColumn]) {
             return false;
         }
@@ -194,8 +184,7 @@ public class JPS implements SearchInterface {
     * 
     * @return true, if we found the end Vertex. False, if not.
     */
-    
-        
+   
     private boolean moveDiagonalGrids(Vertex currentV, int movementRow, int movementCol) {
         int nextRow = currentV.getRow() + movementRow;
         int nextColumn = currentV.getColumn() + movementCol;
@@ -231,13 +220,13 @@ public class JPS implements SearchInterface {
  
         if ((movementRow == -1 && movementCol != 0)) {
             if(goDiagonalUpCheckRightOrLeftAndDown(nextStep, movementCol)) {
-                return false; // stop
+                return false;
             }
         }
         
         if ((movementRow == 1 && movementCol != 0)) {
             if(goDiagDownCheckRightOrLeftAndUp(nextStep, movementCol)) {
-                return false; // stop
+                return false;
             }
         }
         
@@ -418,7 +407,6 @@ public class JPS implements SearchInterface {
         return false;
     }
     
-    
     /**
     * Method for JPS to estimate Euclidean distance.
     *
@@ -490,7 +478,6 @@ public class JPS implements SearchInterface {
     public boolean[][] getVisitedForPainting() {
         return this.visitedForPainting;
     }
-    
         
     public Heap getHeap() {
         return heap;

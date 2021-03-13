@@ -83,9 +83,9 @@ public class ImageHandler {
     public BufferedImage drawShortestPath(BufferedImage img, List shortestPathAStar, List shortestPathDijkstra, 
                 List shortestPathJPS, boolean[][] visitedDijkstra, boolean[][] visitedAstar, boolean[][] visitedJPS) {   
         img = drawVisited(img, visitedDijkstra, colorIndex);
-        this.colorIndex = 1; // next A star
+        this.colorIndex = 1;
         img = drawVisited(img, visitedAstar, colorIndex);
-        this.colorIndex = 2; // next JPS
+        this.colorIndex = 2;
         img = drawVisited(img, visitedJPS, colorIndex);
         
         for (int i = 0; i < shortestPathDijkstra.size() - 1; i++) {
