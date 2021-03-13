@@ -42,7 +42,7 @@ These results can be viewed with chromium-browser (f.ex) from `build/reports/jac
 
 Performance is tested with different sized maps from 216x216=46656 (|V|), 512x512=262144(|V|) and 1024x1024=1048576(|V|) pixelmaps. Measurement is taken from running times for the pathfindings. We will cover average times for different sizes of runs. Performance testing is possible also to to from the user interface, as user can set how many runs user wants. 
 
-Here are some results about the performance tests with several different maps with different sizes:
+Here are some results about the performance tests with several different maps with different sizes. All the runs has been made from the command prompt, and all the programs are closed, unless one mozzilla browser (for accounting):
 
 
 | Map                 | Size        | Feed  | Algorithm | Average time in sec. | Average time ns. | Start point | End point | 2D Benchmark maps | Our Distance | Total time in seconds |
@@ -81,11 +81,36 @@ Here are some results about the performance tests with several different maps wi
 
 Here below are some comparsion about the above runs with these algorithms:
 
-<img src="https://github.com/StrappedGlint13/pathfinding/blob/main/documentation/images/calculationComparsion.png" width="600">
+<img src="https://github.com/StrappedGlint13/pathfinding/blob/main/documentation/images/calculationComparsion.png" width="1024">
 
-## Issues raised due to resolution
+## Issues raised due to resolution and made some limits for these experiments
 
-This raised an issue about the approach to make these performance tests. Due to getting the image from the website, brings it to the program as 1073 x 1073 pixels. This means that if we want to make reliable comparsions with the benchmark maps, we should resize them to the same size. Benchmark scenarios largest images are 1024 x 1024, so these results can not be compare _exactly_. However, resizing the image to the 1024 x 1024 and running the maximum length scenarios will give the most exact distances
+These runs raised an issue about the approach to make these performance tests. Due to getting the image from the website, brings it to the program as 1073 x 1073 pixels. This means that if we want to make reliable comparsions with the benchmark maps, we should resize them to the same size. Benchmark scenarios largest images are 1024 x 1024, so these results can not be compare _exactly_. However, resizing the image to the 1024 x 1024 and running the maximum length scenarios will give the most exact distances, and I compare two maps below with almost the same distance. 
+
+Berlin shortest path – 1539.8023074035596 & London shortest path – 1598.427632:
+ 
+ | Map                 | Size        | Algorithm | Average time in sec. | Feed | Average time ns. | Start point | End point  | 2D Benchmark maps | Our Distance       | Total time in seconds |
+| ------------------- | ----------- | --------- | -------------------- | ---- | ---------------- | ----------- | ---------- | ----------------- | ------------------ | --------------------- |
+| Berlin\_0\_1024.map | 1024 x 1024 | Dijkstra  | 0.188784038          | 10   | 188784038        | 19, 3       | 1005, 1002 | 1539.80230712     | 1539.8023074035596 | 3.767531121           |
+| Berlin\_0\_1024.map | 1024 x 1024 | A\*       | 0.174155795          | 10   | 174155795        | 19, 3       | 1005, 1002 | 1539.80230712     | 1539.8023074035596 | 3.767531121           |
+| Berlin\_0\_1024.map | 1024 x 1024 | JPS       | 0.01380018           | 10   | 13800180         | 19, 3       | 1005, 1002 | 1539.80230712     | 1539.8023074035596 | 3.767531121           |
+| Berlin\_0\_1024.map | 1024 x 1024 | Dijkstra  | 0.170998383          | 100  | 170998383        | 19, 3       | 1005, 1002 | 1539.80230712     | 1539.8023074035596 | 34.500684824          |
+| Berlin\_0\_1024.map | 1024 x 1024 | A\*       | 0.163319282          | 100  | 163319282        | 19, 3       | 1005, 1002 | 1539.80230712     | 1539.8023074035596 | 34.500684824          |
+| Berlin\_0\_1024.map | 1024 x 1024 | JPS       | 0.010681723          | 100  | 10681723         | 19, 3       | 1005, 1002 | 1539.80230712     | 1539.8023074035596 | 34.500684824          |
+| Berlin\_0\_1024.map | 1024 x 1024 | Dijkstra  | 0.176106846          | 1000 | 176106846        | 19, 3       | 1005, 1002 | 1539.80230712     | 1539.8023074035596 | 360.177554994         |
+| Berlin\_0\_1024.map | 1024 x 1024 | A\*       | 0.173453825          | 1000 | 173453825        | 19, 3       | 1005, 1002 | 1539.80230712     | 1539.8023074035596 | 360.177554994         |
+| Berlin\_0\_1024.map | 1024 x 1024 | JPS       | 0.01060939           | 1000 | 10609390         | 19, 3       | 1005, 1002 | 1539.80230712     | 1539.8023074035596 | 360.177554994         |
+| London\_0\_1024.map | 1024 x 1024 | Dijkstra  | 0.170910229          | 10   | 170910229        | 471, 82     | 45, 304    | 1600.52813        | 1598.427632        | 2.564869352           |
+| London\_0\_1024.map | 1024 x 1024 | A\*       | 0.076581872          | 10   | 76581872         | 471, 82     | 45, 304    | 1600.52813        | 1598.427632        | 2.564869352           |
+| London\_0\_1024.map | 1024 x 1024 | JPS       | 0.008983219          | 10   | 8983219          | 471, 82     | 45, 304    | 1600.52813        | 1598.427632        | 2.564869352           |
+| London\_0\_1024.map | 1024 x 1024 | Dijkstra  | 0.173602332          | 100  | 173602332        | 471, 82     | 45, 304    | 1600.52813        | 1598.427632        | 26.268729938          |
+| London\_0\_1024.map | 1024 x 1024 | A\*       | 0.079851357          | 100  | 79851357         | 471, 82     | 45, 304    | 1600.52813        | 1598.427632        | 26.268729938          |
+| London\_0\_1024.map | 1024 x 1024 | JPS       | 0.009224851          | 100  | 9224851          | 471, 82     | 45, 304    | 1600.52813        | 1598.427632        | 26.268729938          |
+| London\_0\_1024.map | 1024 x 1024 | Dijkstra  | 0.173602332          | 1000 | 170451572        | 471, 82     | 45, 304    | 1600.52813        | 1598.427632        | 259.153565624         |
+| London\_0\_1024.map | 1024 x 1024 | A\*       | 0.079851357          | 1000 | 79540901         | 471, 82     | 45, 304    | 1600.52813        | 1598.427632        | 259.153565624         |
+| London\_0\_1024.map | 1024 x 1024 | JPS       | 0.009224851          | 1000 | 9153109          | 471, 82     | 45, 304    | 1600.52813        | 1598.427632        | 259.153565624         |
+
+<img src="https://github.com/StrappedGlint13/pathfinding/blob/main/documentation/images/londonBerlin.png" width="800">
 
 Biggest differences were at the mazes, but there can be seen that the algorithms found the shortest paths with own eyes. In addition, the difference between the scenes and the projects algorithms are so big, that the resolution probelm is clear as it can't be that big difference.
 
