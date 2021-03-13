@@ -154,14 +154,14 @@ public class JPS implements SearchInterface {
             return true;
         }
  
-        if ((movementRow == 0 && movementCol == 1) || movementRow == 0 ||
-                movementCol == -1) {
+        if ((movementRow == 0 && movementCol == 1) || (movementRow == 0 &&
+                movementCol == -1)) {
             if(checkForcedNeighboursTopAndBelow(nextStep, movementCol)) {
                 return false;
             }
         }
         
-        if ((movementRow == 1 && movementCol == 0) || movementRow == -1 && movementCol == 0) {
+        if ((movementRow == 1 && movementCol == 0) || (movementRow == -1 && movementCol == 0)) {
             if(checkForcedNeighboursRightAndLeft(nextStep, movementRow)) {
                 return false;
             }
@@ -337,7 +337,7 @@ public class JPS implements SearchInterface {
         if (map[curRow+1][curCol] == 0) { 
             curCol += colRorL;
             if (checkLimits(map, curRow+1, curCol, rowLen, colLen)) {
-                if (map[curRow+1][curCol] == 1) {
+                if (map[curRow+1][curCol] == 1 && !forcedneigh[curRow+1][curCol]) {
                     curCol = curV.getColumn();
                     visitedForPainting[curRow][curCol] = true;
                     heap.add(curV);
@@ -350,7 +350,7 @@ public class JPS implements SearchInterface {
         if (map[curRow][curCol-colRorL] == 0) {
             curCol -= colRorL;
             if (checkLimits(map, curRow-1, curCol, rowLen, colLen)) {
-                if (map[curRow-1][curCol] == 1) {
+                if (map[curRow-1][curCol] == 1 && !forcedneigh[curRow-1][curCol]) {
                     curCol = curV.getColumn();
                     visitedForPainting[curRow][curCol] = true;
                     heap.add(curV);
@@ -377,7 +377,7 @@ public class JPS implements SearchInterface {
         if (map[curRow-1][curCol] == 0) { 
             curCol += colRorL;
             if (checkLimits(map, curRow-1, curCol, rowLen, colLen)) {
-                if (map[curRow-1][curCol] == 1) {
+                if (map[curRow-1][curCol] == 1 && !forcedneigh[curRow-1][curCol] ) {
                     curCol = curV.getColumn();
                     visitedForPainting[curRow][curCol] = true;
                     heap.add(curV);
@@ -391,7 +391,7 @@ public class JPS implements SearchInterface {
         if (map[curRow][curCol-colRorL] == 0) {
             curCol -= colRorL;
             if (checkLimits(map, curRow+1, curCol, rowLen, colLen)) {
-                if (map[curRow+1][curCol] == 1) {
+                if (map[curRow+1][curCol] == 1 && !forcedneigh[curRow+1][curCol]) {
                     curCol = curV.getColumn();
                     visitedForPainting[curRow][curCol] = true;
                     heap.add(curV);
