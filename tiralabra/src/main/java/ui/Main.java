@@ -280,8 +280,8 @@ public class Main extends Application {
             ImageHandler imgHand = new ImageHandler();
             BufferedImage img = io.readImage(url);
 
-            int height = 600;
-            int width = 600;
+            int height = 1024;
+            int width = 1024;
 
             img = imgHand.makeNewFrame(img, height, width);
             Map map = new Map(img, height, width);
